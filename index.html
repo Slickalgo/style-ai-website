@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/logo-mark.svg" />
+    <meta name="theme-color" content="#44182b" />
+    <title>Style AI | Outfits &amp; colors made for you</title>
+    <meta
+      name="description"
+      content="Style AI learns your skin tone and undertones, then suggests a color palette and outfits that make you look rested, bright, and like yourself—not washed out. Your closet, your glow, a stylist who remembers."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;500;700&family=Manrope:wght@300;400;500;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body
+    class="overflow-x-hidden bg-off-white font-body text-slate-900 selection:bg-primary selection:text-white"
+  >
+    <nav
+      id="site-nav"
+      class="site-nav"
+      aria-label="Primary"
+      data-nav-expanded="true"
+      data-mobile-menu="closed"
+    >
+      <div class="site-nav-mobile-bar">
+        <a href="/" class="site-nav-mobile-bar__mark">
+          <img
+            src="/logo-mark.svg"
+            alt=""
+            width="28"
+            height="28"
+            class="brand-logo-img brand-logo-img--nav"
+            decoding="async"
+          />
+          <span>Style AI</span>
+        </a>
+        <button
+          type="button"
+          class="site-nav-mobile-bar__toggle"
+          id="site-nav-mobile-toggle"
+          aria-expanded="false"
+          aria-controls="site-nav-mobile-panel"
+          aria-label="Open menu"
+        >
+          <span class="site-nav-mobile-bar__line" aria-hidden="true"></span>
+          <span class="site-nav-mobile-bar__line" aria-hidden="true"></span>
+        </button>
+      </div>
+
+      <div
+        class="site-nav-mobile-overlay"
+        id="site-nav-mobile-panel"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Site menu"
+        aria-hidden="true"
+        tabindex="-1"
+      >
+        <div class="site-nav-mobile-overlay__sheet">
+          <ul class="site-nav-mobile-overlay__links" role="list">
+            <li>
+              <a href="#features" class="site-nav-mobile-overlay__link">Features</a>
+            </li>
+            <li>
+              <a href="#your-style" class="site-nav-mobile-overlay__link">Your style</a>
+            </li>
+            <li>
+              <a href="#in-app-styling" class="site-nav-mobile-overlay__link"
+                >In-app styling</a
+              >
+            </li>
+            <li>
+              <a href="#lookbook" class="site-nav-mobile-overlay__link">Community</a>
+            </li>
+          </ul>
+          <div class="site-nav-mobile-overlay__rule" aria-hidden="true"></div>
+          <a href="mailto:hello@styleai.app" class="site-nav-mobile-overlay__email"
+            >hello@styleai.app</a
+          >
+          <div class="site-nav-mobile-overlay__socials">
+            <a
+              href="#"
+              class="site-nav-mobile-overlay__social"
+              aria-label="Instagram"
+              ><span class="material-symbols-outlined" aria-hidden="true"
+                >photo_camera</span
+              ></a
+            >
+          </div>
+          <a href="#download" class="site-nav-mobile-overlay__cta plum-gradient">
+            <span class="material-symbols-outlined site-nav-mobile-overlay__cta-icon" aria-hidden="true"
+              >download</span
+            >
+            Get the app
+          </a>
+        </div>
+      </div>
+
+      <div class="site-nav__shell glass-effect">
+        <div class="site-nav__inner">
+          <div class="site-nav__row">
+            <a href="/" class="site-nav__brand">
+              <img
+                src="/logo-mark.svg"
+                alt=""
+                width="28"
+                height="28"
+                class="brand-logo-img brand-logo-img--nav"
+                decoding="async"
+              />
+              <span>Style AI</span>
+            </a>
+            <ul class="site-nav__links" role="list">
+              <li>
+                <a href="#features" class="site-nav__link">Features</a>
+              </li>
+              <li>
+                <a href="#your-style" class="site-nav__link">Your style</a>
+              </li>
+              <li>
+                <a href="#in-app-styling" class="site-nav__link">In-App Styling</a>
+              </li>
+              <li>
+                <a href="#lookbook" class="site-nav__link">Community</a>
+              </li>
+            </ul>
+            <a
+              href="#download"
+              class="site-nav__cta plum-gradient"
+              aria-label="Download app"
+            >
+              <span class="material-symbols-outlined site-nav__cta-icon" aria-hidden="true"
+                >download</span
+              >
+              <span class="site-nav__cta-app">App</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <main>
+      <!-- Cinematic hero (all breakpoints): blobs + device chrome + hero image -->
+      <section
+        id="hero"
+        class="site-sr-section hero-mobile-v2 relative z-0 flex min-h-0 flex-col overflow-hidden pb-6 pt-[calc(5.85rem-13px+env(safe-area-inset-top))] max-md:min-h-[100dvh] md:min-h-screen md:justify-center md:pb-16 md:pt-[max(5.25rem,env(safe-area-inset-top))]"
+        aria-labelledby="hero-heading"
+      >
+        <div class="hero-mobile-v2__atmo" aria-hidden="true">
+          <div class="hero-mobile-v2__blobs">
+            <div class="hero-mobile-v2__blob hero-mobile-v2__blob--a"></div>
+            <div class="hero-mobile-v2__blob hero-mobile-v2__blob--b"></div>
+            <div class="hero-mobile-v2__blob hero-mobile-v2__blob--c"></div>
+          </div>
+          <div class="hero-mobile-v2__vignette"></div>
+          <div class="hero-mobile-v2__grain"></div>
+        </div>
+        <div class="hero-mobile-v2__layout max-md:flex-1 max-md:min-h-0">
+          <div class="hero-mobile-v2__copy site-sr-item" style="--site-sr-delay: 0.05s">
+            <p class="hero-mobile-v2__eyebrow">Style AI</p>
+            <p class="hero-mobile-v2__sub">When the color is right, you feel it—in the mirror and in the room.</p>
+            <h1 id="hero-heading" class="hero-mobile-v2__headline font-display">
+              <span class="hero-mobile-v2__headline-line hero-mobile-v2__headline-lead"
+                >Personal designer</span
+              >
+              <span class="hero-mobile-v2__headline-line hero-mobile-v2__headline-accent"
+                >for your style.</span
+              >
+            </h1>
+            <ul class="hero-mobile-v2__chips" aria-label="What you get">
+              <li>Colors that suit your skin</li>
+              <li>Outfits from your closet</li>
+              <li>See yourself in the look</li>
+            </ul>
+            <p class="hero-mobile-v2__deck">
+              We read your skin with care—tone, undertone, what makes you glow—then suggest
+              <strong class="font-800 text-[rgba(250,246,240,0.98)]">a palette and outfits that flatter you</strong>,
+              not a generic color wheel. Mix looks from clothes you already own, preview them on you,
+              and chat with a stylist who remembers the shades you love and the ones you skip.
+            </p>
+            <div class="hero-mobile-v2__ctas flex flex-wrap gap-3">
+              <a
+                href="#download"
+                class="plum-gradient inline-flex items-center gap-2 rounded-full px-5 py-3 text-[10px] font-800 uppercase tracking-[0.18em] text-white shadow-lg shadow-primary/25 max-md:px-5 max-md:py-2.5 md:gap-3 md:px-8 md:py-4 md:text-xs md:tracking-[0.2em]"
+              >
+                Get the app
+                <span class="material-symbols-outlined text-lg max-md:text-base">download</span>
+              </a>
+              <a
+                href="#what-we-do"
+                class="inline-flex items-center rounded-full border border-white/25 bg-white/5 px-5 py-3 text-[10px] font-800 uppercase tracking-[0.18em] text-[rgba(250,246,240,0.92)] backdrop-blur-sm transition-colors hover:bg-white/10 max-md:px-5 max-md:py-2.5 md:px-8 md:py-4 md:text-xs md:tracking-widest"
+              >
+                Explore
+              </a>
+            </div>
+          </div>
+          <div class="hero-mobile-v2__visual site-sr-item" style="--site-sr-delay: 0.14s">
+            <div class="hero-mobile-v2__stage" aria-hidden="true">
+              <div class="hero-mobile-v2__stage-glow"></div>
+            </div>
+            <div class="hero-phone-mock">
+              <div class="hero-phone-mock__bezel">
+                <div class="hero-phone-mock__screen">
+                  <img
+                    class="hero-phone-mock__img"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuDE0jDaimp8PL3w9SWs0yBW9QbuDF8qv9dLZJlbVEw3JpgnyPwbq3f8Q3UuUppGdiARLYV-sRIVmtKd7UqNGL29p5ChsaNVenelu0izrjea4o3EyD0i4-TnvCXzzk_bioOS827i_IHQMl8dppiLjc7WZdq5OyLOBuO3uhtOFCkq1ay8HpJsT80rsjnalheFYYwvmsPWr9hJuxP10ttCcg7o1VPnwJNk-ivzNc5Di5sk9FSsZzNr8mlCTxcSze6aSv_G3b73gxCqzqo"
+                    alt="Style AI app preview"
+                    width="786"
+                    height="1704"
+                    decoding="async"
+                  />
+                  <div class="hero-phone-mock__bar" aria-hidden="true">
+                    <span class="hero-phone-mock__time">9:41</span>
+                    <span class="hero-phone-mock__notch"></span>
+                    <span class="hero-phone-mock__icons"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section
+        id="what-we-do"
+        class="what-we-do relative scroll-mt-28 overflow-hidden bg-off-white py-24 md:py-32"
+        aria-labelledby="what-we-do-heading"
+      >
+        <div class="what-we-do__ambient" aria-hidden="true"></div>
+        <div class="relative z-[1] mx-auto max-w-[1400px] px-8">
+          <header
+            class="what-we-do__intro wwd-reveal-item mb-20 max-w-3xl"
+            style="--wwd-delay: 0.04s"
+          >
+            <p class="site-eyebrow mb-4">With you, not above you</p>
+            <h2 id="what-we-do-heading" class="site-h2 mb-8">
+              How we show up<br />
+              <span class="site-h2__accent">for you.</span>
+            </h2>
+            <p class="site-lead max-w-2xl text-balance">
+              Less second-guessing the mirror. More of that quiet, &ldquo;that&rsquo;s me&rdquo;
+              feeling when you walk out the door.
+            </p>
+          </header>
+
+          <div
+            class="grid grid-cols-1 items-center gap-16 lg:grid-cols-12 lg:gap-x-16 lg:gap-y-0"
+          >
+            <div
+              class="what-we-do__visual order-1 wwd-reveal-item lg:col-span-5"
+              style="--wwd-delay: 0.12s"
+            >
+              <div class="relative">
+                <figure class="what-we-do__figure m-0">
+                  <div
+                    class="what-we-do__figure-frame group relative aspect-[4/5] overflow-hidden rounded-[2.25rem] shadow-2xl ring-1 ring-primary/[0.06] lg:aspect-auto lg:min-h-[min(480px,62vh)]"
+                  >
+                    <img
+                      alt=""
+                      class="what-we-do__figure-img h-full w-full object-cover transition-transform duration-[1.6s] ease-out group-hover:scale-[1.03]"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_xhiKDmXjxUCYMHzprzBHIEJGK3EPcsQss2RH6Mvuwx06YxwpxURRQNvsifWMvLafGv8IkSDtfCF9g-FU4NFPHvLZedycUJujG0Djrgkxp3KF4SwWWSoVckaEhToLutwU63xMgQqw71OCYOel_1_r0jJ29wW6SIm4FZCxj455QAr8emRLO5uPrOnw-P0LN4MMDHN3V_YBSvDIzc0l6yl9BKryWGrGeA0H4XPDK2DLQgWQF01PDbjZl7jr0Nv2uDDSjclxXizNbIE"
+                      width="800"
+                      height="1000"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                    <div
+                      class="pointer-events-none absolute inset-0 bg-gradient-to-t from-primary via-primary/20 to-transparent opacity-[0.9]"
+                      aria-hidden="true"
+                    ></div>
+                    <div
+                      class="pointer-events-none absolute inset-x-0 bottom-0 p-6 pb-7 md:p-8 md:pb-8"
+                    >
+                      <p
+                        class="text-[10px] font-800 uppercase tracking-[0.22em] text-white/70"
+                      >
+                        In the app
+                      </p>
+                      <p
+                        class="mt-2 max-w-[16rem] text-xl font-800 leading-[1.15] tracking-tight text-white md:text-2xl"
+                      >
+                        The same light you live in.
+                      </p>
+                    </div>
+                  </div>
+                  <figcaption class="sr-only">
+                    In-app preview of styled looks in real-world context.
+                  </figcaption>
+                </figure>
+                <div
+                  class="what-we-do__float absolute -bottom-5 -right-3 hidden w-[40%] overflow-hidden rounded-[1.75rem] shadow-xl ring-4 ring-off-white md:block lg:-right-6"
+                >
+                  <div class="aspect-square">
+                    <img
+                      alt=""
+                      class="h-full w-full object-cover"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuAAg_bYEtnp5B2gK5U9bHTzr1-HVTjusUjxb08k2gn1fdYM0UFnx_eofrIe-Fxd5rniQKrwuhkoCkC9yIXfWxnstV1qfPId4Ys8VRsI7KJZkZO1zHpDpGtOzu94u2mj5QigXjNiXH8NSa4EfozRiva2SRDLvy46JLqTGHxk72w_QvXVR4QFCJUkOFaQWE5tT6W8x8tk0nkJVTMJFp1xn-g-t3j1nH0iiHb-k40GdwT3zsn6ejZFoEm903s33mrczg1E9ggs7ADI2wk"
+                      width="600"
+                      height="600"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="what-we-do__beats order-2 lg:col-span-7">
+              <ul class="what-we-do__beat-list" role="list">
+                <li
+                  id="your-style"
+                  class="what-we-do__beat wwd-reveal-item scroll-mt-28"
+                  style="--wwd-delay: 0.2s"
+                >
+                  <span class="what-we-do__beat-node" aria-hidden="true"></span>
+                  <div class="what-we-do__beat-body">
+                    <p class="site-eyebrow mb-2">Your style</p>
+                    <p class="what-we-do__beat-text max-w-2xl text-lg font-300 leading-relaxed text-slate-600 md:max-w-3xl">
+                      You set the vibe—minimal, bold, office, weekend. We surface the pieces that
+                      actually fit <em>that</em> lane, not a generic &ldquo;best dressed&rdquo; template.
+                    </p>
+                  </div>
+                </li>
+                <li
+                  class="what-we-do__beat wwd-reveal-item"
+                  style="--wwd-delay: 0.28s"
+                >
+                  <span class="what-we-do__beat-node" aria-hidden="true"></span>
+                  <div class="what-we-do__beat-body">
+                    <p class="site-eyebrow mb-2">Your looks</p>
+                    <p class="what-we-do__beat-text max-w-2xl text-lg font-300 leading-relaxed text-slate-600 md:max-w-3xl">
+                      Generate full outfits straight from <em>your wardrobe</em>—or blend what you
+                      already own with shoppable pieces in one look. Closet-only, shop-only, or a
+                      mix; always head to toe, never a random collage.
+                    </p>
+                  </div>
+                </li>
+                <li
+                  class="what-we-do__beat wwd-reveal-item"
+                  style="--wwd-delay: 0.36s"
+                >
+                  <span class="what-we-do__beat-node" aria-hidden="true"></span>
+                  <div class="what-we-do__beat-body">
+                    <p class="site-eyebrow mb-2">Shop &amp; share</p>
+                    <p class="what-we-do__beat-text max-w-2xl text-lg font-300 leading-relaxed text-slate-600 md:max-w-3xl">
+                      When something clicks, grab <em>shoppable links</em> for the new pieces—while
+                      the rest stays the clothes on your rack. Save, send, or check out; hybrid looks
+                      stay honest about what you own vs. what you&apos;re buying.
+                    </p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section
+        id="features"
+        class="features relative scroll-mt-28 overflow-hidden bg-white py-24 md:py-32"
+        aria-labelledby="features-heading"
+      >
+        <div class="features__ambient" aria-hidden="true"></div>
+        <div class="relative z-[1] mx-auto max-w-[1400px] px-6 sm:px-8">
+          <div
+            class="mb-14 grid grid-cols-1 gap-10 md:mb-20 lg:grid-cols-12 lg:items-end lg:gap-12"
+          >
+            <div class="fe-reveal-item lg:col-span-8" style="--fe-delay: 0.05s">
+              <p class="site-eyebrow mb-4">Your digital closet</p>
+              <h2 id="features-heading" class="site-h2 mb-6 md:mb-8">
+                Your closet <br />
+                <span class="site-h2__accent">on your phone</span>
+              </h2>
+              <p class="site-lead max-w-2xl text-balance">
+                Snap pieces once for a living closet—and get skin-aware analysis that recommends
+                palette colors tailored to you, not a generic chart.
+              </p>
+            </div>
+            <div class="fe-reveal-item lg:col-span-4 lg:text-right" style="--fe-delay: 0.1s">
+              <a
+                href="#download"
+                class="features__cta group inline-flex min-h-[48px] touch-manipulation items-center gap-3 border-b-2 border-primary/15 py-3 text-[10px] font-800 uppercase tracking-widest text-primary transition-colors duration-300 hover:border-vibrant-plum active:opacity-80 sm:gap-4 sm:py-4"
+              >
+                Open the app
+                <span
+                  class="material-symbols-outlined text-xl transition-transform duration-300 group-hover:translate-x-1.5 group-active:translate-x-1"
+                  aria-hidden="true"
+                  >arrow_forward</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="features__bento flex flex-col gap-4 sm:gap-5 md:gap-6">
+            <article
+              class="features__catalog fe-reveal-item group relative flex min-h-[22rem] flex-col justify-between overflow-hidden rounded-[2.25rem] bg-ice-blue p-8 shadow-[0_20px_50px_-24px_rgba(68,24,43,0.12)] ring-1 ring-primary/[0.07] sm:min-h-[26rem] sm:rounded-[2.75rem] sm:p-10 md:min-h-[min(520px,70vh)] md:rounded-[3rem] md:p-12 lg:rounded-[3.5rem]"
+              style="--fe-delay: 0.08s"
+            >
+              <div class="features__catalog-texture pointer-events-none absolute inset-0" aria-hidden="true"></div>
+              <img
+                alt=""
+                class="features__catalog-bg pointer-events-none absolute inset-0 h-full w-full object-cover opacity-[0.2] mix-blend-multiply transition-transform duration-[1.8s] ease-out group-hover:scale-[1.05]"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDSUMFVVB2byOXsSAAGnu3OtHiKdXy2xs1-zJvEGJt09T4Bx186k6q_rSXclv7aTLrCZYKqHOWZ6qYbr2UQLE7XmZwkIQXh_7yciBezLM5GxMF5KTO90B6mfjHUIHKBaSdB6JErQ_9Z0hE0G170BbFuscDvqp4ooDDTJWF6YDHdy3emLPiL_hcQE9GHWN4IjuejXmvS5oFNCc-Ao3VQ5E1xB4lAw5Zqjy3f0CtwaIg0d9trKwoJ99_blC7BhflfSVmt18RHxu5Q6Tw"
+                loading="lazy"
+                decoding="async"
+              />
+              <div
+                class="features__catalog-shine pointer-events-none absolute inset-0 z-[1] opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                aria-hidden="true"
+              ></div>
+              <div class="relative z-[2] flex min-h-0 flex-1 flex-col justify-between gap-8 md:gap-10">
+                <div class="relative z-[1]">
+                  <div
+                    class="features__icon-tile mb-8 flex h-16 w-16 items-center justify-center rounded-2xl bg-white shadow-xl ring-1 ring-slate-200/80 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:shadow-xl"
+                  >
+                    <span
+                      class="material-symbols-outlined text-3xl text-vibrant-plum transition-transform duration-500 group-hover:scale-110"
+                      aria-hidden="true"
+                      >photo_camera</span>
+                  </div>
+                  <h3 class="mb-4 font-body text-3xl font-800 tracking-tight text-primary sm:text-4xl">
+                    In-App Cataloging
+                  </h3>
+                  <p class="max-w-sm text-lg font-300 leading-relaxed text-slate-600">
+                    Open the Style AI app and scan items with your camera. We process tags and
+                    textures instantly.
+                  </p>
+                </div>
+                <div
+                  class="features__avatar-row relative z-[1] flex flex-wrap items-center gap-3 md:flex-nowrap md:-space-x-4"
+                >
+                  <div
+                    class="h-[4.5rem] w-[4.5rem] shrink-0 overflow-hidden rounded-full border-4 border-white shadow-lg transition-transform duration-300 hover:z-10 hover:scale-105 md:h-20 md:w-20"
+                  >
+                    <img
+                      alt="App item"
+                      class="h-full w-full object-cover"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuCiE6xsIG6y4et1LchbiTM-NX0lbYmsxRmpvMMdt260OUYxlYXqQDT_SNoBzkb1K1tX8x_AKaetdMLeMLO_jSRNOxXyQiusk1Xbp2_-YtfjCEPkGT5gwHc870_wOBilb83VQia9HogWpc2yE5GjLk8t5JwHwl2QRodRqtGxIFuUh2sevA9qVgiILwq957lD0i4S5wGwx4tXSMheXnBNTURLenYLkLBuyUsSFOCPSTAXbzb_BPPA1CdYZz6E9EdHFsz2MaQjUrwd8b8"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </div>
+                  <div
+                    class="flex h-[4.5rem] w-[4.5rem] shrink-0 items-center justify-center rounded-full bg-vibrant-plum text-base font-800 text-white shadow-lg transition-transform duration-300 hover:scale-105 active:scale-95 md:h-20 md:w-20 md:text-lg"
+                  >
+                    <span
+                      class="tabular-nums"
+                      data-count-up
+                      data-count-target="142"
+                      data-count-prefix="+"
+                      >+0</span>
+                  </div>
+                  <p
+                    class="w-full text-[10px] font-800 uppercase tracking-widest text-slate-500 md:ml-2 md:w-auto"
+                  >
+                    Items filed this week
+                  </p>
+                </div>
+              </div>
+            </article>
+
+            <article
+              class="features__dna fe-reveal-item group relative flex flex-col justify-between gap-8 overflow-hidden rounded-[2.25rem] bg-[#f4f6f9] p-8 shadow-[0_18px_44px_-22px_rgba(68,24,43,0.1)] ring-1 ring-primary/[0.06] sm:rounded-[2.75rem] sm:p-10 md:rounded-[3rem] md:p-10 lg:rounded-[3rem]"
+              style="--fe-delay: 0.14s"
+            >
+              <div
+                class="features__dna-shine pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                aria-hidden="true"
+              ></div>
+              <div class="relative z-[1] max-w-xl">
+                <h3
+                  class="mb-3 font-body text-2xl font-800 tracking-tight text-primary sm:mb-4 sm:text-3xl md:text-[1.85rem] md:leading-[1.12]"
+                >
+                  Style DNA Tracking
+                </h3>
+                <p class="text-base font-300 leading-relaxed text-slate-600 md:text-[1.05rem]">
+                  From your skin tone and undertones to the hues you actually wear—we learn what
+                  flatters you and keep your recommended palette in sync with your closet.
+                </p>
+              </div>
+              <div class="relative z-[1] flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between sm:gap-6">
+                <div
+                  class="features__palette flex items-center gap-3 sm:gap-4"
+                  aria-label="Example style palette"
+                >
+                  <span
+                    class="features__palette-swatch h-10 w-10 rounded-xl shadow-md ring-2 ring-white sm:h-11 sm:w-11 sm:rounded-2xl"
+                    style="background-color: #44182b"
+                    title="Primary plum"
+                  ></span>
+                  <span
+                    class="features__palette-swatch h-10 w-10 rounded-xl shadow-md ring-2 ring-white sm:h-11 sm:w-11 sm:rounded-2xl"
+                    style="background-color: #f2e3d5"
+                    title="Warm neutral"
+                  ></span>
+                  <span
+                    class="features__palette-swatch h-10 w-10 rounded-xl shadow-md ring-2 ring-white sm:h-11 sm:w-11 sm:rounded-2xl"
+                    style="background-color: #70635a"
+                    title="Taupe"
+                  ></span>
+                </div>
+                <p
+                  class="text-[10px] font-800 uppercase tracking-[0.18em] text-slate-500 sm:max-w-[12rem] sm:text-right"
+                >
+                  Up to 98% accuracy on closet tagging
+                </p>
+              </div>
+            </article>
+
+            <div
+              class="features__mini-row grid grid-cols-2 gap-4 sm:gap-5 md:gap-6"
+            >
+              <div
+                class="features__tile features__tile--sync fe-reveal-item flex min-h-[10.5rem] touch-manipulation flex-col items-center justify-center gap-3 rounded-[2rem] bg-[#f4f6f9] p-6 text-center shadow-[0_16px_40px_-20px_rgba(68,24,43,0.1)] ring-1 ring-primary/[0.06] transition-[transform,box-shadow] duration-300 active:scale-[0.98] sm:min-h-[11.5rem] sm:rounded-[2.5rem] sm:p-8 md:min-h-[12rem] md:rounded-[3rem]"
+                style="--fe-delay: 0.2s"
+              >
+                <div
+                  class="features__live-sync-icon flex items-center justify-center gap-0.5 text-vibrant-plum"
+                  aria-hidden="true"
+                >
+                  <span class="material-symbols-outlined text-xl opacity-55 sm:text-2xl">graphic_eq</span>
+                  <span class="material-symbols-outlined text-[1.85rem] sm:text-4xl">smartphone</span>
+                  <span class="material-symbols-outlined text-xl opacity-55 sm:text-2xl">graphic_eq</span>
+                </div>
+                <div class="text-[9px] font-800 uppercase tracking-[0.22em] text-slate-500 sm:text-[10px]">
+                  Live sync
+                </div>
+              </div>
+              <div
+                class="features__tile features__tile--rating fe-reveal-item plum-gradient relative flex min-h-[10.5rem] touch-manipulation flex-col items-center justify-center gap-1.5 overflow-hidden rounded-[2rem] p-6 text-center text-white shadow-[0_20px_48px_-16px_rgba(68,24,43,0.45)] ring-1 ring-white/25 transition-[transform,box-shadow] duration-300 active:scale-[0.98] sm:min-h-[11.5rem] sm:rounded-[2.5rem] sm:gap-2 sm:p-8 md:min-h-[12rem] md:rounded-[3rem]"
+                style="--fe-delay: 0.26s"
+              >
+                <div
+                  class="features__rating-sheen pointer-events-none absolute inset-0 opacity-40"
+                  aria-hidden="true"
+                ></div>
+                <div
+                  class="relative z-[1] text-4xl font-800 tabular-nums tracking-tight text-white sm:text-5xl md:text-[2.75rem]"
+                >
+                  <span data-count-up data-count-target="4.9" data-count-decimals="1">0</span><span class="text-white/85">/5</span>
+                </div>
+                <div
+                  class="relative z-[1] text-[9px] font-700 uppercase tracking-[0.22em] text-white/75 sm:text-[10px]"
+                >
+                  App rating
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section
+        id="in-app-styling"
+        class="site-sr-section relative scroll-mt-28 overflow-hidden bg-off-white py-24 md:py-32"
+      >
+        <div class="mx-auto max-w-[1400px] px-6 sm:px-8">
+          <div class="grid grid-cols-1 items-center gap-24 lg:grid-cols-12">
+            <div
+              class="ias-copy site-sr-item relative max-w-xl lg:col-span-5 lg:max-w-none"
+              style="--site-sr-delay: 0.06s"
+            >
+              <div class="ias-copy__glow" aria-hidden="true"></div>
+              <p class="site-eyebrow relative z-[1] mb-5">In the app</p>
+              <h2 class="site-h2--compact relative z-[1] mb-8">
+                Less guessing.<br />
+                <span class="ias-copy__title-accent">More you.</span>
+              </h2>
+              <p
+                class="site-lead relative z-[1] mb-14 max-w-[22rem] sm:max-w-md md:mb-16"
+              >
+                For the moment you&apos;re standing at the closet: it learns what feels like
+                <em class="font-normal not-italic text-primary">you</em>, then suggests looks
+                that fit.
+              </p>
+              <ul class="ias-copy__list relative z-[1]" role="list">
+                <li class="ias-copy__item">
+                  <span class="material-symbols-outlined ias-copy__icon" aria-hidden="true"
+                    >schedule</span
+                  >
+                  <p class="ias-copy__item-text">
+                    <span class="ias-copy__item-lead">Your real day</span>
+                    Errands, work, nights out—the right idea when you open the app.
+                  </p>
+                </li>
+                <li class="ias-copy__item">
+                  <span class="material-symbols-outlined ias-copy__icon" aria-hidden="true"
+                    >swipe</span
+                  >
+                  <p class="ias-copy__item-text">
+                    <span class="ias-copy__item-lead">Love it or skip it</span>
+                    Save what feels like you. Skip the rest. The feed learns fast.
+                  </p>
+                </li>
+                <li class="ias-copy__item">
+                  <span class="material-symbols-outlined ias-copy__icon" aria-hidden="true"
+                    >palette</span
+                  >
+                  <p class="ias-copy__item-text">
+                    <span class="ias-copy__item-lead">Colors that flatter</span>
+                    Hues tuned to your skin—not whatever&apos;s trending this week.
+                  </p>
+                </li>
+              </ul>
+            </div>
+            <div
+              class="relative lg:col-span-7 site-sr-item"
+              style="--site-sr-delay: 0.12s"
+            >
+              <div class="relative z-10 grid grid-cols-2 gap-6">
+                <div class="space-y-6 pt-12">
+                  <div
+                    class="ias-look-card group relative aspect-[4/5] overflow-hidden rounded-[2rem] bg-white shadow-2xl ring-1 ring-primary/[0.05]"
+                  >
+                    <img
+                      alt="Suggested look in the Style AI feed"
+                      class="h-full w-full object-cover transition-transform duration-[1.4s] ease-out group-hover:scale-[1.03]"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_xhiKDmXjxUCYMHzprzBHIEJGK3EPcsQss2RH6Mvuwx06YxwpxURRQNvsifWMvLafGv8IkSDtfCF9g-FU4NFPHvLZedycUJujG0Djrgkxp3KF4SwWWSoVckaEhToLutwU63xMgQqw71OCYOel_1_r0jJ29wW6SIm4FZCxj455QAr8emRLO5uPrOnw-P0LN4MMDHN3V_YBSvDIzc0l6yl9BKryWGrGeA0H4XPDK2DLQgWQF01PDbjZl7jr0Nv2uDDSjclxXizNbIE"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                    <div
+                      class="pointer-events-none absolute inset-0 bg-gradient-to-t from-primary/50 via-transparent to-primary/10 opacity-90"
+                      aria-hidden="true"
+                    ></div>
+                    <div
+                      class="ias-look-hud pointer-events-none absolute inset-x-3 top-3 flex items-center justify-between rounded-full border border-white/20 bg-black/30 px-3 py-2 shadow-lg backdrop-blur-md sm:inset-x-4 sm:top-4"
+                      aria-hidden="true"
+                    >
+                      <span
+                        class="pl-0.5 text-[11px] font-700 tabular-nums tracking-tight text-white"
+                        >9:41</span
+                      >
+                      <span
+                        class="text-[8px] font-800 uppercase tracking-[0.2em] text-white/75"
+                        >For you</span
+                      >
+                      <span class="flex gap-1 pr-0.5" aria-hidden="true">
+                        <span class="h-1.5 w-1.5 rounded-full bg-white/90"></span>
+                        <span class="h-1.5 w-1.5 rounded-full bg-white/90"></span>
+                        <span class="h-1.5 w-1.5 rounded-full bg-white/40"></span>
+                      </span>
+                    </div>
+                    <div
+                      class="ias-swipe-cue pointer-events-none absolute left-2 top-1/2 flex -translate-y-1/2 flex-col gap-0.5 text-white/50 opacity-80"
+                      aria-hidden="true"
+                    >
+                      <span class="material-symbols-outlined text-lg leading-none">chevron_left</span>
+                      <span class="material-symbols-outlined text-lg leading-none">chevron_left</span>
+                    </div>
+                    <div
+                      class="ias-moment-card pointer-events-none absolute inset-x-3 bottom-3 sm:inset-x-4 sm:bottom-4"
+                      aria-hidden="true"
+                    >
+                      <div
+                        class="rounded-2xl border border-white/50 bg-white/93 p-3 shadow-xl shadow-primary/10 backdrop-blur-md sm:p-3.5"
+                      >
+                        <p
+                          class="mb-0.5 text-[9px] font-800 uppercase tracking-[0.18em] text-vibrant-plum"
+                        >
+                          Tonight · Dinner out
+                        </p>
+                        <p class="text-sm font-800 leading-snug tracking-tight text-primary">
+                          This one matches your palette—and the room you&apos;ll be in.
+                        </p>
+                        <div
+                          class="mt-2.5 flex flex-wrap items-center gap-2 border-t border-slate-200/80 pt-2.5"
+                        >
+                          <span
+                            class="inline-flex items-center gap-1 rounded-full bg-primary px-2.5 py-1 text-[9px] font-800 uppercase tracking-wider text-white shadow-sm"
+                          >
+                            <span class="material-symbols-outlined text-[14px]">favorite</span>
+                            Save look
+                          </span>
+                          <span
+                            class="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-1 text-[9px] font-800 uppercase tracking-wider text-slate-600"
+                          >
+                            <span class="material-symbols-outlined text-[14px]">close</span>
+                            Skip
+                          </span>
+                          <span
+                            class="ml-auto hidden text-[9px] font-700 uppercase tracking-widest text-slate-400 sm:inline"
+                            >Swipe for more</span
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="space-y-6">
+                  <div
+                    class="ias-detail-card group relative aspect-square overflow-hidden rounded-[2rem] bg-white shadow-2xl ring-1 ring-primary/[0.05]"
+                  >
+                    <img
+                      alt="Color and fabric detail from your closet"
+                      class="h-full w-full object-cover transition-transform duration-[1.4s] ease-out group-hover:scale-[1.03]"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuAAg_bYEtnp5B2gK5U9bHTzr1-HVTjusUjxb08k2gn1fdYM0UFnx_eofrIe-Fxd5rniQKrwuhkoCkC9yIXfWxnstV1qfPId4Ys8VRsI7KJZkZO1zHpDpGtOzu94u2mj5QigXjNiXH8NSa4EfozRiva2SRDLvy46JLqTGHxk72w_QvXVR4QFCJUkOFaQWE5tT6W8x8tk0nkJVTMJFp1xn-g-t3j1nH0iiHb-k40GdwT3zsn6ejZFoEm903s33mrczg1E9ggs7ADI2wk"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                    <div
+                      class="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-primary/55 to-transparent pt-16"
+                      aria-hidden="true"
+                    ></div>
+                    <div
+                      class="pointer-events-none absolute left-3 top-3 rounded-full border border-white/25 bg-black/25 px-2.5 py-1 backdrop-blur-md sm:left-4 sm:top-4"
+                      aria-hidden="true"
+                    >
+                      <span
+                        class="text-[8px] font-800 uppercase tracking-[0.2em] text-white/90"
+                        >From your closet</span
+                      >
+                    </div>
+                    <div
+                      class="pointer-events-none absolute bottom-3 left-3 right-3 flex items-center gap-2 rounded-xl border border-white/35 bg-white/90 px-2.5 py-2 shadow-lg backdrop-blur-sm sm:bottom-4 sm:left-4 sm:right-4"
+                      aria-hidden="true"
+                    >
+                      <span
+                        class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#f2e3d5] shadow-inner ring-1 ring-primary/10"
+                        aria-hidden="true"
+                      ></span>
+                      <div class="min-w-0 flex-1 text-left">
+                        <p class="truncate text-[10px] font-800 uppercase tracking-wider text-vibrant-plum">
+                          Palette match
+                        </p>
+                        <p class="truncate text-xs font-700 text-primary">In your recommended hues</p>
+                      </div>
+                      <span
+                        class="material-symbols-outlined shrink-0 text-lg text-vibrant-plum opacity-80"
+                        aria-hidden="true"
+                        >check_circle</span
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="lookbook" class="site-sr-section scroll-mt-28 bg-white py-24 md:py-32">
+        <div class="mx-auto max-w-[1400px] px-6 sm:px-8">
+          <div class="site-sr-item mb-24 text-center" style="--site-sr-delay: 0.05s">
+            <p class="site-eyebrow mb-5">Community</p>
+            <h2 class="site-h2 mb-6 text-balance">
+              In-App <span class="site-h2__accent--muted">Lookbook</span>
+            </h2>
+            <p class="site-lead mx-auto max-w-xl text-balance">
+              Save the outfits you love and come back anytime—your lookbook stays
+              with you on your phone.
+            </p>
+          </div>
+          <div
+            class="grid grid-cols-1 gap-12 md:grid-cols-3 md:items-start md:gap-x-8 md:gap-y-0 lg:gap-x-10"
+          >
+            <div class="group site-sr-item cursor-pointer" style="--site-sr-delay: 0.1s">
+              <div
+                class="relative mb-8 aspect-[3/4] overflow-hidden rounded-[2.5rem] shadow-lg"
+              >
+                <img
+                  alt="Saved look 1"
+                  class="h-full w-full object-cover transition-all duration-700 group-hover:scale-105"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuAGzaOoNNfb8W-wy_hymZ1w05cX5K1GJnpJYb0J3Id3sUQUhiwN5G1NRMsuPDianx493J8ysGSz7eN5p9vpohZaqu5mFRSG_ZJryVHv_K75osoAxpDyGL7iK_8HjuLooCvLOzmrfna4DmJJwuMw1sEzl_vcxv1PObI-eBbfQ77PnlTvLMvwsy_LUKXesmCj5hFM7ujGcIYEK7I89OcLJQpE5mEVVRjuj5xxfD2OAD5zvz1rmITCdg6LqTrKsyr6t480xcFKY4VjeK4"
+                />
+              </div>
+              <h3 class="mb-2 text-xl font-800 text-primary">Modern Minimal</h3>
+              <p class="site-caption">Shared from Style AI app</p>
+            </div>
+            <div
+              class="group site-sr-item cursor-pointer md:mt-[clamp(2.5rem,6.5vw,4.75rem)] lg:mt-[clamp(3rem,7vw,5.25rem)]"
+              style="--site-sr-delay: 0.16s"
+            >
+              <div
+                class="relative mb-8 aspect-[3/4] overflow-hidden rounded-[2.5rem] shadow-lg"
+              >
+                <img
+                  alt="Saved look 2"
+                  class="h-full w-full object-cover transition-all duration-700 group-hover:scale-105"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuCTjzoVVLfXgYi0TfFyZkhXnifCnZ-u-WcpQDUSbRLfg14Rv6VQVSvr_jI62v2Q2ISY9-eNrN1osiGELiN3R08tl58eeQEUFhNGq6scDy05HA2TpzJdhlgyD1EMi--5rdg2U8OOOY536IeH-1Qn-xlpN8hdEFkb_j0zdd74pnH50l9Jt7PkUfMzM3_wHAMkH6w0zBIzzCdLs1IooeoJP7Cqc64gFqksNJW4vpq8zuwZHr2jCN1VK76u5sCUuDtulvG6K_ZEqGd7hLM"
+                />
+              </div>
+              <h3 class="mb-2 text-xl font-800 text-primary">Executive Look</h3>
+              <p class="site-caption">Saved in App</p>
+            </div>
+            <div class="group site-sr-item cursor-pointer" style="--site-sr-delay: 0.22s">
+              <div
+                class="relative mb-8 aspect-[3/4] overflow-hidden rounded-[2.5rem] shadow-lg"
+              >
+                <img
+                  alt="Saved look 3"
+                  class="h-full w-full object-cover transition-all duration-700 group-hover:scale-105"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuB7q1au-1QzE4nJH6pGc-cuKxZWdfSMl1BTzOMJE7-It2R7HNPGjL8rSv-ex8SwEMFOvWECXkIWsKZOCuC8CC9qM7BHAWS3Lq4SEYOQg_V0yd8-BoCU4lcZUnXSXoJJl9DqNyt7dT8yg1UDqoLvv-VaApV_Wx6ekaluH1uk9GW7GGJqIhjGPIOZA2xPayKiSfUQxDapqkSAWr0eEY5_qJn3QNsIcjurtDby64rGvzAGVJVmAv8vficyixqofV5RFBNHRJCbVRjeewo"
+                />
+              </div>
+              <h3 class="mb-2 text-xl font-800 text-primary">Weekend Set</h3>
+              <p class="site-caption">Active Look</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section
+        id="download"
+        class="download-section site-sr-section relative scroll-mt-28 overflow-hidden bg-primary py-28 text-white md:py-36"
+      >
+        <div
+          class="download-section__atmo absolute inset-0 -z-0 overflow-hidden"
+          aria-hidden="true"
+        >
+          <div class="download-section__blob download-section__blob--c"></div>
+          <div class="download-section__blob download-section__blob--a"></div>
+          <div class="download-section__blob download-section__blob--b"></div>
+          <div class="download-section__vignette"></div>
+        </div>
+        <div
+          class="site-sr-item relative z-10 mx-auto max-w-3xl px-6 text-center sm:max-w-4xl sm:px-8"
+          style="--site-sr-delay: 0.06s"
+        >
+          <p class="download-section__eyebrow">Ready when you are</p>
+          <h2 class="download-section__title text-balance">
+            Step out feeling<br class="hidden sm:block" />
+            like <span class="download-section__title-accent">yourself</span>—not a trend.
+          </h2>
+          <p class="download-section__lead mb-12 text-balance md:mb-14">
+            Save looks you love, preview outfits on <em class="font-normal not-italic text-white/90">you</em>,
+            and lean on colors that flatter your skin. Built for the mornings when the mirror
+            feels loud—we quiet it down.
+          </p>
+          <div class="download-section__cta-row">
+            <a
+              class="download-section__store download-section__store--primary"
+              href="https://apps.apple.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span class="material-symbols-outlined" aria-hidden="true">ios</span>
+              App Store
+            </a>
+            <a
+              class="download-section__store download-section__store--secondary"
+              href="https://play.google.com/store/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span class="material-symbols-outlined" aria-hidden="true">android</span>
+              Google Play
+            </a>
+          </div>
+          <p class="download-section__note">
+            Free to start. Same calm energy as the rest of the app—no clutter, no pressure.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer mb-20" role="contentinfo">
+      <div class="site-footer__inner">
+        <div class="site-footer__identity">
+          <a href="/" class="site-footer__mark">
+            <img
+              src="/logo-mark.svg"
+              alt=""
+              width="24"
+              height="24"
+              class="brand-logo-img brand-logo-img--footer"
+              decoding="async"
+            />
+            <span>Style AI</span>
+          </a>
+          <p class="site-footer__copyright">
+            © 2026 Style AI. All rights reserved.
+          </p>
+        </div>
+        <nav class="site-footer__nav" aria-label="Legal">
+          <a href="/privacy" class="site-footer__link">Privacy Policy</a>
+          <span class="site-footer__divider" aria-hidden="true"></span>
+          <a href="/terms" class="site-footer__link">Terms of Service</a>
+        </nav>
+      </div>
+    </footer>
+
+    <div
+      id="site-cta-bar"
+      class="site-cta-bar pointer-events-none fixed bottom-0 left-0 z-[110] w-full p-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] sm:p-3"
+      data-visible="false"
+      aria-hidden="true"
+    >
+      <div
+        class="site-cta-bar__sheet pointer-events-auto mx-auto flex w-full max-w-[min(100%,17.5rem)] items-center justify-between gap-2 rounded-full border border-white/45 bg-white/82 px-2.5 py-1.5 shadow-lg shadow-primary/8 backdrop-blur-2xl sm:max-w-[19rem] sm:px-3 sm:py-2"
+      >
+        <div class="flex min-w-0 items-center gap-2 sm:gap-2.5">
+          <div
+            class="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-white plum-gradient sm:h-8 sm:w-8"
+          >
+            <span class="material-symbols-outlined text-[18px] sm:text-[20px]" aria-hidden="true"
+              >smart_toy</span
+            >
+          </div>
+          <div class="hidden min-w-0 sm:block">
+            <span class="block truncate text-[10px] font-800 leading-tight text-primary sm:text-[11px]"
+              >Colors &amp; outfits for you</span
+            >
+            <span class="block text-[8px] font-400 uppercase leading-tight tracking-wider text-slate-500"
+              >Made for your skin</span
+            >
+          </div>
+        </div>
+        <div class="flex shrink-0 items-center gap-1.5 sm:gap-2">
+          <a
+            class="rounded-full px-2 py-1 text-[8px] font-800 uppercase tracking-wider text-vibrant-plum transition-colors hover:bg-vibrant-plum/8 sm:px-2.5 sm:text-[9px] sm:tracking-widest"
+            href="#features"
+            >Learn</a
+          >
+          <a
+            href="#download"
+            class="plum-gradient flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-white shadow-md shadow-primary/15 sm:h-9 sm:w-9"
+            aria-label="Download app"
+          >
+            <span class="material-symbols-outlined text-lg sm:text-[22px]" aria-hidden="true"
+              >download</span
+            >
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
