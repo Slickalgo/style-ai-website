@@ -1,0 +1,23 @@
+[
+  { "source": "/terms", "target": "/terms.html", "status": "200" },
+  { "source": "/terms/", "target": "/terms.html", "status": "200" },
+  { "source": "/privacy", "target": "/privacy.html", "status": "200" },
+  { "source": "/privacy/", "target": "/privacy.html", "status": "200" },
+  { "source": "/guides", "target": "/guides/index.html", "status": "200" },
+  { "source": "/guides/", "target": "/guides/index.html", "status": "200" },
+  { "source": "/guides/what-to-wear-today-ai", "target": "/guides/what-to-wear-today-ai.html", "status": "200" },
+  { "source": "/guides/best-ai-fashion-apps", "target": "/guides/best-ai-fashion-apps.html", "status": "200" },
+  { "source": "/guides/skin-tone-colors-warm-undertone", "target": "/guides/skin-tone-colors-warm-undertone.html", "status": "200" },
+  { "source": "/guides/outfit-ideas-for-wedding", "target": "/guides/outfit-ideas-for-wedding.html", "status": "200" },
+  { "source": "/guides/ai-stylist-app-india", "target": "/guides/ai-stylist-app-india.html", "status": "200" },
+  { "source": "/guides/what-to-wear-mumbai-monsoon", "target": "/guides/what-to-wear-mumbai-monsoon.html", "status": "200" },
+  { "source": "/guides/what-to-wear-delhi-summer-heat", "target": "/guides/what-to-wear-delhi-summer-heat.html", "status": "200" },
+  { "source": "/guides/wedding-guest-outfits-india", "target": "/guides/wedding-guest-outfits-india.html", "status": "200" },
+  { "source": "/guides/office-wear-india-heat-ac", "target": "/guides/office-wear-india-heat-ac.html", "status": "200" },
+  { "source": "/guides/what-to-wear-in-nyc-spring", "target": "/guides/what-to-wear-in-nyc-spring.html", "status": "200" },
+  { "source": "/guides/ai-stylist-busy-parents", "target": "/guides/ai-stylist-busy-parents.html", "status": "200" },
+  { "source": "/guides/color-palette-from-wardrobe", "target": "/guides/color-palette-from-wardrobe.html", "status": "200" },
+  { "source": "/guides/office-dress-code-outfits", "target": "/guides/office-dress-code-outfits.html", "status": "200" },
+  { "source": "/guides/capsule-wardrobe-outfit-ideas", "target": "/guides/capsule-wardrobe-outfit-ideas.html", "status": "200" },
+  { "source": "/guides/travel-outfits-cold-weather", "target": "/guides/travel-outfits-cold-weather.html", "status": "200" }
+]

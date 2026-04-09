@@ -1,23 +1,261 @@
 import "./style.css";
+import "lenis/dist/lenis.css";
+import Lenis from "lenis";
+import { getFocusablesIn } from "./a11y-utils.js";
+import { initDownloadModal } from "./download-modal.js";
 
 const MD = 768;
 
-const FOCUSABLE_SELECTOR =
-  'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+const IOS_FALLBACK =
+  "https://apps.apple.com/in/search?term=Style%20AI%20stylist%20outfit%20planner&media=software";
+const ANDROID_FALLBACK =
+  "https://play.google.com/store/search?q=Style+AI+stylist+outfit+planner&c=apps&hl=en&gl=in";
 
-function isElementFocusable(el) {
-  if (!(el instanceof HTMLElement)) return false;
-  if (el.getAttribute("aria-hidden") === "true") return false;
-  if (el.closest('[aria-hidden="true"]')) return false;
-  if (el.closest("[inert]")) return false;
-  const style = window.getComputedStyle(el);
-  if (style.display === "none" || style.visibility === "hidden") return false;
-  return true;
+function initStoreLinks() {
+  const ios = import.meta.env.VITE_APP_STORE_IOS_URL;
+  const android = import.meta.env.VITE_APP_STORE_ANDROID_URL;
+  document.querySelectorAll("a[data-store-link]").forEach((a) => {
+    const k = a.getAttribute("data-store-link");
+    if (k === "ios") {
+      if (ios) a.href = ios;
+      else if (/^https:\/\/apps\.apple\.com\/?$/i.test(a.href.trim())) a.href = IOS_FALLBACK;
+    }
+    if (k === "android") {
+      if (android) a.href = android;
+      else if (/^https:\/\/play\.google\.com\/store\/?$/i.test(a.href.trim())) {
+        a.href = ANDROID_FALLBACK;
+      }
+    }
+  });
 }
 
-function getFocusablesIn(root) {
-  if (!root) return [];
-  return Array.from(root.querySelectorAll(FOCUSABLE_SELECTOR)).filter(isElementFocusable);
+/** @param {string} name @param {Record<string, unknown>} [params] */
+function gaEvent(name, params) {
+  if (typeof window.gtag !== "function") return;
+  window.gtag("event", name, params || {});
+}
+
+const ANALYTICS_CONSENT_KEY = "style_ai_analytics_consent_v1";
+
+function analyticsConsentStored() {
+  try {
+    return localStorage.getItem(ANALYTICS_CONSENT_KEY);
+  } catch {
+    return null;
+  }
+}
+
+function setAnalyticsConsent(value) {
+  try {
+    localStorage.setItem(ANALYTICS_CONSENT_KEY, value);
+  } catch {
+    /* private mode / blocked storage */
+  }
+}
+
+function ensureGtagStub() {
+  window.dataLayer = window.dataLayer || [];
+  if (typeof window.gtag !== "function") {
+    window.gtag = function gtag() {
+      window.dataLayer.push(arguments);
+    };
+  }
+}
+
+function gtagConsentDefaultDenied() {
+  ensureGtagStub();
+  window.gtag("consent", "default", {
+    analytics_storage: "denied",
+    ad_storage: "denied",
+    ad_user_data: "denied",
+    ad_personalization: "denied",
+    functionality_storage: "granted",
+    personalization_storage: "denied",
+    security_storage: "granted",
+    wait_for_update: 500,
+  });
+}
+
+/** @param {string} measurementId */
+function loadGtagAfterConsent(measurementId) {
+  const id = measurementId.trim();
+  gtagConsentDefaultDenied();
+  const s = document.createElement("script");
+  s.async = true;
+  s.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(id)}`;
+  s.onload = () => {
+    window.gtag("js", new Date());
+    window.gtag("consent", "update", {
+      analytics_storage: "granted",
+      ad_storage: "denied",
+      ad_user_data: "denied",
+      ad_personalization: "denied",
+    });
+    window.gtag("config", id, { send_page_view: true });
+    void initWebVitals();
+  };
+  document.head.appendChild(s);
+}
+
+function removeCookieConsentBar() {
+  document.getElementById("cookie-consent-bar")?.remove();
+}
+
+function mountCookieConsentBar(onAccept, onReject) {
+  if (document.getElementById("cookie-consent-bar")) return;
+  const bar = document.createElement("div");
+  bar.id = "cookie-consent-bar";
+  bar.className = "cookie-consent-bar";
+  bar.setAttribute("role", "dialog");
+  bar.setAttribute("aria-live", "polite");
+  bar.setAttribute("aria-label", "Analytics cookies");
+  bar.innerHTML = `
+    <div class="cookie-consent-bar__inner">
+      <p class="cookie-consent-bar__text">
+        Optional analytics cookies (Google Analytics 4) help us measure traffic and site performance.
+        <a class="cookie-consent-bar__link" href="/privacy">Privacy Policy</a>
+      </p>
+      <div class="cookie-consent-bar__actions">
+        <button type="button" class="cookie-consent-bar__btn cookie-consent-bar__btn--ghost" data-cookie-reject>Decline</button>
+        <button type="button" class="cookie-consent-bar__btn cookie-consent-bar__btn--primary" data-cookie-accept>Accept analytics</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(bar);
+  bar.querySelector("[data-cookie-accept]")?.addEventListener("click", onAccept);
+  bar.querySelector("[data-cookie-reject]")?.addEventListener("click", onReject);
+}
+
+function initConsentGateAndAnalytics() {
+  const id = import.meta.env.VITE_GA4_MEASUREMENT_ID;
+  if (!id || typeof id !== "string" || !id.trim()) return;
+
+  const prior = analyticsConsentStored();
+  if (prior === "rejected") return;
+
+  if (prior === "accepted") {
+    loadGtagAfterConsent(id);
+    return;
+  }
+
+  mountCookieConsentBar(
+    () => {
+      setAnalyticsConsent("accepted");
+      removeCookieConsentBar();
+      loadGtagAfterConsent(id);
+    },
+    () => {
+      setAnalyticsConsent("rejected");
+      removeCookieConsentBar();
+    }
+  );
+}
+
+function initStoreClickTracking() {
+  document.querySelectorAll("a[data-store-link]").forEach((a) => {
+    a.addEventListener("click", () => {
+      const platform = a.getAttribute("data-store-link");
+      const inModal = Boolean(a.closest("#download-app-modal"));
+      gaEvent(platform === "ios" ? "store_click_ios" : "store_click_android", {
+        link_url: a.href,
+        ...(inModal ? { surface: "modal" } : {}),
+      });
+    });
+  });
+  const stickyDl = document.querySelector(
+    '#site-cta-bar a[data-download-source="sticky"]'
+  );
+  if (stickyDl) {
+    stickyDl.addEventListener("click", () => {
+      gaEvent("cta_sticky_download", { method: "sticky_bar" });
+    });
+  }
+}
+
+function initScrollDepth() {
+  const marks = new Set();
+  function check() {
+    const doc = document.documentElement;
+    const h = doc.scrollHeight - window.innerHeight;
+    if (h < 1) return;
+    const p = window.scrollY / h;
+    if (p >= 0.5 && !marks.has(50)) {
+      marks.add(50);
+      gaEvent("scroll_50", {});
+    }
+    if (p >= 0.9 && !marks.has(90)) {
+      marks.add(90);
+      gaEvent("scroll_90", {});
+    }
+  }
+  window.addEventListener("scroll", check, { passive: true });
+  check();
+}
+
+async function initWebVitals() {
+  if (!import.meta.env.VITE_GA4_MEASUREMENT_ID) return;
+  try {
+    const { onCLS, onINP, onLCP } = await import("web-vitals");
+    const send = (metric) => {
+      gaEvent("web_vitals", {
+        metric_id: metric.id,
+        metric_name: metric.name,
+        metric_value:
+          metric.name === "CLS" ? Math.round(metric.value * 1000) : Math.round(metric.value),
+        metric_delta:
+          metric.name === "CLS" ? Math.round(metric.delta * 1000) : Math.round(metric.delta),
+      });
+    };
+    onLCP(send);
+    onINP(send);
+    onCLS(send);
+  } catch {
+    /* optional / blocked */
+  }
+}
+
+/** @type {Lenis | null} */
+let globalLenis = null;
+
+function initLenis() {
+  const mqReduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const mqDesktop = window.matchMedia(`(min-width: ${MD}px)`);
+
+  function allowLenis() {
+    return !mqReduce.matches && mqDesktop.matches;
+  }
+
+  function mount() {
+    if (globalLenis || !allowLenis()) return;
+    globalLenis = new Lenis({
+      autoRaf: true,
+      lerp: 0.09,
+      smoothWheel: true,
+      syncTouch: false,
+      syncTouchLerp: 0.085,
+      touchMultiplier: 1.12,
+      wheelMultiplier: 1,
+      anchors: {
+        duration: 1.25,
+      },
+      stopInertiaOnNavigate: true,
+    });
+  }
+
+  function unmount() {
+    if (!globalLenis) return;
+    globalLenis.destroy();
+    globalLenis = null;
+  }
+
+  function sync() {
+    if (allowLenis()) mount();
+    else unmount();
+  }
+
+  sync();
+  mqReduce.addEventListener("change", sync);
+  mqDesktop.addEventListener("change", sync);
 }
 
 function initNav() {
@@ -32,6 +270,8 @@ function initNav() {
   const mainEl = document.querySelector("main");
   const footerEl = document.querySelector("footer");
   const ctaBarEl = document.getElementById("site-cta-bar");
+  const heroEl = document.getElementById("hero");
+  const downloadSectionEl = document.getElementById("download");
 
   let lastY = window.scrollY;
   let reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -103,6 +343,7 @@ function initNav() {
     mobileToggle?.setAttribute("aria-label", "Open menu");
     mobilePanel?.setAttribute("aria-hidden", "true");
     document.body.style.overflow = "";
+    globalLenis?.start();
     applyMobileMenuInert(false);
     document.removeEventListener("keydown", onMobileMenuKeydown, true);
     const prev = mobileMenuPreviousFocus;
@@ -133,6 +374,7 @@ function initNav() {
       mobileToggle?.setAttribute("aria-label", "Close menu");
       mobilePanel?.setAttribute("aria-hidden", "false");
       document.body.style.overflow = "hidden";
+      globalLenis?.stop();
       applyMobileMenuInert(true);
       if (!wasOpen) {
         document.addEventListener("keydown", onMobileMenuKeydown, true);
@@ -154,9 +396,28 @@ function initNav() {
     }
   }
 
+  function updateMobileNavSurface() {
+    if (window.innerWidth >= MD || !mobileBar) return;
+
+    const barRect = mobileBar.getBoundingClientRect();
+
+    /** True if this element occupies any of the vertical band behind the mobile pill */
+    function overlapsNavBand(el) {
+      if (!el) return false;
+      const r = el.getBoundingClientRect();
+      return r.bottom > barRect.top && r.top < barRect.bottom;
+    }
+
+    const overDarkBand =
+      overlapsNavBand(heroEl) || overlapsNavBand(downloadSectionEl);
+
+    nav.dataset.mobileNavBg = overDarkBand ? "dark" : "light";
+  }
+
   function onScroll() {
     if (window.innerWidth < MD) {
       lastY = window.scrollY;
+      updateMobileNavSurface();
       return;
     }
 
@@ -201,6 +462,7 @@ function initNav() {
   });
 
   onScroll();
+  updateMobileNavSurface();
 }
 
 function initSiteCtaBar() {
@@ -210,6 +472,11 @@ function initSiteCtaBar() {
   if (!bar || !hero) return;
 
   function updateCtaBar() {
+    if (window.innerWidth >= MD) {
+      bar.dataset.visible = "false";
+      bar.setAttribute("aria-hidden", "true");
+      return;
+    }
     const heroRect = hero.getBoundingClientRect();
     const pastHero = heroRect.bottom < 32;
 
@@ -401,6 +668,198 @@ function initSiteScrollReveal() {
   });
 }
 
+function initHeroPhoneCarousel() {
+  const track = document.querySelector("[data-hero-phone-carousel]");
+  if (!track) return;
+
+  const shell = track.parentElement;
+  if (!shell) return;
+
+  const originals = track.querySelectorAll(".hero-phone-mock__slide");
+  const realSlideCount = originals.length;
+  if (realSlideCount < 2) return;
+
+  const firstSlide = originals[0];
+  const cloneSlide = firstSlide.cloneNode(true);
+  cloneSlide.classList.add("hero-phone-mock__slide--clone");
+  cloneSlide.removeAttribute("data-hero-slide");
+  cloneSlide.setAttribute("aria-hidden", "true");
+  cloneSlide.querySelectorAll("img[loading]").forEach((img) => {
+    img.removeAttribute("loading");
+  });
+  track.appendChild(cloneSlide);
+
+  const slides = track.querySelectorAll(".hero-phone-mock__slide");
+  const totalSlides = slides.length;
+  const cloneIndex = realSlideCount;
+
+  const mqReduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const HOLD_MS = 2000;
+  const TRANSITION_FALLBACK_MS = 1350;
+
+  let index = 0;
+  /** @type {ReturnType<typeof setTimeout> | null} */
+  let holdTimer = null;
+  /** @type {ReturnType<typeof setTimeout> | null} */
+  let transitionFallbackTimer = null;
+  /** @type {((e: Event) => void) | null} */
+  let boundTransitionEnd = null;
+
+  function applyA11y() {
+    slides.forEach((slide, i) => {
+      slide.setAttribute("aria-hidden", i === index ? "false" : "true");
+    });
+  }
+
+  function measureAndApplyWidths() {
+    const w = Math.max(0, Math.round(shell.clientWidth));
+    if (w < 1) return 0;
+    track.style.width = `${totalSlides * w}px`;
+    slides.forEach((s) => {
+      s.style.flexShrink = "0";
+      s.style.flexBasis = `${w}px`;
+      s.style.width = `${w}px`;
+    });
+    return w;
+  }
+
+  function setTransformPx() {
+    const w = Math.max(0, Math.round(shell.clientWidth));
+    if (w < 1) return;
+    track.style.transform = `translate3d(${-index * w}px, 0, 0)`;
+  }
+
+  function clearCycle() {
+    if (holdTimer != null) {
+      window.clearTimeout(holdTimer);
+      holdTimer = null;
+    }
+    if (transitionFallbackTimer != null) {
+      window.clearTimeout(transitionFallbackTimer);
+      transitionFallbackTimer = null;
+    }
+    if (boundTransitionEnd) {
+      track.removeEventListener("transitionend", boundTransitionEnd);
+      boundTransitionEnd = null;
+    }
+  }
+
+  function goToIndex(next, instant = false) {
+    if (next < 0 || next >= totalSlides) return;
+    index = next;
+    applyA11y();
+    if (instant) {
+      track.classList.add("hero-phone-mock__track--reduced");
+      measureAndApplyWidths();
+      setTransformPx();
+      track.offsetHeight;
+      track.classList.remove("hero-phone-mock__track--reduced");
+      return;
+    }
+    setTransformPx();
+  }
+
+  function onTransitionFinished() {
+    if (boundTransitionEnd === null && transitionFallbackTimer === null) return;
+    if (transitionFallbackTimer != null) {
+      window.clearTimeout(transitionFallbackTimer);
+      transitionFallbackTimer = null;
+    }
+    if (boundTransitionEnd) {
+      track.removeEventListener("transitionend", boundTransitionEnd);
+      boundTransitionEnd = null;
+    }
+
+    if (index === cloneIndex) {
+      goToIndex(0, true);
+    }
+
+    if (mqReduce.matches || document.visibilityState !== "visible") return;
+    holdTimer = window.setTimeout(tickAdvance, HOLD_MS);
+  }
+
+  function tickAdvance() {
+    holdTimer = null;
+    if (mqReduce.matches || document.visibilityState !== "visible") return;
+    if (shell.clientWidth < 2) {
+      holdTimer = window.setTimeout(tickAdvance, 64);
+      return;
+    }
+
+    clearCycle();
+
+    if (index < realSlideCount - 1) {
+      goToIndex(index + 1, false);
+    } else if (index === realSlideCount - 1) {
+      goToIndex(cloneIndex, false);
+    } else {
+      goToIndex(0, true);
+      if (!mqReduce.matches && document.visibilityState === "visible") {
+        holdTimer = window.setTimeout(tickAdvance, HOLD_MS);
+      }
+      return;
+    }
+
+    if (mqReduce.matches) return;
+
+    boundTransitionEnd = (e) => {
+      if (e.target !== track || e.propertyName !== "transform") return;
+      onTransitionFinished();
+    };
+    track.addEventListener("transitionend", boundTransitionEnd);
+    transitionFallbackTimer = window.setTimeout(
+      onTransitionFinished,
+      TRANSITION_FALLBACK_MS
+    );
+  }
+
+  function start() {
+    if (mqReduce.matches) return;
+    clearCycle();
+    measureAndApplyWidths();
+    setTransformPx();
+    holdTimer = window.setTimeout(tickAdvance, HOLD_MS);
+  }
+
+  function stop() {
+    clearCycle();
+  }
+
+  function syncReduce() {
+    if (mqReduce.matches) {
+      track.classList.add("hero-phone-mock__track--reduced");
+      stop();
+      goToIndex(0, true);
+    } else {
+      track.classList.remove("hero-phone-mock__track--reduced");
+      measureAndApplyWidths();
+      setTransformPx();
+      if (document.visibilityState === "visible") start();
+    }
+  }
+
+  const ro = new ResizeObserver(() => {
+    const keepReduced =
+      mqReduce.matches || track.classList.contains("hero-phone-mock__track--reduced");
+    track.classList.add("hero-phone-mock__track--reduced");
+    measureAndApplyWidths();
+    setTransformPx();
+    window.requestAnimationFrame(() => {
+      if (!keepReduced) track.classList.remove("hero-phone-mock__track--reduced");
+    });
+  });
+  ro.observe(shell);
+
+  mqReduce.addEventListener("change", syncReduce);
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "hidden") stop();
+    else if (!mqReduce.matches) start();
+  });
+
+  goToIndex(0, true);
+  syncReduce();
+}
+
 function initFeaturesCountUp() {
   const section = document.getElementById("features");
   if (!section) return;
@@ -459,7 +918,18 @@ function initFeaturesCountUp() {
   nodes.forEach((n) => io.observe(n));
 }
 
+initStoreLinks();
+initConsentGateAndAnalytics();
+initStoreClickTracking();
+initScrollDepth();
+
+initLenis();
 initNav();
+initDownloadModal({
+  getLenis: () => globalLenis,
+  trackEvent: gaEvent,
+});
+initHeroPhoneCarousel();
 initSiteCtaBar();
 initWhatWeDoReveal();
 initFeaturesReveal();
