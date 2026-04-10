@@ -1,0 +1,21 @@
+{
+  "cleanUrls": false,
+  "rewrites": [
+    {
+      "source": "/terms",
+      "destination": "/terms.html"
+    },
+    {
+      "source": "/privacy",
+      "destination": "/privacy.html"
+    },
+    {
+      "source": "/guides",
+      "destination": "/guides/index.html"
+    },
+    {
+      "source": "/guides/:slug",
+      "destination": "/guides/:slug.html"
+    }
+  ]
+}
