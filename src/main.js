@@ -16,6 +16,23 @@ import Lenis from "lenis";
 
 const MD = 768;
 
+// ── Hero A/B/C variant tag ───────────────────────────────────────────
+// Read once at module scope. Source of truth is the `data-variant`
+// attribute stamped onto <html> by scripts/build-variants.mjs at build
+// time (`a`, `b`, or `c`). Falls back to the `sa_v` cookie set by the
+// edge middleware. Returns `null` when neither is present — e.g., on
+// ad-lander pages or local dev runs that bypass the middleware. A null
+// variant means "do not tag" — GA4 and Meta Pixel receive no variant
+// dimension, keeping reporting clean.
+
+/** @type {"a" | "b" | "c" | null} */
+const HERO_VARIANT = (() => {
+  const fromDom = document.documentElement.getAttribute("data-variant");
+  if (fromDom === "a" || fromDom === "b" || fromDom === "c") return fromDom;
+  const match = document.cookie.match(/(?:^|;\s*)sa_v=([abc])\b/);
+  return match ? /** @type {"a" | "b" | "c"} */ (match[1]) : null;
+})();
+
 // ── Store links ──────────────────────────────────────────────────────
 
 const IOS_FALLBACK =
@@ -49,7 +66,14 @@ function initStoreLinks() {
 /** @param {string} name @param {Record<string, unknown>} [params] */
 function gaEvent(name, params) {
   if (typeof window.gtag !== "function") return;
-  window.gtag("event", name, params || {});
+  // Tag every event with the hero variant so GA4 reports can split by
+  // `variant` (registered as a custom dimension in the GA4 property).
+  // `gtag('set', ...)` after config also propagates this globally — we
+  // stamp per-event as belt-and-braces so standalone calls are safe.
+  const merged = HERO_VARIANT
+    ? { ...(params || {}), variant: HERO_VARIANT }
+    : params || {};
+  window.gtag("event", name, merged);
 }
 
 const ANALYTICS_CONSENT_KEY = "style_ai_analytics_consent_v1";
@@ -108,6 +132,11 @@ function loadGtagAfterConsent(measurementId) {
       ad_user_data: "denied",
       ad_personalization: "denied",
     });
+    // Register the hero variant as a user-scoped property so every event
+    // inherits it in GA4 reporting, independent of per-event params.
+    if (HERO_VARIANT) {
+      window.gtag("set", "user_properties", { variant: HERO_VARIANT });
+    }
     window.gtag("config", id, { send_page_view: true });
     void initWebVitals();
   };
@@ -157,7 +186,14 @@ function mountCookieConsentBar(onAccept, onReject) {
 /** @param {string} eventName @param {Record<string, unknown>} [params] */
 function fbqEvent(eventName, params) {
   if (typeof window.fbq !== "function") return;
-  window.fbq("track", eventName, params || {});
+  // Meta Pixel has no global-set equivalent for custom params, so we stamp
+  // `variant` on every event. Custom Conversions in Meta Events Manager
+  // can then filter on this param to produce per-variant CPA columns in
+  // Ads Manager.
+  const merged = HERO_VARIANT
+    ? { ...(params || {}), variant: HERO_VARIANT }
+    : params || {};
+  window.fbq("track", eventName, merged);
 }
 
 /** @param {string} pixelId */
@@ -184,7 +220,9 @@ function loadMetaPixelAfterConsent(pixelId) {
     s.parentNode.insertBefore(t, s);
   })(window, document, "script", "https://connect.facebook.net/en_US/fbevents.js");
   window.fbq("init", id);
-  window.fbq("track", "PageView");
+  // Tag the first PageView with the variant so Meta attribution is correct
+  // from the first event in the session, not just from the second onward.
+  window.fbq("track", "PageView", HERO_VARIANT ? { variant: HERO_VARIANT } : {});
 }
 
 function initConsentGateAndAnalytics() {

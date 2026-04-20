@@ -72,3 +72,48 @@ WebGL fragment shader only if the CSS filter fails the "dipping in water" read i
 Which one gets a `hero/concept-{a,b,c}` branch? I can prototype two in parallel if two tie. My read: **B is the editorial moonshot**, **C is the conversion dark-horse**, **A is the safe A/B with a known upside**. If I had to pick one without your input I'd pick C — fastest to prototype, easiest to A/B, cleanest perf story, and the brief's own line *"conversion is the only scoreboard"* makes the zero-image hero the uncomfortable-but-honest bet.
 
 I'd rather we argue about that than ship the comfortable choice.
+
+---
+
+## Update 2026-04-20 — superseded by a three-way live A/B/C
+
+The CEO rejected the pick-one-concept framing. All three ship simultaneously and compete for live traffic. Decision rule logged in `DESIGN-DECISIONS.md` (2026-04-20 entry: *"Decision rule for the A/B/C test, written BEFORE it runs"*).
+
+### How the traffic split works
+
+One URL — `styledesigner.co.in/` — same as today. No ad-ops change. No creative triplication. Every Meta ad still points at `/`.
+
+Vercel Edge Middleware (`middleware.js` at repo root) intercepts the root path and does three things before the browser gets any bytes:
+
+1. **Reads a cookie.** Returning visitors always see their prior variant. The cookie is `sa_v`, first-party, 1-year, SameSite=Lax, value is a single letter (`a`, `b`, or `c`). No PII.
+2. **Assigns new visitors.** Fresh visitors get a cryptographically random 33/33/33 split via `crypto.getRandomValues`. Independent of IP, UA, headers — so two people on the same office Wi-Fi get independent assignments.
+3. **Rewrites internally** to `/_variants/{a|b|c}/index.html`. The address bar stays `/`. The user never sees a variant URL.
+
+Override for QA: append `?v=a|b|c` to any URL to force and pin the variant in the browser. Useful for the CEO to preview each variant on the live deploy.
+
+### How the variants are built
+
+`scripts/build-variants.mjs` runs in both `npm run dev` and `npm run build` `prebuild`. It reads `index.html` at repo root and generates `_variants/a/index.html`, `_variants/b/index.html`, `_variants/c/index.html`. Each output is byte-identical to the source except:
+- `<html lang="en" class="bg-paper" data-variant="X">` stamped so client-side analytics can read the variant without a cookie parse.
+- `<meta name="robots" content="noindex, nofollow">` injected after the canonical link.
+- A leading HTML comment flagging the file as generated.
+
+Vite picks up the three variants as additional rollup inputs (`vite.config.js:123–126`), so asset hashes and bundling stay consistent across all four outputs (`index.html` + three variants).
+
+**Right now, all three variants = the current hero.** That's intentional. A is the control (shipping today). B and C stay as copies of A until a follow-up session prototypes the breathing-hero + zero-image heroes on `hero/concept-b` and `hero/concept-c` branches, CEO reviews the motion on Vercel previews, and only then replaces the hero `<section>` inside `_variants/b/index.html` and `_variants/c/index.html` (or — cleaner — modifies `build-variants.mjs` to swap in concept-specific hero fragments).
+
+### How the data flows to the winner
+
+`src/main.js` reads `data-variant` once at module scope (falls back to the `sa_v` cookie) and tags every GA4 `event` + Meta Pixel `track` call with `variant: 'a'|'b'|'c'`. The instrumentation is live regardless of whether the concepts are prototyped — so the day variant B's hero ships, the day's traffic already carries the variant attribution.
+
+Three Meta **custom conversions** (to be created in Meta Events Manager before the test runs) filter on the `variant` param: `InitiateCheckout_VariantA`, `_VariantB`, `_VariantC`. Each becomes a selectable column in Ads Manager — cost-per-custom-conversion-per-variant falls out natively with no spreadsheet work.
+
+GA4 needs `variant` registered as a custom dimension (property-level setting, no code change). Once registered, every report can split by it.
+
+### When a winner is called
+
+Per `DESIGN-DECISIONS.md`: 14-day minimum, 1,000 visitors / 100 conversions per variant floor, 95% statistical confidence on CPA. Stop-early kill switch pauses any variant running ≥20% worse than average after 500 visitors.
+
+### Cleanup
+
+When we have a winner, it's a one-line edit to `middleware.js` (hard-pin `assigned` to the winning letter). A follow-up PR deletes the middleware, the variant build step, and the losing HTML. The site returns to static-only with no edge overhead. Reversible.

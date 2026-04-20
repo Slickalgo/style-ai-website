@@ -51,4 +51,45 @@ Decision punted to the post-pick session. `package.json` unchanged.
 
 ---
 
+## 2026-04-20 — A/B/C test via edge middleware on a single URL
+
+**Context.** The original proposal was "CEO picks one concept, one branch, prototype, ship." The CEO asked instead to run all three concepts as a live A/B/C test so conversion data — not taste — picks the winner. Two routing approaches were considered.
+
+**Rejected: three distinct ad-lander URLs (`/`, `/b/`, `/c/`) with Meta splitting traffic at the creative level.** Zero new infrastructure, matches the existing `/how-she-works` and `/the-looks` ad-lander pattern. Rejected because the operational cost is recurring: every new ad creative must be triplicated across three URLs for the duration of the test, and Meta's delivery system cannot be trusted to produce a clean 33/33/33 split without the A/B-Test tool actively running. The ad-ops cost to the CEO was judged heavier than the one-time infrastructure cost.
+
+**Chosen: Vercel Edge Middleware on a single URL (`/`).** `middleware.js` at repo root intercepts requests to the root path, reads or sets a first-party cookie (`sa_v`, 1-year, SameSite=Lax), hashes a fresh visitor 33/33/33 via `crypto.getRandomValues`, and rewrites the response internally to `/_variants/{a|b|c}/index.html`. The URL in the address bar stays `/`. Returning visitors see the same variant. Ads point at `/` as they always have — zero ad-ops change. The CEO can force a specific variant by appending `?v=a|b|c` to any URL, which re-pins the cookie for that browser.
+
+**Cost.** Adds one dependency (`@vercel/edge`, ~3KB, Vercel-authored), ~30–60ms of edge-function TTFB on the first byte of the root page, one first-party functional cookie, and a new `_variants/` tree generated at build time. Concept C's LCP target of 1.1s on 4G becomes ~1.15s with edge overhead — still well under the 1.8s brief cap. This is pitch-first territory per brief §Technical constraints; the CEO approved the pitch in the 2026-04-20 session.
+
+**Cleanup path.** When a winner is declared, a single-line change to `middleware.js` (hard-pin `assigned` to the winning letter) flips 100% of traffic to the winner. A follow-up PR then deletes `middleware.js`, the `_variants/` build step, and the losing-variant HTML; the root returns to serving `index.html` directly with no edge overhead. Reversible within one small PR.
+
+---
+
+## 2026-04-20 — Decision rule for the A/B/C test, written BEFORE it runs
+
+**Context.** The brief's §Success section names the scoreboard (CPA drop, scroll-depth lift, `InitiateCheckout` rate) but not the decision rule. Writing the rule before the data arrives prevents post-hoc rationalization when one variant looks close-but-not-quite to another.
+
+**Outcome — locked in advance:**
+
+| Metric | Source | Winning signal |
+|---|---|---|
+| **Cost per install (PRIMARY)** | Meta Ads Manager via three custom conversions filtered on the `variant` Pixel param | Lowest CPA at **≥95% statistical confidence** |
+| **`InitiateCheckout` rate per visit** | Meta Events Manager, GA4 | Highest rate; leading indicator |
+| **`scroll_90` rate** | GA4 | ≥10% lift vs. control |
+| **LCP p75** | GA4 Web Vitals (`src/main.js` `initWebVitals`) | Concept C must beat A/B by ≥0.5s to justify its zero-image thesis |
+| **Bounce / avg session duration** | GA4 | Sanity check — no material regression |
+
+**Run parameters:**
+- **Minimum duration:** 14 calendar days. Shorter reads noise.
+- **Traffic floor:** ≥1,000 visitors **and** ≥100 conversions per variant before any winner can be declared. Below that, extend.
+- **Stop-early kill switch:** if any variant's CPA is ≥20% worse than the running average after 500 visitors, pause that variant in the middleware (hard-pin zero traffic to it) so ad spend stops bleeding into a known loser. Other two continue.
+- **Tiebreaker:** if two variants tie on CPA within the 95% confidence interval, pick the one with better LCP p75. Perf is permanent; CPA noise is not.
+
+**Instrumentation required before launch (not yet shipped):**
+1. Add `variant` as a GA4 custom dimension (property-level setting in the GA4 UI; no code change).
+2. Create three custom conversions in Meta Events Manager (`InitiateCheckout_VariantA/B/C`) filtered on the `variant` Pixel param.
+3. Build a GA4 Explore saved report: rows = variant, columns = `scroll_50` / `scroll_90` / `cta_scroll_to_ask` / avg LCP.
+
+---
+
 *Add entries below as we make decisions. Future agents: if you reverse any entry above, add a new entry explaining why — do not edit history.*
