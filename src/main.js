@@ -147,15 +147,62 @@ function mountCookieConsentBar(onAccept, onReject) {
   bar.querySelector("[data-cookie-reject]")?.addEventListener("click", onReject);
 }
 
+// ── Meta Pixel ────────────────────────────────────────────────────────
+// Client-side Facebook/Instagram pixel. Loads AFTER consent alongside
+// GA4. Wired for paid-funnel attribution — PageView on load, ViewContent
+// on section reveals, InitiateCheckout on App Store tap. Conversions API
+// (server-side CAPI) is deferred until the backend adds a /events/meta
+// webhook; events here can be mirrored to CAPI with matching event_ids.
+
+/** @param {string} eventName @param {Record<string, unknown>} [params] */
+function fbqEvent(eventName, params) {
+  if (typeof window.fbq !== "function") return;
+  window.fbq("track", eventName, params || {});
+}
+
+/** @param {string} pixelId */
+function loadMetaPixelAfterConsent(pixelId) {
+  const id = pixelId.trim();
+  if (!id) return;
+  // Stub + async loader, adapted from Meta's official snippet. We include
+  // it only after the consent gate has granted analytics — no mysterious
+  // network calls before the user has said yes.
+  (function (f, b, e, v, n, t, s) {
+    if (f.fbq) return;
+    n = f.fbq = function () {
+      n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
+    };
+    if (!f._fbq) f._fbq = n;
+    n.push = n;
+    n.loaded = !0;
+    n.version = "2.0";
+    n.queue = [];
+    t = b.createElement(e);
+    t.async = !0;
+    t.src = v;
+    s = b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t, s);
+  })(window, document, "script", "https://connect.facebook.net/en_US/fbevents.js");
+  window.fbq("init", id);
+  window.fbq("track", "PageView");
+}
+
 function initConsentGateAndAnalytics() {
-  const id = import.meta.env.VITE_GA4_MEASUREMENT_ID;
-  if (!id || typeof id !== "string" || !id.trim()) return;
+  const gaId = import.meta.env.VITE_GA4_MEASUREMENT_ID;
+  const pixelId = import.meta.env.VITE_META_PIXEL_ID;
+  const hasAnyId = (gaId && gaId.trim()) || (pixelId && pixelId.trim());
+  if (!hasAnyId) return;
+
+  function grant() {
+    if (gaId) loadGtagAfterConsent(gaId);
+    if (pixelId) loadMetaPixelAfterConsent(pixelId);
+  }
 
   const prior = analyticsConsentStored();
   if (prior === "rejected") return;
 
   if (prior === "accepted") {
-    loadGtagAfterConsent(id);
+    grant();
     return;
   }
 
@@ -163,7 +210,7 @@ function initConsentGateAndAnalytics() {
     () => {
       setAnalyticsConsent("accepted");
       removeCookieConsentBar();
-      loadGtagAfterConsent(id);
+      grant();
     },
     () => {
       setAnalyticsConsent("rejected");
@@ -179,6 +226,13 @@ function initStoreClickTracking() {
       gaEvent(platform === "ios" ? "store_click_ios" : "store_click_android", {
         link_url: a.href,
       });
+      // Meta's equivalent: InitiateCheckout is the canonical "user left for
+      // the app store" signal. content_category disambiguates iOS vs
+      // Android in Ads Manager.
+      fbqEvent("InitiateCheckout", {
+        content_category: platform || "store",
+        content_name: "style_ai_app",
+      });
     });
   });
   // Any hero / sticky CTA that scrolls to #your-turn is a soft conversion
@@ -190,6 +244,7 @@ function initStoreClickTracking() {
         : a.hasAttribute("data-sticky-cta") ? "sticky"
         : "other";
       gaEvent("cta_scroll_to_ask", { source });
+      fbqEvent("ViewContent", { content_name: "your_turn", source });
     });
   });
 }
@@ -204,10 +259,14 @@ function initScrollDepth() {
     if (p >= 0.5 && !marks.has(50)) {
       marks.add(50);
       gaEvent("scroll_50", {});
+      // Meta: ViewContent when the user has engaged past halfway —
+      // clearer paid-funnel signal than PageView alone.
+      fbqEvent("ViewContent", { content_name: "issue_halfway" });
     }
     if (p >= 0.9 && !marks.has(90)) {
       marks.add(90);
       gaEvent("scroll_90", {});
+      fbqEvent("ViewContent", { content_name: "issue_deep_scroll" });
     }
   }
   window.addEventListener("scroll", check, { passive: true });
