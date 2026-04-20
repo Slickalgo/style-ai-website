@@ -8,12 +8,15 @@
 //   2. A <meta name="robots" content="noindex, nofollow"> injected after the
 //      canonical link so search engines don't index the variant URLs directly.
 //   3. A leading HTML comment flagging the file as generated.
+//   4. If `scripts/variants/<v>.mjs` exists, its default export runs as a last-mile
+//      transform — lets concepts B and C diverge from the A control (hero section
+//      swap, preload strip, etc.) without forking index.html three ways.
 //
 // Runs in both `dev` and `prebuild` so vite sees the files as rollup inputs.
 
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { resolve, dirname } from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
 const REPO_ROOT = resolve(__dirname, "..");
@@ -53,7 +56,29 @@ function stampVariant(html, variant) {
   return out;
 }
 
-function main() {
+async function applyVariantOverride(html, variant) {
+  // If scripts/variants/<v>.mjs exists, import and apply its default export
+  // as a transform. Contract: `export default async function (html, variant)`
+  // returns the transformed HTML string. Missing file = no override = pass-through.
+  const overridePath = resolve(__dirname, "variants", `${variant}.mjs`);
+  if (!existsSync(overridePath)) return html;
+  const mod = await import(pathToFileURL(overridePath).href);
+  if (typeof mod.default !== "function") {
+    throw new Error(
+      `build-variants: ${overridePath} exists but has no default export — ` +
+        `remove the file or export a default (html, variant) => html function.`,
+    );
+  }
+  const out = await mod.default(html, variant);
+  if (typeof out !== "string" || !out.length) {
+    throw new Error(
+      `build-variants: ${overridePath} default export returned non-string or empty output for variant=${variant}.`,
+    );
+  }
+  return out;
+}
+
+async function main() {
   if (!existsSync(SOURCE)) {
     console.error(`build-variants: source not found at ${SOURCE}`);
     process.exit(1);
@@ -64,9 +89,16 @@ function main() {
     const destDir = resolve(REPO_ROOT, "_variants", v);
     const destFile = resolve(destDir, "index.html");
     mkdirSync(destDir, { recursive: true });
-    writeFileSync(destFile, stampVariant(source, v), "utf8");
-    console.log(`build-variants: wrote _variants/${v}/index.html`);
+    const stamped = stampVariant(source, v);
+    const final = await applyVariantOverride(stamped, v);
+    writeFileSync(destFile, final, "utf8");
+    const delta = final.length - stamped.length;
+    const suffix = delta === 0 ? "" : ` (${delta > 0 ? "+" : ""}${delta}b override)`;
+    console.log(`build-variants: wrote _variants/${v}/index.html${suffix}`);
   }
 }
 
-main();
+main().catch((err) => {
+  console.error(err);
+  process.exit(1);
+});
