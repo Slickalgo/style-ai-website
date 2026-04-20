@@ -1,10 +1,22 @@
+// Style.ai marketing site — runtime.
+//
+// Editorial site runtime. Four concerns: analytics + consent, desktop-only
+// smooth scroll, scroll-reveal choreography, and two section-specific helpers
+// (sticky CTA visibility + hero verdict rotation).
+//
+// Anti-pattern audit: the prior runtime (937 lines) had initNav, carousel,
+// download modal, feature-reveal, count-up, and a nav bar built around the
+// maroon palette. All deleted — the new editorial IA has none of those
+// surfaces. Scroll-reveal + store-click tracking are the only primitives
+// carried over verbatim.
+
 import "./style.css";
 import "lenis/dist/lenis.css";
 import Lenis from "lenis";
-import { getFocusablesIn } from "./a11y-utils.js";
-import { initDownloadModal } from "./download-modal.js";
 
 const MD = 768;
+
+// ── Store links ──────────────────────────────────────────────────────
 
 const IOS_FALLBACK =
   "https://apps.apple.com/in/search?term=Style%20AI%20stylist%20outfit%20planner&media=software";
@@ -28,6 +40,11 @@ function initStoreLinks() {
     }
   });
 }
+
+// ── Analytics + consent gate ─────────────────────────────────────────
+// GA4 only loads after explicit consent (stored in localStorage). The
+// consent bar markup is built inline here so it stays decoupled from the
+// editorial stylesheet — neutral utility classes, ink-on-paper.
 
 /** @param {string} name @param {Record<string, unknown>} [params] */
 function gaEvent(name, params) {
@@ -101,24 +118,28 @@ function removeCookieConsentBar() {
   document.getElementById("cookie-consent-bar")?.remove();
 }
 
+/**
+ * Minimal paper-on-ink consent strip. Bottom of screen, mono caps, single
+ * line of prose + two actions. No modal, no scrim — editorial touches,
+ * not legal chrome.
+ */
 function mountCookieConsentBar(onAccept, onReject) {
   if (document.getElementById("cookie-consent-bar")) return;
   const bar = document.createElement("div");
   bar.id = "cookie-consent-bar";
-  bar.className = "cookie-consent-bar";
   bar.setAttribute("role", "dialog");
   bar.setAttribute("aria-live", "polite");
-  bar.setAttribute("aria-label", "Analytics cookies");
+  bar.setAttribute("aria-label", "Analytics consent");
+  bar.className =
+    "fixed inset-x-3 bottom-3 z-50 flex flex-col gap-3 rounded-sm bg-ink/95 px-5 py-4 text-paper shadow-2xl backdrop-blur sm:inset-x-auto sm:right-5 sm:bottom-5 sm:max-w-md sm:flex-row sm:items-center sm:gap-5";
   bar.innerHTML = `
-    <div class="cookie-consent-bar__inner">
-      <p class="cookie-consent-bar__text">
-        Optional analytics cookies (Google Analytics 4) help us measure traffic and site performance.
-        <a class="cookie-consent-bar__link" href="/privacy">Privacy Policy</a>
-      </p>
-      <div class="cookie-consent-bar__actions">
-        <button type="button" class="cookie-consent-bar__btn cookie-consent-bar__btn--ghost" data-cookie-reject>Decline</button>
-        <button type="button" class="cookie-consent-bar__btn cookie-consent-bar__btn--primary" data-cookie-accept>Accept analytics</button>
-      </div>
+    <p class="font-display text-[13px] italic leading-snug" style="color: rgba(245, 241, 234, 0.82)">
+      Optional analytics help us measure how the issue is read.
+      <a class="underline decoration-[rgba(245,241,234,0.35)] underline-offset-2 hover:decoration-paper" href="/privacy">Privacy.</a>
+    </p>
+    <div class="flex items-center gap-3 sm:ml-auto">
+      <button type="button" class="font-mono text-[10px] uppercase tracking-[0.18em] transition-opacity hover:opacity-70" style="color: rgba(245, 241, 234, 0.55)" data-cookie-reject>Decline</button>
+      <button type="button" class="cta-pill cta-pill--paper !px-4 !py-2 text-[10px]" data-cookie-accept>Accept</button>
     </div>
   `;
   document.body.appendChild(bar);
@@ -147,7 +168,7 @@ function initConsentGateAndAnalytics() {
     () => {
       setAnalyticsConsent("rejected");
       removeCookieConsentBar();
-    }
+    },
   );
 }
 
@@ -155,21 +176,22 @@ function initStoreClickTracking() {
   document.querySelectorAll("a[data-store-link]").forEach((a) => {
     a.addEventListener("click", () => {
       const platform = a.getAttribute("data-store-link");
-      const inModal = Boolean(a.closest("#download-app-modal"));
       gaEvent(platform === "ios" ? "store_click_ios" : "store_click_android", {
         link_url: a.href,
-        ...(inModal ? { surface: "modal" } : {}),
       });
     });
   });
-  const stickyDl = document.querySelector(
-    '#site-cta-bar a[data-download-source="sticky"]'
-  );
-  if (stickyDl) {
-    stickyDl.addEventListener("click", () => {
-      gaEvent("cta_sticky_download", { method: "sticky_bar" });
+  // Any hero / sticky CTA that scrolls to #your-turn is a soft conversion
+  // signal — track it so we can A/B test copy against scroll-to-ask rate.
+  document.querySelectorAll('a[data-cta-kind="scroll"]').forEach((a) => {
+    a.addEventListener("click", () => {
+      const source =
+        a.hasAttribute("data-cta-hero") ? "hero"
+        : a.hasAttribute("data-sticky-cta") ? "sticky"
+        : "other";
+      gaEvent("cta_scroll_to_ask", { source });
     });
-  }
+  });
 }
 
 function initScrollDepth() {
@@ -214,6 +236,10 @@ async function initWebVitals() {
   }
 }
 
+// ── Lenis smooth scroll — DESKTOP ONLY ───────────────────────────────
+// Mobile uses native iOS/Android momentum. Our motion strategy assumes no
+// Lenis on touch. Gated at >=768px AND no prefers-reduced-motion.
+
 /** @type {Lenis | null} */
 let globalLenis = null;
 
@@ -232,13 +258,7 @@ function initLenis() {
       lerp: 0.09,
       smoothWheel: true,
       syncTouch: false,
-      syncTouchLerp: 0.085,
-      touchMultiplier: 1.12,
-      wheelMultiplier: 1,
-      anchors: {
-        duration: 1.25,
-      },
-      stopInertiaOnNavigate: true,
+      anchors: { duration: 1.25 },
     });
   }
 
@@ -258,354 +278,11 @@ function initLenis() {
   mqDesktop.addEventListener("change", sync);
 }
 
-function initNav() {
-  const nav = document.getElementById("site-nav");
-  if (!nav) return;
-
-  const mobileToggle = document.getElementById("site-nav-mobile-toggle");
-  const mobilePanel = document.getElementById("site-nav-mobile-panel");
-  const mobileBar = nav.querySelector(".site-nav-mobile-bar");
-  const mobileLinks = nav.querySelectorAll(".site-nav-mobile-overlay__link");
-  const mobileCta = nav.querySelector(".site-nav-mobile-overlay__cta");
-  const mainEl = document.querySelector("main");
-  const footerEl = document.querySelector("footer");
-  const ctaBarEl = document.getElementById("site-cta-bar");
-  const heroEl = document.getElementById("hero");
-  const downloadSectionEl = document.getElementById("download");
-
-  let lastY = window.scrollY;
-  let reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  let mobileMenuPreviousFocus = null;
-
-  window
-    .matchMedia("(prefers-reduced-motion: reduce)")
-    .addEventListener("change", (e) => {
-      reduceMotion = e.matches;
-      if (reduceMotion) nav.dataset.navExpanded = "true";
-    });
-
-  function setNavExpanded(expanded) {
-    nav.dataset.navExpanded = expanded ? "true" : "false";
-  }
-
-  function getMobileMenuTabOrder() {
-    const list = [];
-    if (mobileBar) list.push(...getFocusablesIn(mobileBar));
-    if (mobilePanel) list.push(...getFocusablesIn(mobilePanel));
-    return list;
-  }
-
-  function focusMobileMenuInitial() {
-    if (!mobilePanel || nav.dataset.mobileMenu !== "open") return;
-    const inPanel = getFocusablesIn(mobilePanel);
-    if (inPanel.length) {
-      inPanel[0].focus();
-    } else {
-      mobilePanel.focus();
-    }
-  }
-
-  function onMobileMenuKeydown(e) {
-    if (nav.dataset.mobileMenu !== "open") return;
-    if (e.key === "Escape") {
-      e.preventDefault();
-      setMobileMenu(false);
-      return;
-    }
-    if (e.key !== "Tab") return;
-    const focusables = getMobileMenuTabOrder();
-    if (focusables.length === 0) return;
-    const first = focusables[0];
-    const last = focusables[focusables.length - 1];
-    const active = document.activeElement;
-    if (e.shiftKey) {
-      if (active === first) {
-        e.preventDefault();
-        last.focus();
-      }
-    } else if (active === last) {
-      e.preventDefault();
-      first.focus();
-    }
-  }
-
-  function applyMobileMenuInert(on) {
-    const method = on ? "setAttribute" : "removeAttribute";
-    mainEl?.[method]("inert", "");
-    footerEl?.[method]("inert", "");
-    ctaBarEl?.[method]("inert", "");
-  }
-
-  function teardownMobileMenuIfOpen() {
-    if (nav.dataset.mobileMenu !== "open") return;
-    nav.dataset.mobileMenu = "closed";
-    mobileToggle?.setAttribute("aria-expanded", "false");
-    mobileToggle?.setAttribute("aria-label", "Open menu");
-    mobilePanel?.setAttribute("aria-hidden", "true");
-    document.body.style.overflow = "";
-    globalLenis?.start();
-    applyMobileMenuInert(false);
-    document.removeEventListener("keydown", onMobileMenuKeydown, true);
-    const prev = mobileMenuPreviousFocus;
-    mobileMenuPreviousFocus = null;
-    if (prev instanceof HTMLElement && prev.isConnected) {
-      prev.focus();
-    } else {
-      mobileToggle?.focus();
-    }
-  }
-
-  function setMobileMenu(open) {
-    const isMobile = window.innerWidth < MD;
-    if (!isMobile) {
-      teardownMobileMenuIfOpen();
-      return;
-    }
-
-    const wasOpen = nav.dataset.mobileMenu === "open";
-
-    if (open) {
-      if (!wasOpen) {
-        mobileMenuPreviousFocus =
-          document.activeElement instanceof HTMLElement ? document.activeElement : null;
-      }
-      nav.dataset.mobileMenu = "open";
-      mobileToggle?.setAttribute("aria-expanded", "true");
-      mobileToggle?.setAttribute("aria-label", "Close menu");
-      mobilePanel?.setAttribute("aria-hidden", "false");
-      document.body.style.overflow = "hidden";
-      globalLenis?.stop();
-      applyMobileMenuInert(true);
-      if (!wasOpen) {
-        document.addEventListener("keydown", onMobileMenuKeydown, true);
-        queueMicrotask(() => {
-          if (nav.dataset.mobileMenu === "open") focusMobileMenuInitial();
-        });
-      }
-      return;
-    }
-
-    if (wasOpen) {
-      teardownMobileMenuIfOpen();
-    } else {
-      nav.dataset.mobileMenu = "closed";
-      mobileToggle?.setAttribute("aria-expanded", "false");
-      mobileToggle?.setAttribute("aria-label", "Open menu");
-      mobilePanel?.setAttribute("aria-hidden", "true");
-      document.body.style.overflow = "";
-    }
-  }
-
-  function updateMobileNavSurface() {
-    if (window.innerWidth >= MD || !mobileBar) return;
-
-    const barRect = mobileBar.getBoundingClientRect();
-
-    /** True if this element occupies any of the vertical band behind the mobile pill */
-    function overlapsNavBand(el) {
-      if (!el) return false;
-      const r = el.getBoundingClientRect();
-      return r.bottom > barRect.top && r.top < barRect.bottom;
-    }
-
-    const overDarkBand =
-      overlapsNavBand(heroEl) || overlapsNavBand(downloadSectionEl);
-
-    nav.dataset.mobileNavBg = overDarkBand ? "dark" : "light";
-  }
-
-  function onScroll() {
-    if (window.innerWidth < MD) {
-      lastY = window.scrollY;
-      updateMobileNavSurface();
-      return;
-    }
-
-    if (reduceMotion) {
-      setNavExpanded(true);
-      lastY = window.scrollY;
-      return;
-    }
-
-    const y = window.scrollY;
-    if (y < 56) {
-      setNavExpanded(true);
-      lastY = y;
-      return;
-    }
-
-    const diff = y - lastY;
-    if (Math.abs(diff) < 0.5) return;
-
-    setNavExpanded(diff < 0);
-    lastY = y;
-  }
-
-  mobileToggle?.addEventListener("click", () => {
-    const open = nav.dataset.mobileMenu === "open";
-    setMobileMenu(!open);
-  });
-
-  mobileLinks.forEach((a) => {
-    a.addEventListener("click", () => setMobileMenu(false));
-  });
-
-  mobileCta?.addEventListener("click", () => setMobileMenu(false));
-
-  window.addEventListener("scroll", onScroll, { passive: true });
-  window.addEventListener("resize", () => {
-    lastY = window.scrollY;
-    if (window.innerWidth >= MD) {
-      setMobileMenu(false);
-    }
-    onScroll();
-  });
-
-  onScroll();
-  updateMobileNavSurface();
-}
-
-function initSiteCtaBar() {
-  const bar = document.getElementById("site-cta-bar");
-  const hero = document.getElementById("hero");
-  const download = document.getElementById("download");
-  if (!bar || !hero) return;
-
-  function updateCtaBar() {
-    if (window.innerWidth >= MD) {
-      bar.dataset.visible = "false";
-      bar.setAttribute("aria-hidden", "true");
-      return;
-    }
-    const heroRect = hero.getBoundingClientRect();
-    const pastHero = heroRect.bottom < 32;
-
-    let inDownloadZone = false;
-    if (download) {
-      const d = download.getBoundingClientRect();
-      const vh = window.innerHeight;
-      inDownloadZone = d.top < vh - 56 && d.bottom > 72;
-    }
-
-    const show = pastHero && !inDownloadZone;
-    bar.dataset.visible = show ? "true" : "false";
-    bar.setAttribute("aria-hidden", show ? "false" : "true");
-  }
-
-  window.addEventListener("scroll", updateCtaBar, { passive: true });
-  window.addEventListener("resize", updateCtaBar);
-  updateCtaBar();
-}
-
-function initWhatWeDoReveal() {
-  const section = document.getElementById("what-we-do");
-  if (!section) return;
-
-  const mqReduce = window.matchMedia("(prefers-reduced-motion: reduce)");
-  const items = section.querySelectorAll(".wwd-reveal-item");
-
-  function revealEverything() {
-    section.setAttribute("data-wwd-inview", "1");
-    items.forEach((el) => el.setAttribute("data-wwd-revealed", "1"));
-  }
-
-  if (mqReduce.matches) {
-    revealEverything();
-    return;
-  }
-
-  section.setAttribute("data-wwd-animate", "1");
-
-  const ioSection = new IntersectionObserver(
-    (entries, obs) => {
-      for (const e of entries) {
-        if (e.isIntersecting) {
-          section.setAttribute("data-wwd-inview", "1");
-          obs.disconnect();
-        }
-      }
-    },
-    { rootMargin: "12% 0px 8% 0px", threshold: 0 }
-  );
-  ioSection.observe(section);
-
-  const ioItem = new IntersectionObserver(
-    (entries) => {
-      for (const e of entries) {
-        if (!e.isIntersecting) continue;
-        e.target.setAttribute("data-wwd-revealed", "1");
-        ioItem.unobserve(e.target);
-      }
-    },
-    { rootMargin: "-10% 0px -6% 0px", threshold: 0.08 }
-  );
-
-  items.forEach((el) => ioItem.observe(el));
-
-  mqReduce.addEventListener("change", () => {
-    if (mqReduce.matches) {
-      revealEverything();
-      section.removeAttribute("data-wwd-animate");
-    }
-  });
-}
-
-function initFeaturesReveal() {
-  const section = document.getElementById("features");
-  if (!section) return;
-
-  const mqReduce = window.matchMedia("(prefers-reduced-motion: reduce)");
-  const items = section.querySelectorAll(".fe-reveal-item");
-
-  function revealAll() {
-    section.setAttribute("data-fe-ambient", "1");
-    items.forEach((el) => el.setAttribute("data-fe-revealed", "1"));
-  }
-
-  if (mqReduce.matches) {
-    revealAll();
-    return;
-  }
-
-  section.setAttribute("data-fe-animate", "1");
-
-  const ioAmbient = new IntersectionObserver(
-    (entries, obs) => {
-      for (const e of entries) {
-        if (e.isIntersecting) {
-          section.setAttribute("data-fe-ambient", "1");
-          obs.disconnect();
-        }
-      }
-    },
-    { rootMargin: "10% 0px 6% 0px", threshold: 0 }
-  );
-  ioAmbient.observe(section);
-
-  const ioItem = new IntersectionObserver(
-    (entries) => {
-      for (const e of entries) {
-        if (!e.isIntersecting) continue;
-        e.target.setAttribute("data-fe-revealed", "1");
-        ioItem.unobserve(e.target);
-      }
-    },
-    { rootMargin: "-8% 0px -5% 0px", threshold: 0.1 }
-  );
-
-  items.forEach((el) => ioItem.observe(el));
-
-  mqReduce.addEventListener("change", () => {
-    if (mqReduce.matches) {
-      revealAll();
-      section.removeAttribute("data-fe-animate");
-    }
-  });
-}
-
-function easeOutExpo(t) {
-  return t >= 1 ? 1 : 1 - 2 ** (-10 * t);
-}
+// ── Scroll-reveal choreography ───────────────────────────────────────
+// Section-opener reveals use a single signature: 600ms bottom-to-top fade
+// (see .site-sr-item transition in style.css). Hero items auto-reveal
+// after first paint with a short stagger; non-hero sections reveal on
+// intersection.
 
 function initSiteScrollReveal() {
   const mqReduce = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -615,10 +292,6 @@ function initSiteScrollReveal() {
     section.querySelectorAll(".site-sr-item").forEach((el) => {
       el.setAttribute("data-site-sr-revealed", "1");
     });
-  }
-
-  function clearAnimate(section) {
-    section.removeAttribute("data-site-sr-animate");
   }
 
   sections.forEach((section) => {
@@ -632,6 +305,9 @@ function initSiteScrollReveal() {
 
     section.setAttribute("data-site-sr-animate", "1");
 
+    // Hero reveals immediately on load with a per-item stagger so the
+    // masthead, verdict, and CTA arrive in order — 80ms + 120ms per index
+    // matches the app's "unhurried" motion register.
     if (section.id === "hero") {
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
@@ -653,7 +329,7 @@ function initSiteScrollReveal() {
           obs.unobserve(e.target);
         }
       },
-      { rootMargin: "-7% 0px -5% 0px", threshold: 0.08 }
+      { rootMargin: "-7% 0px -5% 0px", threshold: 0.08 },
     );
 
     items.forEach((el) => io.observe(el));
@@ -663,275 +339,107 @@ function initSiteScrollReveal() {
     if (!mqReduce.matches) return;
     sections.forEach((section) => {
       revealAllItems(section);
-      clearAnimate(section);
+      section.removeAttribute("data-site-sr-animate");
     });
   });
 }
 
-function initHeroPhoneCarousel() {
-  const track = document.querySelector("[data-hero-phone-carousel]");
-  if (!track) return;
+// ── Sticky CTA visibility ────────────────────────────────────────────
+// Shows the bottom-right pill only after the user has scrolled past the
+// hero (so it never competes with the primary hero CTA). Hidden again if
+// the user returns to the top.
 
-  const shell = track.parentElement;
-  if (!shell) return;
+function initStickyCta() {
+  const cta = document.querySelector("[data-sticky-cta]");
+  if (!cta) return;
+  const hero = document.getElementById("hero");
+  if (!hero) return;
 
-  const originals = track.querySelectorAll(".hero-phone-mock__slide");
-  const realSlideCount = originals.length;
-  if (realSlideCount < 2) return;
-
-  const firstSlide = originals[0];
-  const cloneSlide = firstSlide.cloneNode(true);
-  cloneSlide.classList.add("hero-phone-mock__slide--clone");
-  cloneSlide.removeAttribute("data-hero-slide");
-  cloneSlide.setAttribute("aria-hidden", "true");
-  cloneSlide.querySelectorAll("img[loading]").forEach((img) => {
-    img.removeAttribute("loading");
-  });
-  track.appendChild(cloneSlide);
-
-  const slides = track.querySelectorAll(".hero-phone-mock__slide");
-  const totalSlides = slides.length;
-  const cloneIndex = realSlideCount;
-
-  const mqReduce = window.matchMedia("(prefers-reduced-motion: reduce)");
-  const HOLD_MS = 2000;
-  const TRANSITION_FALLBACK_MS = 1350;
-
-  let index = 0;
-  /** @type {ReturnType<typeof setTimeout> | null} */
-  let holdTimer = null;
-  /** @type {ReturnType<typeof setTimeout> | null} */
-  let transitionFallbackTimer = null;
-  /** @type {((e: Event) => void) | null} */
-  let boundTransitionEnd = null;
-
-  function applyA11y() {
-    slides.forEach((slide, i) => {
-      slide.setAttribute("aria-hidden", i === index ? "false" : "true");
-    });
-  }
-
-  function measureAndApplyWidths() {
-    const w = Math.max(0, Math.round(shell.clientWidth));
-    if (w < 1) return 0;
-    track.style.width = `${totalSlides * w}px`;
-    slides.forEach((s) => {
-      s.style.flexShrink = "0";
-      s.style.flexBasis = `${w}px`;
-      s.style.width = `${w}px`;
-    });
-    return w;
-  }
-
-  function setTransformPx() {
-    const w = Math.max(0, Math.round(shell.clientWidth));
-    if (w < 1) return;
-    track.style.transform = `translate3d(${-index * w}px, 0, 0)`;
-  }
-
-  function clearCycle() {
-    if (holdTimer != null) {
-      window.clearTimeout(holdTimer);
-      holdTimer = null;
-    }
-    if (transitionFallbackTimer != null) {
-      window.clearTimeout(transitionFallbackTimer);
-      transitionFallbackTimer = null;
-    }
-    if (boundTransitionEnd) {
-      track.removeEventListener("transitionend", boundTransitionEnd);
-      boundTransitionEnd = null;
-    }
-  }
-
-  function goToIndex(next, instant = false) {
-    if (next < 0 || next >= totalSlides) return;
-    index = next;
-    applyA11y();
-    if (instant) {
-      track.classList.add("hero-phone-mock__track--reduced");
-      measureAndApplyWidths();
-      setTransformPx();
-      track.offsetHeight;
-      track.classList.remove("hero-phone-mock__track--reduced");
-      return;
-    }
-    setTransformPx();
-  }
-
-  function onTransitionFinished() {
-    if (boundTransitionEnd === null && transitionFallbackTimer === null) return;
-    if (transitionFallbackTimer != null) {
-      window.clearTimeout(transitionFallbackTimer);
-      transitionFallbackTimer = null;
-    }
-    if (boundTransitionEnd) {
-      track.removeEventListener("transitionend", boundTransitionEnd);
-      boundTransitionEnd = null;
-    }
-
-    if (index === cloneIndex) {
-      goToIndex(0, true);
-    }
-
-    if (mqReduce.matches || document.visibilityState !== "visible") return;
-    holdTimer = window.setTimeout(tickAdvance, HOLD_MS);
-  }
-
-  function tickAdvance() {
-    holdTimer = null;
-    if (mqReduce.matches || document.visibilityState !== "visible") return;
-    if (shell.clientWidth < 2) {
-      holdTimer = window.setTimeout(tickAdvance, 64);
-      return;
-    }
-
-    clearCycle();
-
-    if (index < realSlideCount - 1) {
-      goToIndex(index + 1, false);
-    } else if (index === realSlideCount - 1) {
-      goToIndex(cloneIndex, false);
-    } else {
-      goToIndex(0, true);
-      if (!mqReduce.matches && document.visibilityState === "visible") {
-        holdTimer = window.setTimeout(tickAdvance, HOLD_MS);
-      }
-      return;
-    }
-
-    if (mqReduce.matches) return;
-
-    boundTransitionEnd = (e) => {
-      if (e.target !== track || e.propertyName !== "transform") return;
-      onTransitionFinished();
-    };
-    track.addEventListener("transitionend", boundTransitionEnd);
-    transitionFallbackTimer = window.setTimeout(
-      onTransitionFinished,
-      TRANSITION_FALLBACK_MS
-    );
-  }
-
-  function start() {
-    if (mqReduce.matches) return;
-    clearCycle();
-    measureAndApplyWidths();
-    setTransformPx();
-    holdTimer = window.setTimeout(tickAdvance, HOLD_MS);
-  }
-
-  function stop() {
-    clearCycle();
-  }
-
-  function syncReduce() {
-    if (mqReduce.matches) {
-      track.classList.add("hero-phone-mock__track--reduced");
-      stop();
-      goToIndex(0, true);
-    } else {
-      track.classList.remove("hero-phone-mock__track--reduced");
-      measureAndApplyWidths();
-      setTransformPx();
-      if (document.visibilityState === "visible") start();
-    }
-  }
-
-  const ro = new ResizeObserver(() => {
-    const keepReduced =
-      mqReduce.matches || track.classList.contains("hero-phone-mock__track--reduced");
-    track.classList.add("hero-phone-mock__track--reduced");
-    measureAndApplyWidths();
-    setTransformPx();
-    window.requestAnimationFrame(() => {
-      if (!keepReduced) track.classList.remove("hero-phone-mock__track--reduced");
-    });
-  });
-  ro.observe(shell);
-
-  mqReduce.addEventListener("change", syncReduce);
-  document.addEventListener("visibilitychange", () => {
-    if (document.visibilityState === "hidden") stop();
-    else if (!mqReduce.matches) start();
-  });
-
-  goToIndex(0, true);
-  syncReduce();
-}
-
-function initFeaturesCountUp() {
-  const section = document.getElementById("features");
-  if (!section) return;
-
-  const mqReduce = window.matchMedia("(prefers-reduced-motion: reduce)");
-
-  function setFinal(el) {
-    const target = parseFloat(el.dataset.countTarget || "0");
-    const decimals = parseInt(el.dataset.countDecimals || "0", 10);
-    const prefix = el.dataset.countPrefix || "";
-    const suffix = el.dataset.countSuffix || "";
-    const num =
-      decimals > 0 ? target.toFixed(decimals) : String(Math.round(target));
-    el.textContent = prefix + num + suffix;
-  }
-
-  function run(el) {
-    if (el.dataset.countDone === "1") return;
-    el.dataset.countDone = "1";
-    if (mqReduce.matches) {
-      setFinal(el);
-      return;
-    }
-    const target = parseFloat(el.dataset.countTarget || "0");
-    const decimals = parseInt(el.dataset.countDecimals || "0", 10);
-    const prefix = el.dataset.countPrefix || "";
-    const suffix = el.dataset.countSuffix || "";
-    const duration = 1500;
-    const start = performance.now();
-
-    function frame(now) {
-      const t = Math.min(1, (now - start) / duration);
-      const eased = easeOutExpo(t);
-      const val = target * eased;
-      const num =
-        decimals > 0 ? val.toFixed(decimals) : String(Math.round(val));
-      el.textContent = prefix + num + suffix;
-      if (t < 1) requestAnimationFrame(frame);
-    }
-    requestAnimationFrame(frame);
-  }
-
-  const nodes = section.querySelectorAll("[data-count-up]");
   const io = new IntersectionObserver(
     (entries) => {
       for (const e of entries) {
-        if (e.isIntersecting) {
-          run(e.target);
-          io.unobserve(e.target);
+        // Show sticky once the hero is at least 60% out of view upward —
+        // that's when the next section is dominant and the sticky CTA
+        // stops competing with the hero's own "Pull your first look" pill.
+        const past = !e.isIntersecting || e.intersectionRatio < 0.4;
+        cta.setAttribute("data-visible", past ? "1" : "0");
+      }
+    },
+    { threshold: [0, 0.4, 1] },
+  );
+  io.observe(hero);
+}
+
+// ── Verdict rotation ─────────────────────────────────────────────────
+// The hero's verdict stamp holds static on first load ("Today. Quiet
+// confidence.") — that first string teaches the format. One rotation per
+// session is triggered when the user scrolls past the mirror and returns
+// to top; that's a discovery moment, not a timer. Never rotates more than
+// once per page load to avoid the slot-machine feel.
+
+const VERDICTS = [
+  "Sharpened Monday.",
+  "Soft authority.",
+  "Warm, unhurried.",
+  "Bundled, composed.",
+  "Not trying.",
+];
+
+function initVerdictRotation() {
+  const el = document.getElementById("hero-verdict");
+  if (!el || el.getAttribute("data-verdict-rotates") !== "1") return;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  const mirror = document.getElementById("mirror");
+  if (!mirror) return;
+
+  let userScrolledPastMirror = false;
+  let rotated = false;
+
+  // First we need to confirm the user actually passed the mirror.
+  const passObs = new IntersectionObserver(
+    (entries) => {
+      for (const e of entries) {
+        if (e.isIntersecting || e.intersectionRatio > 0) {
+          userScrolledPastMirror = true;
+          passObs.disconnect();
+          return;
         }
       }
     },
-    { rootMargin: "-5% 0px -10% 0px", threshold: 0.25 }
+    { threshold: [0, 0.1] },
   );
+  passObs.observe(mirror);
 
-  nodes.forEach((n) => io.observe(n));
+  // Then — and only then — watch for the hero coming back into view to
+  // rotate once. Crossfade via opacity for 320ms either side of the swap.
+  const backObs = new IntersectionObserver(
+    (entries) => {
+      for (const e of entries) {
+        if (!e.isIntersecting || !userScrolledPastMirror || rotated) continue;
+        rotated = true;
+        const next = VERDICTS[Math.floor(Math.random() * VERDICTS.length)];
+        el.style.transition = "opacity 320ms ease";
+        el.style.opacity = "0";
+        window.setTimeout(() => {
+          el.textContent = next;
+          el.style.opacity = "1";
+          backObs.disconnect();
+        }, 340);
+      }
+    },
+    { threshold: [0.5] },
+  );
+  backObs.observe(document.getElementById("hero"));
 }
+
+// ── Bootstrap ────────────────────────────────────────────────────────
 
 initStoreLinks();
 initConsentGateAndAnalytics();
 initStoreClickTracking();
 initScrollDepth();
-
 initLenis();
-initNav();
-initDownloadModal({
-  getLenis: () => globalLenis,
-  trackEvent: gaEvent,
-});
-initHeroPhoneCarousel();
-initSiteCtaBar();
-initWhatWeDoReveal();
-initFeaturesReveal();
 initSiteScrollReveal();
-initFeaturesCountUp();
+initStickyCta();
+initVerdictRotation();

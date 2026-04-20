@@ -1,74 +1,90 @@
 /** @type {import('tailwindcss').Config} */
+//
+// Editorial token system — shared vocabulary with the Style.ai app
+// (see ../style-ai-frontend/src/theme/theme.ts, editorialColors + editorialType).
+// Duplicated BY VALUE (not imported) so the sites stay decoupled; if tokens
+// drift in the app, update here too.
+//
+// Anti-pattern audit: the prior config had ~50 Material-style tokens (plum,
+// maroon, surface-container-highest, etc.). Deleted entirely — they were
+// CSS-weight tax with no design payoff, and the visual identity now matches
+// the app's paper + ink + stone + Fraunces aesthetic.
+
 export default {
   darkMode: "class",
-  content: ["./index.html", "./terms.html", "./privacy.html", "./src/**/*.{js,ts}"],
+  content: [
+    "./index.html",
+    "./terms.html",
+    "./privacy.html",
+    "./how-she-works.html",
+    "./the-looks.html",
+    "./guides/**/*.html",
+    "./src/**/*.{js,ts}",
+  ],
   theme: {
     extend: {
       colors: {
-        primary: "#44182b",
-        "vibrant-plum": "#6B1D47",
-        "soft-plum": "#9E7389",
-        "off-white": "#F9FAFB",
-        "ice-blue": "#F0F4F8",
-        "slate-glass": "#E2E8F0",
-        iridescent: "#D8B4FE",
-        "inverse-surface": "#31302d",
-        "surface-container-high": "#ebe8e3",
-        "surface-container-highest": "#e5e2dd",
-        "on-secondary-fixed-variant": "#52443b",
-        "tertiary-fixed": "#f4dfcb",
-        "on-surface-variant": "#514347",
-        "on-secondary-fixed": "#241911",
-        "on-primary": "#ffffff",
-        "surface-container-low": "#f6f3ee",
-        "on-primary-fixed-variant": "#6a374b",
-        "on-surface": "#1c1c19",
-        secondary: "#6b5b51",
-        "surface-tint": "#854e63",
-        "on-tertiary-container": "#b8a593",
-        "on-tertiary": "#ffffff",
-        "on-background": "#1c1c19",
-        "on-secondary": "#ffffff",
-        "primary-fixed-dim": "#f9b3cb",
-        "on-error-container": "#93000a",
-        "secondary-fixed": "#f4ded1",
-        "on-tertiary-fixed": "#241a0e",
-        "primary-container": "#5e2d41",
-        "secondary-container": "#f4ded1",
-        "surface-container": "#f0ede8",
-        surface: "#fcf9f4",
-        "on-error": "#ffffff",
-        "secondary-fixed-dim": "#d7c3b6",
-        "outline-variant": "#d5c2c6",
-        "tertiary-fixed-dim": "#d7c3b0",
-        "error-container": "#ffdad6",
-        "on-secondary-container": "#716157",
-        outline: "#837377",
-        "primary-fixed": "#ffd9e4",
-        "surface-dim": "#dcdad5",
-        "on-primary-container": "#d795ac",
-        "surface-container-lowest": "#ffffff",
-        "inverse-primary": "#f9b3cb",
-        "inverse-on-surface": "#f3f0eb",
-        "on-tertiary-fixed-variant": "#524436",
-        "on-primary-fixed": "#360c1f",
-        "surface-bright": "#fcf9f4",
-        "surface-variant": "#e5e2dd",
-        tertiary: "#312519",
-        error: "#ba1a1a",
-        background: "#fcf9f4",
-        "tertiary-container": "#483b2d",
+        // Canvas — ordered by frequency of use across the site.
+        paper: "#F5F1EA",  // primary canvas; most sections sit on this
+        ink:   "#0D0B0A",  // primary text + hero backdrop
+        stone: "#A89B8A",  // hairlines, marginalia, secondary meta
+
+        // Reserved accents — one per page at most.
+        ember: "#A7412A",  // emphasis (verdict stamp tint only)
+        clay:  "#C6B5A3",  // warm neutral for gradient washes
       },
       fontFamily: {
-        headline: ['"Noto Serif"', "ui-serif", "Georgia", "serif"],
-        body: ["Manrope", "system-ui", "sans-serif"],
-        label: ["Manrope", "system-ui", "sans-serif"],
-        display: ['"Noto Serif"', "ui-serif", "Georgia", "serif"],
+        // Fraunces — display + verdict stamps + editorial prose.
+        // Italic is the voice carrier; use it wherever the stylist "speaks."
+        display: ['"Fraunces"', "ui-serif", "Georgia", "serif"],
+        // IBM Plex Mono — eyebrows, meta lines, CTA labels, captions.
+        mono: ['"IBM Plex Mono"', "ui-monospace", "SFMono-Regular", "monospace"],
+        // System-UI — body paragraphs and long-form prose where Fraunces
+        // would be overkill. Marketing copy, not a book.
+        body: [
+          "system-ui",
+          "-apple-system",
+          "BlinkMacSystemFont",
+          '"Segoe UI"',
+          "Roboto",
+          "sans-serif",
+        ],
       },
       fontWeight: {
-        300: "300",
-        400: "400",
-        800: "800",
+        // Fraunces + Plex Mono subset below — keep font-weights to what we
+        // actually ship so Tailwind doesn't emit unused weight classes.
+        regular: "400",
+        medium: "500",
+        semibold: "600",
+      },
+      letterSpacing: {
+        // Mono caps eyebrow default — matches app's editorialType.label.
+        editorial: "0.18em",
+        wider: "0.22em",
+      },
+      fontSize: {
+        // Editorial type scale. Mobile-first — these are the 390px baselines;
+        // desktop scales via clamp() in style.css components.
+        eyebrow: ["10px", { lineHeight: "1.2", letterSpacing: "0.18em" }],
+        whisper: ["13px", { lineHeight: "1.4" }],
+        caption: ["14px", { lineHeight: "1.5" }],
+        verdict: ["40px", { lineHeight: "1.08", letterSpacing: "-0.01em" }],
+        "verdict-lg": ["56px", { lineHeight: "1.02", letterSpacing: "-0.015em" }],
+        "verdict-xl": ["72px", { lineHeight: "1", letterSpacing: "-0.02em" }],
+      },
+      backgroundImage: {
+        // Warm grain tint overlay for full-bleed hero compositions. Paired
+        // with a noise SVG in public/ to avoid a raster texture in the
+        // critical CSS. 8% opacity keeps it tactile without busying the image.
+        "ink-fade-bottom":
+          "linear-gradient(to top, rgba(13, 11, 10, 0.88) 0%, rgba(13, 11, 10, 0.55) 45%, rgba(13, 11, 10, 0) 100%)",
+        "ink-fade-top":
+          "linear-gradient(to bottom, rgba(13, 11, 10, 0.45) 0%, rgba(13, 11, 10, 0) 55%)",
+      },
+      maxWidth: {
+        // Editorial reading column — desktop content never exceeds this.
+        editorial: "1100px",
+        prose: "520px", // mobile-centered copy blocks
       },
     },
   },
