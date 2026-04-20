@@ -252,6 +252,103 @@
 }
 
 /* ─────────────────────────────────────────────────────────────── */
+/* GUIDE PROSE — long-form editorial article typography.             */
+/* Used on /guides/* + /privacy + /terms. System-UI body with        */
+/* Fraunces italic section headings. Reads as a magazine article,   */
+/* not a SaaS blog post.                                             */
+/* ─────────────────────────────────────────────────────────────── */
+
+@layer components {
+  .guide-prose {
+    color: #0d0b0a;
+    max-width: 640px;
+  }
+  .guide-prose h1 {
+    font-family: "Fraunces", Georgia, serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(32px, 5.6vw, 48px);
+    line-height: 1.08;
+    letter-spacing: -0.01em;
+    margin: 0 0 1.5rem;
+    color: #0d0b0a;
+  }
+  .guide-prose h2 {
+    font-family: "Fraunces", Georgia, serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(22px, 3.4vw, 28px);
+    line-height: 1.2;
+    letter-spacing: -0.005em;
+    margin: 3.5rem 0 1rem;
+    color: #0d0b0a;
+  }
+  .guide-prose h3 {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #a89b8a;
+    margin: 2.5rem 0 0.75rem;
+  }
+  .guide-prose p {
+    font-family: system-ui, -apple-system, sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.7;
+    margin: 0 0 1.2rem;
+    color: rgba(13, 11, 10, 0.82);
+  }
+  .guide-prose ul,
+  .guide-prose ol {
+    margin: 0 0 1.2rem 1.2rem;
+    padding: 0;
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 16px;
+    line-height: 1.7;
+    color: rgba(13, 11, 10, 0.82);
+  }
+  .guide-prose li {
+    margin-bottom: 0.4rem;
+  }
+  .guide-prose a {
+    color: #0d0b0a;
+    text-decoration: underline;
+    text-decoration-color: rgba(168, 155, 138, 0.6);
+    text-underline-offset: 2px;
+    transition: text-decoration-color 160ms ease;
+  }
+  .guide-prose a:hover {
+    text-decoration-color: #0d0b0a;
+  }
+  .guide-prose blockquote {
+    border-left: 2px solid #a89b8a;
+    padding-left: 1.25rem;
+    margin: 1.5rem 0;
+    font-family: "Fraunces", Georgia, serif;
+    font-style: italic;
+    font-size: 18px;
+    line-height: 1.5;
+    color: rgba(13, 11, 10, 0.7);
+  }
+  .guide-prose code,
+  .guide-prose pre {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    background: rgba(168, 155, 138, 0.12);
+    padding: 0 4px;
+    border-radius: 2px;
+  }
+  .guide-prose time {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12px;
+    color: #a89b8a;
+    letter-spacing: 0.05em;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────── */
 /* SCROLL REVEAL — IntersectionObserver pairs with main.js.          */
 /* One signature motion idiom: 600ms bottom-to-top reveal.           */
 /* Infrastructure preserved from prior build; timing tightened.      */
