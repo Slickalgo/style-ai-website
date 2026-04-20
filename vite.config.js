@@ -33,6 +33,16 @@ function cleanUrlMiddleware(req, _res, next) {
     req.url = "/privacy.html" + q;
     return next();
   }
+  // Editorial ad-lander pages. Not in nav; served on clean slugs so Meta
+  // ad creatives can deep-link to /how-she-works or /the-looks.
+  if (url === "/how-she-works" || url === "/how-she-works/") {
+    req.url = "/how-she-works.html" + q;
+    return next();
+  }
+  if (url === "/the-looks" || url === "/the-looks/") {
+    req.url = "/the-looks.html" + q;
+    return next();
+  }
   if (url === "/guides" || url === "/guides/") {
     req.url = "/guides/index.html" + q;
     return next();
@@ -107,6 +117,8 @@ export default defineConfig(({ mode }) => {
           main: resolve(__dirname, "index.html"),
           terms: resolve(__dirname, "terms.html"),
           privacy: resolve(__dirname, "privacy.html"),
+          "how-she-works": resolve(__dirname, "how-she-works.html"),
+          "the-looks": resolve(__dirname, "the-looks.html"),
           ...guideHtmlInputs(),
         },
       },

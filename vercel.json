@@ -10,6 +10,14 @@
       "destination": "/privacy.html"
     },
     {
+      "source": "/how-she-works",
+      "destination": "/how-she-works.html"
+    },
+    {
+      "source": "/the-looks",
+      "destination": "/the-looks.html"
+    },
+    {
       "source": "/guides",
       "destination": "/guides/index.html"
     },
