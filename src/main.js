@@ -467,69 +467,6 @@ function initStickyCta() {
   io.observe(hero);
 }
 
-// ── Verdict rotation ─────────────────────────────────────────────────
-// The hero's verdict stamp holds static on first load ("Today. Quiet
-// confidence.") — that first string teaches the format. One rotation per
-// session is triggered when the user scrolls past the mirror and returns
-// to top; that's a discovery moment, not a timer. Never rotates more than
-// once per page load to avoid the slot-machine feel.
-
-const VERDICTS = [
-  "Sharpened Monday.",
-  "Soft authority.",
-  "Warm, unhurried.",
-  "Bundled, composed.",
-  "Not trying.",
-];
-
-function initVerdictRotation() {
-  const el = document.getElementById("hero-verdict");
-  if (!el || el.getAttribute("data-verdict-rotates") !== "1") return;
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-  const mirror = document.getElementById("mirror");
-  if (!mirror) return;
-
-  let userScrolledPastMirror = false;
-  let rotated = false;
-
-  // First we need to confirm the user actually passed the mirror.
-  const passObs = new IntersectionObserver(
-    (entries) => {
-      for (const e of entries) {
-        if (e.isIntersecting || e.intersectionRatio > 0) {
-          userScrolledPastMirror = true;
-          passObs.disconnect();
-          return;
-        }
-      }
-    },
-    { threshold: [0, 0.1] },
-  );
-  passObs.observe(mirror);
-
-  // Then — and only then — watch for the hero coming back into view to
-  // rotate once. Crossfade via opacity for 320ms either side of the swap.
-  const backObs = new IntersectionObserver(
-    (entries) => {
-      for (const e of entries) {
-        if (!e.isIntersecting || !userScrolledPastMirror || rotated) continue;
-        rotated = true;
-        const next = VERDICTS[Math.floor(Math.random() * VERDICTS.length)];
-        el.style.transition = "opacity 320ms ease";
-        el.style.opacity = "0";
-        window.setTimeout(() => {
-          el.textContent = next;
-          el.style.opacity = "1";
-          backObs.disconnect();
-        }, 340);
-      }
-    },
-    { threshold: [0.5] },
-  );
-  backObs.observe(document.getElementById("hero"));
-}
-
 // ── Bootstrap ────────────────────────────────────────────────────────
 
 initStoreLinks();
@@ -539,4 +476,3 @@ initScrollDepth();
 initLenis();
 initSiteScrollReveal();
 initStickyCta();
-initVerdictRotation();

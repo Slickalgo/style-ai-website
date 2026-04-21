@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/logo-mark.svg" />
-    <meta name="theme-color" content="#0D0B0A" />
+    <meta name="theme-color" content="#F5F1EA" />
     <title>Style.ai — one outfit. every morning.</title>
     <meta
       name="description"
@@ -35,14 +35,15 @@
     />
     <meta name="twitter:image" content="https://styledesigner.co.in/og-cover.jpg" />
 
-    <!-- Hero image preload. Hash-named real app renders live in public/images/;
-         keep this in sync with the hero <picture> below. -->
+    <!-- Hero image preload. Issue №01 opens on paper with type; the render arrives
+         on viewport 2. Preload so the second viewport paints silently. No
+         fetchpriority — the LCP element is now "Today." in Fraunces italic. -->
     <link rel="preload" as="image" href="/images/08349e12269a.avif" type="image/avif" />
 
     <!-- Fonts are self-hosted in public/fonts/; @font-face in style.css.
-         Preload only the italic hero weight (Fraunces 400 italic) because
-         verdict stamps are LCP-critical and we declared font-display: optional
-         for that face. The non-critical weights load normally after first paint. -->
+         Preload only the italic hero weight (Fraunces 400 italic) — Issue №01
+         opens on the word "Today." so italic is LCP-critical. Font-display:
+         optional means the fallback paints without a swap flash. -->
     <link
       rel="preload"
       as="font"
@@ -83,7 +84,7 @@
             "applicationCategory": "LifestyleApplication",
             "operatingSystem": "iOS, Android",
             "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" },
-            "description": "An editorial, first-person AI stylist. One outfit a day, pulled from your light, your undertone, and the way you stand.",
+            "description": "An editorial, first-person personal stylist. One outfit a day, pulled from your light, your undertone, and the way you stand.",
             "publisher": { "@id": "https://styledesigner.co.in/#organization" }
           }
         ]
@@ -94,52 +95,42 @@
   <body class="bg-paper text-ink antialiased">
     <!--
       Style.ai — Issue №01.
-      The page is structured as a single magazine issue. Six movements,
-      scroll is the interaction. No nav bar.
 
-      Sections 4–6 are scaffold shells in Phase 1; Phases 2 + 3 fill them.
+      Seven viewports, one scroll, no nav. Each viewport carries a single
+      emotional verb; the reader moves through them in one sitting.
+
+        1. The word          (paper)   — told.       Type-led hero, no image.
+        2. The render        (ink)     — shown.      Full-bleed image, silent.
+        3. The pieces        (paper)   — named.      Three fragments, stone rail.
+        4. The mirror        (paper)   — recognized. Negation beats.
+        5. How she works     (paper)   — understood. Three verbs.
+        6. Memory            (paper)   — remembered. One line + one thumbnail.
+        7. Your turn         (paper)   — invited.    One sentence, two links.
+
+      The brand-world decisions behind this layout live in
+      docs/brand/website-brand-guidebook-2026-04-21.md §VI.
     -->
 
     <main>
 
       <!-- ============================================================= -->
-      <!-- SECTION 1 — Masthead + first verdict (hero)                    -->
-      <!-- Full-bleed real app render. Ink backdrop + warm grain overlay. -->
+      <!-- VIEWPORT 1 — The word                                           -->
+      <!-- Paper canvas. No image. "Today." at display scale, flush left. -->
+      <!-- The reader is told before they are shown.                      -->
       <!-- ============================================================= -->
 
       <section
         id="hero"
-        class="site-sr-section relative isolate w-full overflow-hidden bg-ink text-paper"
+        class="site-sr-section relative w-full overflow-hidden bg-paper text-ink"
         style="min-height: 100vh; min-height: 100svh"
-        aria-label="Today's pull"
+        aria-label="Today's verdict"
       >
-        <!-- Image stack — AVIF preferred, WebP fallback, PNG last. -->
-        <picture class="absolute inset-0 h-full w-full">
-          <source srcset="/images/08349e12269a.avif" type="image/avif" />
-          <source srcset="/images/08349e12269a.webp" type="image/webp" />
-          <img
-            src="/images/08349e12269a.png"
-            alt="Today's pull — a composed editorial outfit against warm light"
-            class="h-full w-full object-cover"
-            fetchpriority="high"
-            decoding="async"
-          />
-        </picture>
-
-        <!-- Atmosphere: warm grain + top/bottom ink fades for legibility. -->
-        <div class="grain-overlay" aria-hidden="true"></div>
-        <div class="ink-fade-top" aria-hidden="true"></div>
-        <div class="ink-fade-bottom" aria-hidden="true"></div>
-
-        <!-- Masthead (top-left). ISSUE №01 date line is static on deploy
-             (Phase 5 wires a server-side date helper). -->
+        <!-- Masthead (top-left). ISSUE №01 is static on deploy. -->
         <div
-          class="absolute left-6 right-6 top-6 site-sr-item"
+          class="absolute left-6 right-6 top-6 site-sr-item sm:left-10 sm:top-10"
           style="--site-sr-delay: 0ms"
         >
-          <p class="eyebrow eyebrow--paper tracking-wider">
-            ISSUE №01 · TUE · OCT 22
-          </p>
+          <p class="eyebrow tracking-wider">ISSUE №01 · TUE · OCT 22</p>
           <p
             class="mt-1 font-display text-[22px] tracking-tight"
             aria-label="Style.ai"
@@ -148,50 +139,111 @@
           </p>
         </div>
 
-        <!-- Verdict stamp + pieces line + CTA, bottom third. -->
+        <!-- The verdict. "Today." at display scale, "Quiet confidence." below
+             at the hero verdict scale. Vertically centered in the viewport. -->
         <div
-          class="absolute inset-x-0 bottom-0 px-6 pb-10 text-center sm:pb-14"
+          class="absolute inset-0 flex flex-col justify-center px-6 sm:px-10"
         >
-          <div
-            class="site-sr-item mx-auto max-w-prose"
-            style="--site-sr-delay: 200ms"
-          >
-            <!-- On first load this reads "Today. Quiet confidence." so the
-                 grammar self-teaches. Rotations triggered by return-to-top
-                 drop the "Today." prefix — see main.js verdict helper. -->
+          <div class="site-sr-item" style="--site-sr-delay: 200ms">
             <h1
               id="hero-verdict"
-              class="verdict verdict--hero verdict--paper"
-              data-verdict-rotates="1"
+              class="hero-today"
               aria-live="polite"
             >
-              Today. Quiet confidence.
+              Today.
             </h1>
-            <p class="pieces pieces--paper mt-4">
-              Camel knit. Black denim. Brown loafers.
+            <p class="verdict verdict--hero mt-2">
+              Quiet confidence.
             </p>
           </div>
+        </div>
 
-          <div
-            class="site-sr-item mt-8 flex justify-center"
-            style="--site-sr-delay: 400ms"
+        <!-- Bottom-left ambient marginalia. The word "read" belongs to
+             print — it tells the reader, without a tutorial, that this
+             is a publication, not a landing page. -->
+        <div
+          class="absolute bottom-6 left-6 right-6 site-sr-item sm:bottom-10 sm:left-10"
+          style="--site-sr-delay: 500ms"
+        >
+          <p
+            class="eyebrow"
+            style="color: rgba(168, 155, 138, 0.75)"
           >
-            <a
-              href="#your-turn"
-              class="cta-pill cta-pill--paper"
-              data-cta-hero
-              data-cta-kind="scroll"
+            READ THE ISSUE.
+          </p>
+        </div>
+      </section>
+
+      <!-- ============================================================= -->
+      <!-- VIEWPORT 2 — The render                                         -->
+      <!-- Ink canvas. Full-bleed real app render. No overlay text.       -->
+      <!-- The verdict in V1 prepared the eye; this viewport is silent.   -->
+      <!-- ============================================================= -->
+
+      <section
+        id="the-render"
+        class="site-sr-section relative isolate w-full overflow-hidden bg-ink"
+        style="min-height: 100vh; min-height: 100svh"
+        aria-label="The pull"
+      >
+        <picture class="absolute inset-0 h-full w-full">
+          <source srcset="/images/08349e12269a.avif" type="image/avif" />
+          <source srcset="/images/08349e12269a.webp" type="image/webp" />
+          <img
+            src="/images/08349e12269a.png"
+            alt="Today's pull — a composed editorial outfit in warm morning light"
+            class="h-full w-full object-cover site-sr-item"
+            style="--site-sr-delay: 0ms"
+            loading="lazy"
+            decoding="async"
+          />
+        </picture>
+        <div class="grain-overlay" aria-hidden="true"></div>
+        <!-- No ink-fade. No caption. The image stands alone. -->
+      </section>
+
+      <!-- ============================================================= -->
+      <!-- VIEWPORT 3 — The pieces                                         -->
+      <!-- Paper canvas. Stone rail. Three fragments on one line, sized   -->
+      <!-- just below the mirror's negation scale — the outfit named.     -->
+      <!-- ============================================================= -->
+
+      <section
+        id="the-pieces"
+        class="site-sr-section bg-paper py-28 sm:py-40"
+        aria-label="The pieces"
+      >
+        <div class="mx-auto max-w-editorial px-6 sm:px-10">
+          <div class="stone-rail pl-6 sm:pl-10 max-w-prose">
+            <p
+              class="eyebrow mb-8 site-sr-item sm:mb-12"
+              style="--site-sr-delay: 0ms"
             >
-              Pull your first look →
-            </a>
+              THE PULL · ISSUE №01
+            </p>
+
+            <p
+              class="site-sr-item font-display text-ink"
+              style="--site-sr-delay: 120ms; font-size: clamp(26px, 6.5vw, 40px); line-height: 1.25; letter-spacing: -0.005em"
+            >
+              Camel knit. Black denim. Brown loafers.
+            </p>
+
+            <p
+              class="whisper site-sr-item mt-10 sm:mt-14"
+              style="--site-sr-delay: 320ms"
+            >
+              Worn tomorrow. Before the light changes.
+            </p>
           </div>
         </div>
       </section>
 
       <!-- ============================================================= -->
-      <!-- SECTION 2 — The mirror (the before)                            -->
-      <!-- Paper canvas. Stone rail left. No image. The emptiness is     -->
-      <!-- the point.                                                     -->
+      <!-- VIEWPORT 4 — The mirror                                         -->
+      <!-- Paper canvas. Stone rail left. No image. The emptiness is      -->
+      <!-- the point — the reader recognizes what she is not wearing      -->
+      <!-- before being shown what she is.                                -->
       <!-- ============================================================= -->
 
       <section
@@ -240,72 +292,9 @@
       </section>
 
       <!-- ============================================================= -->
-      <!-- SECTION 3 — One pull (the after)                               -->
-      <!-- Full-bleed real render (different outfit + mood from hero).    -->
-      <!-- Stylist caption composition lives in the bottom scrim.         -->
-      <!-- ============================================================= -->
-
-      <section
-        id="one-pull"
-        class="site-sr-section relative isolate w-full overflow-hidden bg-ink text-paper"
-        style="min-height: 100vh; min-height: 100svh"
-        aria-label="One pull"
-      >
-        <picture class="absolute inset-0 h-full w-full">
-          <source srcset="/images/4f28726ca1c6.avif" type="image/avif" />
-          <source srcset="/images/4f28726ca1c6.webp" type="image/webp" />
-          <img
-            src="/images/4f28726ca1c6.png"
-            alt="A single generated look — camel knit with black denim, composed for a clear Thursday"
-            class="h-full w-full object-cover"
-            loading="lazy"
-            decoding="async"
-          />
-        </picture>
-
-        <div class="grain-overlay" aria-hidden="true"></div>
-        <div class="ink-fade-bottom" aria-hidden="true"></div>
-
-        <!-- Eyebrow top-left: context meta. -->
-        <p
-          class="eyebrow eyebrow--paper site-sr-item absolute left-6 top-8 tracking-wider"
-          style="--site-sr-delay: 0ms"
-        >
-          THURSDAY. 42°F &amp; CLEAR.
-        </p>
-
-        <!-- Verdict + pieces, bottom left-aligned. -->
-        <div class="absolute inset-x-0 bottom-0 px-6 pb-12 sm:pb-16">
-          <div class="mx-auto max-w-editorial">
-            <div class="max-w-prose">
-              <h2
-                class="verdict verdict--paper site-sr-item"
-                style="--site-sr-delay: 160ms"
-              >
-                &ldquo;Soft authority.&rdquo;
-              </h2>
-              <p
-                class="pieces pieces--paper site-sr-item mt-4"
-                style="--site-sr-delay: 320ms"
-              >
-                Camel knit. Black denim. Brown loafers.
-              </p>
-              <p
-                class="whisper whisper--paper site-sr-item mt-2"
-                style="--site-sr-delay: 460ms"
-              >
-                Your undertone reads warm; this palette agrees.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ============================================================= -->
-      <!-- SECTION 4 — How she works (three beats)                        -->
-      <!-- Paper canvas. Pure typography, no feature icons, no cards.     -->
-      <!-- Three verbs, each with a whisper underneath — the stylist's    -->
-      <!-- working shape in three moves.                                   -->
+      <!-- VIEWPORT 5 — How she works                                      -->
+      <!-- Paper canvas. Three italic verbs, each with a whisper.         -->
+      <!-- No icons, no numbered steps, no feature grid.                  -->
       <!-- ============================================================= -->
 
       <section
@@ -362,165 +351,73 @@
               </p>
             </div>
           </div>
+        </div>
+      </section>
 
-          <!-- Long-press gesture cue. Editorial restraint: a single line of
-               mono caps instead of a UI screenshot. When we have the cropped-
-               thumb-on-screen photograph shot, it drops in here between the
-               stone-rail and the caption. For now the caption carries it. -->
-          <div
-            class="site-sr-item mx-auto mt-20 max-w-prose border-t border-stone/30 pt-8 sm:mt-28"
-            style="--site-sr-delay: 640ms"
-          >
-            <p class="eyebrow text-center" style="color: rgba(168, 155, 138, 0.85)">
-              HOLD THE PICTURE FOR OPTIONS.
+      <!-- ============================================================= -->
+      <!-- VIEWPORT 6 — Memory                                             -->
+      <!-- Paper canvas. Stone rail. One Fraunces italic line, one small  -->
+      <!-- paper-framed thumbnail. Replaces the old 4-up lookbook —       -->
+      <!-- memory is not inventory.                                       -->
+      <!-- ============================================================= -->
+
+      <section
+        id="memory"
+        class="site-sr-section bg-paper py-28 sm:py-40"
+        aria-label="Memory"
+      >
+        <div class="mx-auto max-w-editorial px-6 sm:px-10">
+          <div class="stone-rail pl-6 sm:pl-10 max-w-prose">
+            <p
+              class="eyebrow mb-10 site-sr-item"
+              style="--site-sr-delay: 0ms"
+            >
+              LAST WEEK.
+            </p>
+
+            <div class="site-sr-item" style="--site-sr-delay: 120ms">
+              <p
+                class="font-display italic text-ink"
+                style="font-size: clamp(26px, 6.5vw, 40px); line-height: 1.15; letter-spacing: -0.01em"
+              >
+                Last Tuesday, you wore brown.
+              </p>
+            </div>
+
+            <!-- Small thumbnail — a single past look, paper-framed. -->
+            <figure
+              class="site-sr-item mt-10 max-w-[220px] sm:mt-14 sm:max-w-[260px]"
+              style="--site-sr-delay: 280ms"
+            >
+              <picture class="block">
+                <source srcset="/images/a72cfc383f12.avif" type="image/avif" />
+                <source srcset="/images/a72cfc383f12.webp" type="image/webp" />
+                <img
+                  src="/images/a72cfc383f12.png"
+                  alt="A look from last week — an ivory shirt, faded denim, raffia mule"
+                  class="aspect-[2/3] w-full object-cover"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </picture>
+            </figure>
+
+            <p
+              class="whisper site-sr-item mt-8"
+              style="--site-sr-delay: 440ms"
+            >
+              She remembers.
             </p>
           </div>
         </div>
       </section>
 
       <!-- ============================================================= -->
-      <!-- SECTION 5 — The week's pulls (lookbook)                        -->
-      <!-- Four real renders. Mobile: vertical stack, full-bleed, reads    -->
-      <!-- like turning magazine pages. Desktop: asymmetric 2×2 with       -->
-      <!-- offset captions.                                                -->
-      <!-- ============================================================= -->
-
-      <section
-        id="the-looks"
-        class="site-sr-section bg-paper py-24 sm:py-32"
-        aria-label="A week"
-      >
-        <div class="mx-auto max-w-editorial px-6">
-          <p
-            class="eyebrow site-sr-item mb-14 text-center sm:mb-20"
-            style="--site-sr-delay: 0ms"
-          >
-            A WEEK.
-          </p>
-
-          <!--
-            Four looks, varying context / weather / mood. Demographic spread is
-            deliberate — no single archetype. Swap hashes as new renders land.
-            Each figure is standalone (no role='listitem' nesting) so screen
-            readers announce caption copy alongside the image.
-          -->
-          <div
-            class="mx-auto flex max-w-prose flex-col gap-20 sm:max-w-none sm:grid sm:grid-cols-2 sm:gap-x-16 sm:gap-y-28"
-          >
-
-            <!-- LOOK 1 — cold snap / practical elegance -->
-            <figure class="site-sr-item sm:mt-0" style="--site-sr-delay: 120ms">
-              <picture class="block w-full">
-                <source srcset="/images/522f0c15a4e6.avif" type="image/avif" />
-                <source srcset="/images/522f0c15a4e6.webp" type="image/webp" />
-                <img
-                  src="/images/522f0c15a4e6.png"
-                  alt="A winter-leaning outfit: ivory knit, navy trouser, leather mule"
-                  class="aspect-[2/3] w-full object-cover"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </picture>
-              <figcaption class="mt-5">
-                <p class="eyebrow">MON · 28°F · COLD SNAP</p>
-                <p class="font-display italic text-[24px] leading-tight tracking-tight mt-2">
-                  &ldquo;Bundled, composed.&rdquo;
-                </p>
-                <p class="pieces mt-2">
-                  Ivory knit. Navy trouser. Leather mule.
-                </p>
-              </figcaption>
-            </figure>
-
-            <!-- LOOK 2 — office / quiet command -->
-            <figure
-              class="site-sr-item sm:mt-20"
-              style="--site-sr-delay: 240ms"
-            >
-              <picture class="block w-full">
-                <source srcset="/images/89096df6ac08.avif" type="image/avif" />
-                <source srcset="/images/89096df6ac08.webp" type="image/webp" />
-                <img
-                  src="/images/89096df6ac08.png"
-                  alt="An office outfit: charcoal blazer, olive trouser, oxford shoe"
-                  class="aspect-[2/3] w-full object-cover"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </picture>
-              <figcaption class="mt-5">
-                <p class="eyebrow">WED · 54°F · OVERCAST</p>
-                <p class="font-display italic text-[24px] leading-tight tracking-tight mt-2">
-                  &ldquo;Quiet command.&rdquo;
-                </p>
-                <p class="pieces mt-2">
-                  Charcoal blazer. Olive trouser. Oxford shoe.
-                </p>
-              </figcaption>
-            </figure>
-
-            <!-- LOOK 3 — brunch / warm ease -->
-            <figure class="site-sr-item" style="--site-sr-delay: 360ms">
-              <picture class="block w-full">
-                <source srcset="/images/a72cfc383f12.avif" type="image/avif" />
-                <source srcset="/images/a72cfc383f12.webp" type="image/webp" />
-                <img
-                  src="/images/a72cfc383f12.png"
-                  alt="A weekend brunch outfit: ivory shirt, faded denim, raffia mule"
-                  class="aspect-[2/3] w-full object-cover"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </picture>
-              <figcaption class="mt-5">
-                <p class="eyebrow">FRI · 72°F · GOLDEN HOUR</p>
-                <p class="font-display italic text-[24px] leading-tight tracking-tight mt-2">
-                  &ldquo;Warm, unhurried.&rdquo;
-                </p>
-                <p class="pieces mt-2">
-                  Ivory shirt. Faded denim. Raffia mule.
-                </p>
-              </figcaption>
-            </figure>
-
-            <!-- LOOK 4 — evening / event-wear -->
-            <figure
-              class="site-sr-item sm:mt-20"
-              style="--site-sr-delay: 480ms"
-            >
-              <picture class="block w-full">
-                <source srcset="/images/cdedd99bf2d5.avif" type="image/avif" />
-                <source srcset="/images/cdedd99bf2d5.webp" type="image/webp" />
-                <img
-                  src="/images/cdedd99bf2d5.png"
-                  alt="An evening outfit: black silk, slim trouser, polished loafer"
-                  class="aspect-[2/3] w-full object-cover"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </picture>
-              <figcaption class="mt-5">
-                <p class="eyebrow">SAT · 66°F · AFTER DARK</p>
-                <p class="font-display italic text-[24px] leading-tight tracking-tight mt-2">
-                  &ldquo;Sharp, handheld.&rdquo;
-                </p>
-                <p class="pieces mt-2">
-                  Black silk. Slim trouser. Polished loafer.
-                </p>
-              </figcaption>
-            </figure>
-
-          </div>
-        </div>
-      </section>
-
-      <!-- ============================================================= -->
-      <!-- SECTION 6 — Your turn (the ask)                                -->
-      <!-- Paper canvas, lots of space, one composition.                  -->
-      <!-- The handwritten note breaks the editorial formalism for one    -->
-      <!-- emotional moment. Below it, two App Store pills — text-based,  -->
-      <!-- so no Apple/Google logo clear-space rules apply. Swap to       -->
-      <!-- official badges later with a content-only change.              -->
+      <!-- VIEWPORT 7 — Your turn                                          -->
+      <!-- Paper canvas. One ask, one sentence. Two store links — still   -->
+      <!-- ink-fill pills for tap-target reality, but quieter than the    -->
+      <!-- old handwritten-card composition. The close line reads like   -->
+      <!-- the trailing imprint of a magazine, not a CTA.                 -->
       <!-- ============================================================= -->
 
       <section
@@ -542,26 +439,9 @@
             Continue tomorrow's issue.
           </p>
 
-          <!-- Handwritten stylist note — paper card, soft tilt, ember-tinted
-               shadow so it sits on the page like something left for you. -->
           <div
-            class="site-sr-item mx-auto mt-14 inline-block"
+            class="site-sr-item mt-12 flex flex-col items-center justify-center gap-4 sm:mt-14 sm:flex-row sm:gap-5"
             style="--site-sr-delay: 320ms"
-          >
-            <div class="hand-card">
-              This one's yours tomorrow.
-              <span class="mt-2 block text-right opacity-80">— S.</span>
-            </div>
-          </div>
-
-          <!-- Store CTAs — two mono caps pills. Data attributes carry the
-               store identity so main.js.initStoreClickTracking can fire a
-               per-platform GA event. href defaults get overridden at runtime
-               by initStoreLinks when VITE_APP_STORE_IOS_URL / _ANDROID_URL
-               are set in the build env. -->
-          <div
-            class="site-sr-item mt-14 flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-5"
-            style="--site-sr-delay: 480ms"
           >
             <a
               href="https://apps.apple.com/"
@@ -583,10 +463,9 @@
             </a>
           </div>
 
-          <!-- The quiet close. Never pushy. "No ads" is the trust flag. -->
           <p
             class="eyebrow site-sr-item mt-16"
-            style="--site-sr-delay: 640ms; color: rgba(168, 155, 138, 0.85)"
+            style="--site-sr-delay: 520ms; color: rgba(168, 155, 138, 0.85)"
           >
             ONE OUTFIT · EVERY MORNING · NO ADS
           </p>
@@ -595,7 +474,7 @@
 
     </main>
 
-    <!-- Footer — ink canvas. -->
+    <!-- Footer — ink canvas. Five mono-caps links maximum. -->
     <footer class="bg-ink py-10">
       <div
         class="mx-auto flex max-w-editorial flex-col items-center justify-between gap-4 px-6 sm:flex-row"

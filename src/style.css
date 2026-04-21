@@ -194,24 +194,6 @@
     box-shadow: none;
   }
 
-  /* HANDWRITTEN CARD — the stylist's note in Section 6. Soft tilt,
-   * paper background, ember-tinted shadow for warmth. */
-  .hand-card {
-    @apply font-display italic;
-    background: #f5f1ea;
-    color: #0d0b0a;
-    padding: 22px 28px 26px;
-    border-radius: 2px;
-    transform: rotate(-1.8deg);
-    box-shadow:
-      0 2px 2px rgba(167, 65, 42, 0.06),
-      0 8px 24px rgba(13, 11, 10, 0.08);
-    font-weight: 400;
-    font-size: 15px;
-    line-height: 1.55;
-    max-width: 300px;
-  }
-
   /* GRAIN OVERLAY — 8% warm noise on full-bleed compositions.
    * The SVG asset lives in public/noise.svg; we reference it here. */
   .grain-overlay {
@@ -411,4 +393,26 @@
   .sticky-cta[data-visible="1"] {
     transform: none;
   }
+}
+
+/* ─────────────────────────────────────────────────────────────── */
+/* HERO-TODAY — the display verdict on Viewport 1 of Issue №01.     */
+/* Fraunces italic, flush left, viewport-scaled. Opens the issue.   */
+/*                                                                   */
+/* Kept outside @layer components — the .hero-today class appears   */
+/* only in generated output of the A/B/C variant build, and Tailwind */
+/* content-scan would purge it from a component layer. Defined at   */
+/* top level so it survives PurgeCSS regardless of variant.         */
+/* ─────────────────────────────────────────────────────────────── */
+
+.hero-today {
+  font-family: "Fraunces", Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  /* Mobile floor 120px (390px viewport), desktop ceiling 240px (≈923px+). */
+  font-size: clamp(120px, 26vw, 240px);
+  line-height: 0.9;
+  letter-spacing: -0.025em;
+  color: #0d0b0a;
+  margin: 0;
 }
