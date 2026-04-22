@@ -249,12 +249,18 @@
     background-color: rgba(62, 56, 51, 0.4);
   }
 
-  /* STORE PILL — official badge anchors, paper canvas. */
+  /* STORE PILL — official badge anchors, paper canvas.
+     Height is 48px per Apple + Google brand guidelines (min touch target,
+     stronger presence at beat 6). Widths differ by brand:
+       Apple (119.66 × 40 native)      → 144 × 48 displayed
+       Google Play (238.96 × 70.87)    → 162 × 48 displayed
+     Heights MUST match across the two platforms; widths MUST NOT be
+     normalized (would violate both brands' aspect-ratio rules). */
   .store-pill {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    height: 40px;
+    height: 48px;
     line-height: 1;
     transition: outline-color 150ms ease;
     outline: 2px solid transparent;
@@ -267,7 +273,7 @@
   .store-pill img,
   .store-pill svg {
     display: block;
-    height: 40px;
+    height: 48px;
     width: auto;
   }
 

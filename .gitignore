@@ -12,3 +12,8 @@ amplify-upload.zip
 # Source of truth is index.html + the concept-specific hero swaps (added in
 # follow-up sessions after CEO motion review). Do not edit _variants/ by hand.
 _variants/
+
+# Reference brand-asset archives (e.g. Apple's official App Store badge kit
+# with every locale and lockup). These are reference material, not web assets.
+# The canonical badges actually shipped live in public/badges/*.svg.
+brand-assets/
