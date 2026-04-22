@@ -1,5 +1,20 @@
 /**
- * Emits AVIF + WebP next to each PNG under public/images/ (max width 720, aspect preserved).
+ * Emits responsive AVIF + WebP for each PNG under public/images/.
+ *
+ * Two widths per source:
+ *   {stem}.avif    / {stem}.webp      — 1440px primary, served to desktop/retina.
+ *   {stem}-sm.avif / {stem}-sm.webp   — 720px mobile variant.
+ *
+ * HTML <picture> elements consume both via srcset width descriptors:
+ *   <source type="image/avif"
+ *           srcset="/images/hero-sm.avif 720w, /images/hero.avif 1440w"
+ *           sizes="100vw" />
+ *
+ * `withoutEnlargement: true` means a source smaller than the target width
+ * is left at its source size — this matters for the 1:1 week renders whose
+ * source is 1200px, and the 3:4 portraits also capped at 1200px wide.
+ * Acceptable: the 1440 variant of a 1200-source effectively becomes 1200,
+ * which still outperforms the original 720 cap.
  */
 import fs from "node:fs";
 import path from "node:path";
@@ -10,7 +25,10 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, "..");
 const imgDir = path.join(root, "public", "images");
 
-const MAX_W = 720;
+const VARIANTS = [
+  { suffix: "", width: 1440 },
+  { suffix: "-sm", width: 720 },
+];
 
 async function main() {
   if (!fs.existsSync(imgDir)) {
@@ -21,16 +39,24 @@ async function main() {
   for (const f of files) {
     const basePath = path.join(imgDir, f);
     const stem = path.basename(f, ".png");
-    const meta = await sharp(basePath).metadata();
-    const w = meta.width || 0;
-    let pipeline = sharp(basePath);
-    if (w > MAX_W) {
-      pipeline = sharp(basePath).resize({ width: MAX_W, withoutEnlargement: true });
+
+    for (const { suffix, width } of VARIANTS) {
+      const meta = await sharp(basePath).metadata();
+      const srcW = meta.width || 0;
+
+      let pipeline = sharp(basePath);
+      if (srcW > width) {
+        pipeline = sharp(basePath).resize({ width, withoutEnlargement: true });
+      }
+      const buf = await pipeline.toBuffer();
+      await sharp(buf)
+        .avif({ quality: 55, effort: 6 })
+        .toFile(path.join(imgDir, `${stem}${suffix}.avif`));
+      await sharp(buf)
+        .webp({ quality: 82 })
+        .toFile(path.join(imgDir, `${stem}${suffix}.webp`));
     }
-    const buf = await pipeline.toBuffer();
-    await sharp(buf).avif({ quality: 55, effort: 6 }).toFile(path.join(imgDir, `${stem}.avif`));
-    await sharp(buf).webp({ quality: 82 }).toFile(path.join(imgDir, `${stem}.webp`));
-    console.log(`[optimize-images] ${stem}.avif, ${stem}.webp`);
+    console.log(`[optimize-images] ${stem} → 1440, 720 (avif + webp)`);
   }
 }
 

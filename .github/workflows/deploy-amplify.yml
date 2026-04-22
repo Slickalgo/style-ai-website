@@ -1,0 +1,134 @@
+# ─────────────────────────────────────────────────────────────────────────
+# Deploy UKTI marketing site to AWS Amplify
+# ─────────────────────────────────────────────────────────────────────────
+#
+# Trigger:
+#   - Push to `main` (production deploy to d1y2gv5w126dto.amplifyapp.com →
+#     eventually ukti.io after DNS flip, week of May 11-17, 2026).
+#   - Manual `workflow_dispatch` for running against any branch on demand
+#     (e.g. previewing `ukti-launch` before merge).
+#
+# Flow:
+#   1. Checkout the repo at the pushed SHA.
+#   2. Install Node 20 + npm ci.
+#   3. `npm run build` — runs prebuild (ensure-image-placeholders →
+#      optimize-images → build-og-cover) then `vite build`, producing `dist/`.
+#   4. Zip `dist/` → `amplify-upload.zip`.
+#   5. Call `aws amplify create-deployment` to get a pre-signed S3 upload URL
+#      + jobId.
+#   6. curl PUT the zip to that URL.
+#   7. Call `aws amplify start-deployment` with the jobId to trigger Amplify's
+#      deploy job. Amplify pulls the zip, distributes to CloudFront, done.
+#
+# Why API deploy instead of connecting the repo natively:
+#   - Amplify's native build uses its own container; wiring npm install +
+#     Sharp's native binaries there works but is slower and opaque.
+#   - We already have a reliable `npm run build` locally; GH Actions reuses
+#     that exact pipeline, giving identical output as dev and CI.
+#   - Cleaner secret surface: the app doesn't need a GitHub OAuth grant on
+#     the Slickalgo org's Amplify side.
+#
+# Required GitHub Secrets (Settings → Secrets and variables → Actions):
+#   - AWS_ACCESS_KEY_ID      — IAM user with AmplifyDeployer policy (see
+#                              docs/deploy/amplify.md for the minimal JSON)
+#   - AWS_SECRET_ACCESS_KEY  — paired with the above
+#   - AWS_REGION             — ap-south-1
+#   - AMPLIFY_APP_ID         — d1y2gv5w126dto
+#   - AMPLIFY_BRANCH_NAME    — main
+
+name: Deploy to AWS Amplify
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: amplify-deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Build + upload to Amplify
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build static site
+        run: npm run build
+
+      - name: Zip dist/
+        working-directory: dist
+        run: zip -r ../amplify-upload.zip . -x "*.DS_Store"
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Create Amplify deployment
+        id: create
+        run: |
+          response=$(aws amplify create-deployment \
+            --app-id "${{ secrets.AMPLIFY_APP_ID }}" \
+            --branch-name "${{ secrets.AMPLIFY_BRANCH_NAME }}" \
+            --output json)
+          job_id=$(echo "$response" | jq -r '.jobId')
+          upload_url=$(echo "$response" | jq -r '.zipUploadUrl')
+          echo "job_id=$job_id" >> "$GITHUB_OUTPUT"
+          echo "upload_url=$upload_url" >> "$GITHUB_OUTPUT"
+          echo "Created deployment jobId=$job_id"
+
+      - name: Upload zip to pre-signed URL
+        run: |
+          curl --fail --silent --show-error \
+            -T amplify-upload.zip \
+            -H "Content-Type: application/zip" \
+            "${{ steps.create.outputs.upload_url }}"
+
+      - name: Start Amplify deployment
+        run: |
+          aws amplify start-deployment \
+            --app-id "${{ secrets.AMPLIFY_APP_ID }}" \
+            --branch-name "${{ secrets.AMPLIFY_BRANCH_NAME }}" \
+            --job-id "${{ steps.create.outputs.job_id }}"
+          echo "Deployment started. Check the Amplify console:"
+          echo "https://${{ secrets.AWS_REGION }}.console.aws.amazon.com/amplify/apps/${{ secrets.AMPLIFY_APP_ID }}/branches/${{ secrets.AMPLIFY_BRANCH_NAME }}/deployments"
+
+      - name: Wait for deployment to finish
+        run: |
+          for i in $(seq 1 30); do
+            status=$(aws amplify get-job \
+              --app-id "${{ secrets.AMPLIFY_APP_ID }}" \
+              --branch-name "${{ secrets.AMPLIFY_BRANCH_NAME }}" \
+              --job-id "${{ steps.create.outputs.job_id }}" \
+              --query 'job.summary.status' --output text)
+            echo "[attempt $i] status=$status"
+            case "$status" in
+              SUCCEED)
+                echo "::notice::Amplify deployment SUCCEED"
+                exit 0
+                ;;
+              FAILED|CANCELLED)
+                echo "::error::Amplify deployment $status"
+                exit 1
+                ;;
+            esac
+            sleep 10
+          done
+          echo "::error::Timed out waiting for Amplify deploy after 5 minutes"
+          exit 1

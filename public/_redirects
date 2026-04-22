@@ -1,26 +1,12 @@
-# Canonical host: send www → apex (configure www as domain alias in Netlify/DNS)
-https://www.styledesigner.co.in/* https://styledesigner.co.in/:splat 301!
-http://www.styledesigner.co.in/* https://styledesigner.co.in/:splat 301!
+# Canonical host: send www → apex
+https://www.ukti.io/* https://ukti.io/:splat 301!
+http://www.ukti.io/* https://ukti.io/:splat 301!
+
 /terms /terms.html 200
 /terms/ /terms.html 200
 /privacy /privacy.html 200
 /privacy/ /privacy.html 200
-
-# seo-guides (managed by scripts/generate-seo-pages.mjs)
-/guides /guides/index.html 200
-/guides/ /guides/index.html 200
-/guides/what-to-wear-today-ai /guides/what-to-wear-today-ai.html 200
-/guides/best-ai-fashion-apps /guides/best-ai-fashion-apps.html 200
-/guides/skin-tone-colors-warm-undertone /guides/skin-tone-colors-warm-undertone.html 200
-/guides/outfit-ideas-for-wedding /guides/outfit-ideas-for-wedding.html 200
-/guides/ai-stylist-app-india /guides/ai-stylist-app-india.html 200
-/guides/what-to-wear-mumbai-monsoon /guides/what-to-wear-mumbai-monsoon.html 200
-/guides/what-to-wear-delhi-summer-heat /guides/what-to-wear-delhi-summer-heat.html 200
-/guides/wedding-guest-outfits-india /guides/wedding-guest-outfits-india.html 200
-/guides/office-wear-india-heat-ac /guides/office-wear-india-heat-ac.html 200
-/guides/what-to-wear-in-nyc-spring /guides/what-to-wear-in-nyc-spring.html 200
-/guides/ai-stylist-busy-parents /guides/ai-stylist-busy-parents.html 200
-/guides/color-palette-from-wardrobe /guides/color-palette-from-wardrobe.html 200
-/guides/office-dress-code-outfits /guides/office-dress-code-outfits.html 200
-/guides/capsule-wardrobe-outfit-ideas /guides/capsule-wardrobe-outfit-ideas.html 200
-/guides/travel-outfits-cold-weather /guides/travel-outfits-cold-weather.html 200
+/how-it-works /how-it-works.html 200
+/how-it-works/ /how-it-works.html 200
+/press /press.html 200
+/press/ /press.html 200

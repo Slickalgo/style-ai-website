@@ -1,9 +1,24 @@
 /**
- * 1200×630 Open Graph / Twitter share image.
+ * Build `public/og-cover.jpg` — the social-preview image referenced by
+ * every page's og:image + twitter:image meta tags.
  *
- * Editorial share card: ink canvas + warm off-paper type. A verdict stamp
- * carries the voice; the URL sits quietly. Designed to match the site's
- * paper + ink palette so the ad → site → app transition reads as one world.
+ * Typographic composition, not photograph, per final-spec §7.
+ *
+ *   Canvas   1200×630, paper #F5F1EA
+ *   Bottom-left masthead in IBM Plex Mono 11px uppercase tracked 0.12em,
+ *                stone (#6B6460)
+ *   Centered headline "Ukti decides what you wear." in Fraunces 80px,
+ *                roman 400, ink (#0D0B0A), forced two-line break after "you"
+ *   Nothing else.
+ *
+ * Run: `node scripts/build-og-cover.mjs` — wired into prebuild alongside
+ * image-placeholder ensure + image optimize. Idempotent.
+ *
+ * Rendering approach: Sharp's SVG pipeline composites the typography. The
+ * SVG embeds the site's WOFF2 fonts as base64 @font-face, and declares a
+ * system fallback stack (Iowan Old Style / Georgia for serif; SFMono /
+ * Menlo for mono) so a CI machine without the WOFF2 loader falls through
+ * to a visually-similar serif/mono rather than breaking the build.
  */
 import fs from "node:fs";
 import path from "node:path";
@@ -12,80 +27,77 @@ import sharp from "sharp";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, "..");
-const dest = path.join(root, "public", "og-cover.jpg");
+const fontsDir = path.join(root, "public", "fonts");
+const outPath = path.join(root, "public", "og-cover.jpg");
 
-const W = 1200;
-const H = 630;
+function encodeFontBase64(filename) {
+  const abs = path.join(fontsDir, filename);
+  if (!fs.existsSync(abs)) {
+    console.warn(`[build-og-cover] missing font ${filename}, falling back to system fonts`);
+    return null;
+  }
+  return fs.readFileSync(abs).toString("base64");
+}
 
-// Token mirrors — see tailwind.config.js + style-ai-frontend editorialColors.
-const INK = "#0D0B0A";
-const PAPER = "#F5F1EA";
-const STONE = "#A89B8A";
+const fraunces400 = encodeFontBase64("Fraunces-400.woff2");
+const plexMono400 = encodeFontBase64("IBMPlexMono-400.woff2");
+
+const fontFaceFraunces = fraunces400
+  ? `@font-face { font-family: 'Fraunces'; src: url(data:font/woff2;base64,${fraunces400}) format('woff2'); font-weight: 400; font-style: normal; }`
+  : "";
+const fontFacePlex = plexMono400
+  ? `@font-face { font-family: 'IBM Plex Mono'; src: url(data:font/woff2;base64,${plexMono400}) format('woff2'); font-weight: 400; font-style: normal; }`
+  : "";
+
+const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <style>
+    ${fontFaceFraunces}
+    ${fontFacePlex}
+
+    .canvas { fill: #F5F1EA; }
+
+    .masthead {
+      font-family: 'IBM Plex Mono', 'SFMono-Regular', Menlo, monospace;
+      font-size: 12px;
+      font-weight: 400;
+      fill: #6B6460;
+      letter-spacing: 1.44px; /* 0.12em × 12px */
+      text-transform: uppercase;
+    }
+
+    .headline {
+      font-family: 'Fraunces', 'Iowan Old Style', Georgia, serif;
+      font-size: 80px;
+      font-weight: 400;
+      fill: #0D0B0A;
+      letter-spacing: -1.6px; /* -0.02em × 80px */
+    }
+  </style>
+
+  <!-- Canvas -->
+  <rect class="canvas" width="1200" height="630" />
+
+  <!-- Masthead bottom-left (60px from left edge, 46px from bottom) -->
+  <text class="masthead" x="60" y="584">ISSUE №01 · UKTI · EST. 2026</text>
+
+  <!-- Centered headline, forced two-line break.
+       line-height 0.95 × 80 = 76px
+       For a 2-line block centered vertically (canvas 630), midline = 315.
+       Offset each baseline ±38 from the midline.
+       Also: nudge the group ~8px up to optically center — serif descenders
+       push the visual mass downward, which we counteract. -->
+  <text class="headline" x="600" y="285" text-anchor="middle">Ukti decides what you</text>
+  <text class="headline" x="600" y="361" text-anchor="middle">wear.</text>
+</svg>`;
 
 async function main() {
-  const svg = `
-    <svg width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <!-- Subtle vertical wash — ink deepens toward bottom. -->
-        <linearGradient id="bg" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" style="stop-color:#14100D"/>
-          <stop offset="100%" style="stop-color:${INK}"/>
-        </linearGradient>
-      </defs>
-      <rect width="100%" height="100%" fill="url(#bg)"/>
+  const jpg = await sharp(Buffer.from(svg))
+    .jpeg({ quality: 90, mozjpeg: true, chromaSubsampling: "4:4:4" })
+    .toBuffer();
 
-      <!-- Mono eyebrow, letter-spaced caps. -->
-      <text x="72" y="150"
-        fill="${STONE}"
-        font-family="'IBM Plex Mono', ui-monospace, monospace"
-        font-size="22"
-        letter-spacing="4"
-        font-weight="500">
-        ISSUE №01 · TODAY
-      </text>
-
-      <!-- Verdict stamp — Fraunces italic. Face-fallback to Georgia italic
-           covers servers that don't have the self-hosted font installed; the
-           glyph shapes are similar enough for share-card purposes. -->
-      <text x="72" y="300"
-        fill="${PAPER}"
-        font-family="'Fraunces', Georgia, 'Times New Roman', serif"
-        font-size="96"
-        font-style="italic"
-        font-weight="400">
-        Quiet confidence.
-      </text>
-
-      <!-- Pieces caption — lighter, the stylist's post-script. -->
-      <text x="72" y="380"
-        fill="rgba(245, 241, 234, 0.72)"
-        font-family="'Fraunces', Georgia, 'Times New Roman', serif"
-        font-size="32"
-        font-weight="400">
-        Camel knit. Black denim. Brown loafers.
-      </text>
-
-      <!-- Footer meta + URL. -->
-      <text x="72" y="560"
-        fill="${PAPER}"
-        font-family="'Fraunces', Georgia, 'Times New Roman', serif"
-        font-size="36"
-        font-weight="400">
-        Style<tspan fill="rgba(245, 241, 234, 0.6)">.ai</tspan>
-      </text>
-      <text x="1128" y="560"
-        text-anchor="end"
-        fill="${STONE}"
-        font-family="'IBM Plex Mono', ui-monospace, monospace"
-        font-size="18"
-        letter-spacing="3"
-        font-weight="400">
-        STYLEDESIGNER.CO.IN
-      </text>
-    </svg>`;
-
-  await sharp(Buffer.from(svg)).jpeg({ quality: 88, mozjpeg: true }).toFile(dest);
-  console.log(`[build-og-cover] ${path.relative(root, dest)}`);
+  fs.writeFileSync(outPath, jpg);
+  const size = (jpg.length / 1024).toFixed(1);
+  console.log(`[build-og-cover] wrote ${path.relative(root, outPath)} (${size} KB)`);
 }
 
 main().catch((e) => {
