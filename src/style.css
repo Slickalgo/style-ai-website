@@ -558,45 +558,17 @@
     outline-offset: 4px;
   }
 
-  /* Hanging Roman numerals on how-it-works clauses (desktop only).
-     Implementation notes:
-       - Markup is <ol class="clauses" role="list"> with <li class="clause">
-       - Numerals come from CSS counter(clause, lower-roman), not text nodes
-       - Mobile: numerals suppressed via list-style: none; clauses flow plain
-       - Desktop: each <li> becomes a 2-col grid [4.5rem numeral | 1fr clause]
-       - Numeral is Fraunces italic (not mono — single family, no taste break)
-         sized at 0.32em so at --t-100 (96px) clause it renders ~30px
-       - Baseline alignment via align-items:baseline + padding-top on ::before
-         to sit the numeral at the clause cap-line, not the x-height
-     Per Design + CX specs — see 7-agent sign-off round. */
+  /* How-it-works clauses: semantic <ol class="clauses" role="list"> with
+     <li class="clause"> children. Screen readers announce "list, 3 items,
+     item 1…" via the ol/li structure — we keep the a11y win without a
+     visual numeral. Brand + Marketing were right: three short clauses are
+     a self-reading sequence; numerals are scaffolding the reader's eye
+     never needed. Shipped then removed on founder review — see
+     commit history. */
   .clauses {
     list-style: none;
     padding: 0;
     margin: 0;
-    counter-reset: clause;
-  }
-  .clauses .clause {
-    counter-increment: clause;
-  }
-
-  /* Clauses at desktop — two-column grid per li, hanging numeral in col 1. */
-  .clauses .clause {
-    display: grid;
-    grid-template-columns: 4.5rem 1fr;
-    column-gap: 1.5rem;
-    align-items: baseline;
-    text-align: left;
-  }
-  .clauses .clause::before {
-    content: counter(clause, lower-roman);
-    font-family: "Fraunces", ui-serif, Georgia, serif;
-    font-style: italic;
-    font-weight: 400;
-    font-size: 0.32em;
-    color: var(--stone);
-    text-align: right;
-    padding-top: 0.25em;
-    letter-spacing: 0;
   }
 
   /* Close beat — QR block lands. Desktop only; mobile users don't need
