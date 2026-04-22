@@ -13,7 +13,7 @@
   --bone: #E8E1D4;
   --ink: #0D0B0A;
   --espresso: #1A1512;
-  --stone: #6B6460;
+  --stone: #5F5854;
 
   /* Editorial type scale (rem on 16px root). */
   --t-10: 0.688rem;   /* 11px mono labels */
@@ -281,6 +281,11 @@
     text-decoration: none;
   }
   .footer-link:hover {
+    color: var(--ink);
+  }
+  .footer-link:focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 4px;
     color: var(--ink);
   }
 

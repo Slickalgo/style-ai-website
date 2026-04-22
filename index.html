@@ -6,7 +6,7 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/logo-mark.svg" />
     <meta name="theme-color" content="#F5F1EA" />
-    <title>Ukti</title>
+    <title>Ukti — Issue №01</title>
     <meta
       name="description"
       content="Ukti decides what you wear. One outfit a day, from what you already own."
@@ -16,7 +16,7 @@
     <!-- Open Graph / Twitter -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://ukti.io/" />
-    <meta property="og:title" content="Ukti" />
+    <meta property="og:title" content="Ukti — Issue №01" />
     <meta property="og:description" content="One outfit a day. Issued, not suggested." />
     <meta property="og:image" content="https://ukti.io/og-cover.jpg" />
     <meta property="og:image:width" content="1200" />
@@ -24,12 +24,144 @@
     <meta property="og:image:alt" content="Ukti — Issue №01" />
     <meta property="og:site_name" content="Ukti" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Ukti" />
+    <meta name="twitter:title" content="Ukti — Issue №01" />
     <meta name="twitter:description" content="One outfit a day. Issued, not suggested." />
     <meta name="twitter:image" content="https://ukti.io/og-cover.jpg" />
 
-    <!-- Preload the hero photograph as LCP candidate. -->
-    <link rel="preload" as="image" href="/images/hero.avif" type="image/avif" />
+    <!-- Preload the hero photograph as LCP candidate. Responsive: mobile gets -sm (720w), desktop gets the 1440w.
+         href= is the fallback for engines that ignore imagesrcset; it's the desktop variant, same as the primary. -->
+    <link
+      rel="preload"
+      as="image"
+      type="image/avif"
+      href="/images/hero.avif"
+      imagesrcset="/images/hero-sm.avif 720w, /images/hero.avif 1440w"
+      imagesizes="100vw"
+    />
+
+    <!-- ─────────────────────────────────────────────────────────────── -->
+    <!-- Critical CSS — above-the-fold only. Tokens, base body, Beat 1    -->
+    <!-- component classes (hero-headline, eyebrow, support-line,          -->
+    <!-- wordmark, ink-scrim, grain-overlay) + reveal motion. Mirrors      -->
+    <!-- src/style.css; kept narrow so the main sheet can still load       -->
+    <!-- without blocking first paint. If you edit here, keep parity.      -->
+    <!-- ─────────────────────────────────────────────────────────────── -->
+    <style>
+      :root {
+        --paper: #F5F1EA;
+        --bone: #E8E1D4;
+        --ink: #0D0B0A;
+        --stone: #5F5854;
+        --t-10: 0.688rem;
+        --t-50: 1.375rem;
+      }
+      @font-face {
+        font-family: "Fraunces";
+        font-style: normal;
+        font-weight: 400;
+        font-display: swap;
+        src: url("/fonts/Fraunces-400.woff2") format("woff2");
+      }
+      @font-face {
+        font-family: "IBM Plex Mono";
+        font-style: normal;
+        font-weight: 400;
+        font-display: swap;
+        src: url("/fonts/IBMPlexMono-400.woff2") format("woff2");
+      }
+      html { overflow-x: hidden; }
+      body {
+        background: var(--paper);
+        color: var(--ink);
+        font-family: "Fraunces", ui-serif, Georgia, serif;
+        font-weight: 400;
+        margin: 0;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      main { display: block; }
+      .hero-headline {
+        font-family: "Fraunces", ui-serif, Georgia, serif;
+        font-weight: 400;
+        color: var(--ink);
+        letter-spacing: -0.02em;
+        line-height: 0.95;
+        margin: 0;
+        hyphens: none;
+        font-size: clamp(2.5rem, 10vw, 6rem);
+      }
+      @media (max-width: 374px) {
+        .hero-headline { font-size: 2.5rem; line-height: 1; }
+      }
+      .eyebrow {
+        font-family: "IBM Plex Mono", ui-monospace, monospace;
+        text-transform: uppercase;
+        font-size: var(--t-10);
+        letter-spacing: 0.12em;
+        color: var(--stone);
+        font-weight: 400;
+        margin: 0;
+      }
+      .support-line {
+        font-family: "Fraunces", ui-serif, Georgia, serif;
+        font-weight: 400;
+        font-size: var(--t-50);
+        line-height: 1.5;
+        color: var(--ink);
+        margin: 0;
+      }
+      .wordmark {
+        font-family: "Fraunces", ui-serif, Georgia, serif;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--ink);
+        margin: 0;
+      }
+      .ink-scrim {
+        position: absolute;
+        inset: auto 0 0 0;
+        height: 55%;
+        background: linear-gradient(
+          to top,
+          rgba(13, 11, 10, 0.55) 0%,
+          rgba(13, 11, 10, 0.2) 40%,
+          rgba(13, 11, 10, 0) 100%
+        );
+        pointer-events: none;
+      }
+      .grain-overlay {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        opacity: 0.08;
+        mix-blend-mode: multiply;
+        background-image: url("/noise.svg");
+        background-size: 240px 240px;
+      }
+      [data-reveal] {
+        opacity: 0;
+        transform: translate3d(0, 12px, 0);
+        transition:
+          opacity 600ms cubic-bezier(0.22, 1, 0.36, 1),
+          transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
+        transition-delay: var(--reveal-delay, 0ms);
+        will-change: opacity, transform;
+      }
+      [data-reveal][data-revealed="1"] {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+      }
+      @media (prefers-reduced-motion: reduce) {
+        [data-reveal],
+        [data-reveal][data-revealed="1"] {
+          opacity: 1;
+          transform: none;
+          transition: none;
+          transition-delay: 0ms;
+        }
+      }
+    </style>
 
     <!-- Preload Fraunces 400 roman for the hero headline. -->
     <link
@@ -58,11 +190,21 @@
         <!-- Register intentional: the product shows its own output on the marketing surface. -->
         <!-- Register watch: Apartamento / Céline editorial feel. Monitor at launch for off-register drift. -->
         <picture class="absolute inset-0 h-full w-full">
-          <source srcset="/images/hero.avif" type="image/avif" />
-          <source srcset="/images/hero.webp" type="image/webp" />
+          <source
+            type="image/avif"
+            srcset="/images/hero-sm.avif 720w, /images/hero.avif 1440w"
+            sizes="100vw"
+          />
+          <source
+            type="image/webp"
+            srcset="/images/hero-sm.webp 720w, /images/hero.webp 1440w"
+            sizes="100vw"
+          />
           <img
             src="/images/hero.png"
             alt="A navy wool coat and cream trouser, held in morning light."
+            width="1200"
+            height="1600"
             class="h-full w-full object-cover"
             fetchpriority="high"
             decoding="async"
@@ -75,7 +217,7 @@
         <p
           data-reveal
           class="eyebrow absolute left-6 top-6 sm:left-10 sm:top-10"
-          style="color: rgba(245, 241, 234, 0.75); --reveal-delay: 0ms"
+          style="color: rgba(245, 241, 234, 0.92); --reveal-delay: 0ms"
         >
           ISSUE №01 · UKTI · EST. 2026
         </p>
@@ -150,11 +292,21 @@
         aria-label="The pull"
       >
         <picture class="absolute inset-0 h-full w-full">
-          <source srcset="/images/one-pull.avif" type="image/avif" />
-          <source srcset="/images/one-pull.webp" type="image/webp" />
+          <source
+            type="image/avif"
+            srcset="/images/one-pull-sm.avif 720w, /images/one-pull.avif 1440w"
+            sizes="100vw"
+          />
+          <source
+            type="image/webp"
+            srcset="/images/one-pull-sm.webp 720w, /images/one-pull.webp 1440w"
+            sizes="100vw"
+          />
           <img
             src="/images/one-pull.png"
             alt="A rolled-linen sleeve against a cream trouser, at the forearm."
+            width="1200"
+            height="1600"
             class="h-full w-full object-cover"
             loading="lazy"
             decoding="async"
@@ -224,45 +376,75 @@
             <!-- TUE — editorial image in place -->
             <figure data-reveal class="relative flex aspect-square items-end overflow-hidden bg-bone p-5">
               <picture class="absolute inset-0 h-full w-full">
-                <source srcset="/images/week-tue.avif" type="image/avif" />
-                <source srcset="/images/week-tue.webp" type="image/webp" />
+                <source
+                  type="image/avif"
+                  srcset="/images/week-tue-sm.avif 720w, /images/week-tue.avif 1440w"
+                  sizes="(min-width: 640px) 25vw, 50vw"
+                />
+                <source
+                  type="image/webp"
+                  srcset="/images/week-tue-sm.webp 720w, /images/week-tue.webp 1440w"
+                  sizes="(min-width: 640px) 25vw, 50vw"
+                />
                 <img
                   src="/images/week-tue.png"
                   alt="A charcoal wool crewneck knit over a white shirt, hands in pockets, window light."
+                  width="1200"
+                  height="1200"
                   class="h-full w-full object-cover"
                   loading="lazy"
                   decoding="async"
                 />
               </picture>
               <div class="ink-scrim ink-scrim--grid" aria-hidden="true"></div>
-              <figcaption class="eyebrow eyebrow--grid eyebrow--on-image relative z-10">TUE · Quiet confidence.</figcaption>
+              <figcaption class="eyebrow eyebrow--grid eyebrow--on-image relative z-10">TUE · The charcoal knit.</figcaption>
             </figure>
 
             <!-- WED — editorial image in place -->
             <figure data-reveal class="relative flex aspect-square items-end overflow-hidden bg-bone p-5">
               <picture class="absolute inset-0 h-full w-full">
-                <source srcset="/images/week-wed.avif" type="image/avif" />
-                <source srcset="/images/week-wed.webp" type="image/webp" />
+                <source
+                  type="image/avif"
+                  srcset="/images/week-wed-sm.avif 720w, /images/week-wed.avif 1440w"
+                  sizes="(min-width: 640px) 25vw, 50vw"
+                />
+                <source
+                  type="image/webp"
+                  srcset="/images/week-wed-sm.webp 720w, /images/week-wed.webp 1440w"
+                  sizes="(min-width: 640px) 25vw, 50vw"
+                />
                 <img
                   src="/images/week-wed.png"
                   alt="Profile view, ink-navy blazer over a white oxford, head turned down, espresso wood panel behind."
+                  width="1200"
+                  height="1200"
                   class="h-full w-full object-cover"
                   loading="lazy"
                   decoding="async"
                 />
               </picture>
               <div class="ink-scrim ink-scrim--grid" aria-hidden="true"></div>
-              <figcaption class="eyebrow eyebrow--grid eyebrow--on-image relative z-10">WED · Soft authority.</figcaption>
+              <figcaption class="eyebrow eyebrow--grid eyebrow--on-image relative z-10">WED · Navy before the meeting.</figcaption>
             </figure>
 
             <!-- THU — editorial image in place -->
             <figure data-reveal class="relative flex aspect-square items-end overflow-hidden bg-bone p-5">
               <picture class="absolute inset-0 h-full w-full">
-                <source srcset="/images/week-thu.avif" type="image/avif" />
-                <source srcset="/images/week-thu.webp" type="image/webp" />
+                <source
+                  type="image/avif"
+                  srcset="/images/week-thu-sm.avif 720w, /images/week-thu.avif 1440w"
+                  sizes="(min-width: 640px) 25vw, 50vw"
+                />
+                <source
+                  type="image/webp"
+                  srcset="/images/week-thu-sm.webp 720w, /images/week-thu.webp 1440w"
+                  sizes="(min-width: 640px) 25vw, 50vw"
+                />
                 <img
                   src="/images/week-thu.png"
                   alt="Mid-calf walking fragment, grey wool trouser and brown leather lace-ups, late-afternoon light."
+                  width="1200"
+                  height="1200"
                   class="h-full w-full object-cover"
                   loading="lazy"
                   decoding="async"
@@ -275,18 +457,28 @@
             <!-- FRI — editorial image in place -->
             <figure data-reveal class="relative flex aspect-square items-end overflow-hidden bg-bone p-5">
               <picture class="absolute inset-0 h-full w-full">
-                <source srcset="/images/week-fri.avif" type="image/avif" />
-                <source srcset="/images/week-fri.webp" type="image/webp" />
+                <source
+                  type="image/avif"
+                  srcset="/images/week-fri-sm.avif 720w, /images/week-fri.avif 1440w"
+                  sizes="(min-width: 640px) 25vw, 50vw"
+                />
+                <source
+                  type="image/webp"
+                  srcset="/images/week-fri-sm.webp 720w, /images/week-fri.webp 1440w"
+                  sizes="(min-width: 640px) 25vw, 50vw"
+                />
                 <img
                   src="/images/week-fri.png"
                   alt="Chest-up close-crop, white shirt collar under a pale grey merino knit, cool daylight."
+                  width="1200"
+                  height="1200"
                   class="h-full w-full object-cover"
                   loading="lazy"
                   decoding="async"
                 />
               </picture>
               <div class="ink-scrim ink-scrim--grid" aria-hidden="true"></div>
-              <figcaption class="eyebrow eyebrow--grid eyebrow--on-image relative z-10">FRI · Less is the call.</figcaption>
+              <figcaption class="eyebrow eyebrow--grid eyebrow--on-image relative z-10">FRI · Merino, nothing under.</figcaption>
             </figure>
           </div>
         </div>
