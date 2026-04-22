@@ -6,183 +6,146 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/logo-mark.svg" />
     <meta name="theme-color" content="#F5F1EA" />
-    <title>Style.ai — one outfit. every morning.</title>
+    <title>Ukti</title>
     <meta
       name="description"
-      content="A stylist, not a store. One outfit a day, pulled from your light, your undertone, and the way you stand. Editorial, patient, first-person. Download on iOS + Android."
+      content="Ukti decides what you wear. One outfit a day, from what you already own."
     />
-    <link rel="canonical" href="https://styledesigner.co.in/" />
+    <link rel="canonical" href="https://ukti.io/" />
 
     <!-- Open Graph / Twitter -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://styledesigner.co.in/" />
-    <meta property="og:title" content="Style.ai — one outfit. every morning." />
-    <meta
-      property="og:description"
-      content="A stylist, not a store. One outfit a day, pulled from your light, your undertone, and the way you stand."
-    />
-    <meta property="og:image" content="https://styledesigner.co.in/og-cover.jpg" />
+    <meta property="og:url" content="https://ukti.io/" />
+    <meta property="og:title" content="Ukti" />
+    <meta property="og:description" content="One outfit a day. Issued, not suggested." />
+    <!-- TODO: design-lead supplies rebuilt /og-cover.jpg (1200x630, UKTI wordmark on paper). -->
+    <meta property="og:image" content="https://ukti.io/og-cover.jpg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:locale" content="en_IN" />
-    <meta property="og:locale:alternate" content="en_US" />
-    <meta property="og:site_name" content="Style.ai" />
+    <meta property="og:image:alt" content="Ukti — Issue №01" />
+    <meta property="og:site_name" content="Ukti" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Style.ai — one outfit. every morning." />
-    <meta
-      name="twitter:description"
-      content="A stylist, not a store. One outfit a day, pulled from your light, your undertone, and the way you stand."
-    />
-    <meta name="twitter:image" content="https://styledesigner.co.in/og-cover.jpg" />
+    <meta name="twitter:title" content="Ukti" />
+    <meta name="twitter:description" content="One outfit a day. Issued, not suggested." />
+    <meta name="twitter:image" content="https://ukti.io/og-cover.jpg" />
 
-    <!-- Hero image preload. Issue №01 opens on paper with type; the render arrives
-         on viewport 2. Preload so the second viewport paints silently. No
-         fetchpriority — the LCP element is now "Today." in Fraunces italic. -->
-    <link rel="preload" as="image" href="/images/08349e12269a.avif" type="image/avif" />
+    <!-- Preload the hero photograph as LCP candidate. -->
+    <link rel="preload" as="image" href="/images/63d9bb1e1a74.avif" type="image/avif" />
 
-    <!-- Fonts are self-hosted in public/fonts/; @font-face in style.css.
-         Preload only the italic hero weight (Fraunces 400 italic) — Issue №01
-         opens on the word "Today." so italic is LCP-critical. Font-display:
-         optional means the fallback paints without a swap flash. -->
+    <!-- Preload Fraunces 400 roman for the hero headline. -->
     <link
       rel="preload"
       as="font"
-      href="/fonts/Fraunces-400-italic.woff2"
+      href="/fonts/Fraunces-400.woff2"
       type="font/woff2"
       crossorigin
     />
-
-    <!-- Schema.org — Organization, WebSite, SoftwareApplication. -->
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@graph": [
-          {
-            "@type": "Organization",
-            "@id": "https://styledesigner.co.in/#organization",
-            "name": "Style.ai",
-            "url": "https://styledesigner.co.in/",
-            "logo": {
-              "@type": "ImageObject",
-              "url": "https://styledesigner.co.in/logo-mark.svg"
-            },
-            "email": "hello@styleai.app"
-          },
-          {
-            "@type": "WebSite",
-            "@id": "https://styledesigner.co.in/#website",
-            "url": "https://styledesigner.co.in/",
-            "name": "Style.ai",
-            "alternateName": ["styledesigner.co.in", "Style Designer"],
-            "publisher": { "@id": "https://styledesigner.co.in/#organization" },
-            "inLanguage": "en-IN"
-          },
-          {
-            "@type": "SoftwareApplication",
-            "@id": "https://styledesigner.co.in/#app",
-            "name": "Style.ai",
-            "applicationCategory": "LifestyleApplication",
-            "operatingSystem": "iOS, Android",
-            "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" },
-            "description": "An editorial, first-person personal stylist. One outfit a day, pulled from your light, your undertone, and the way you stand.",
-            "publisher": { "@id": "https://styledesigner.co.in/#organization" }
-          }
-        ]
-      }
-    </script>
   </head>
 
-  <body class="bg-paper text-ink antialiased">
-    <!--
-      Style.ai — Issue №01.
-
-      Seven viewports, one scroll, no nav. Each viewport carries a single
-      emotional verb; the reader moves through them in one sitting.
-
-        1. The word          (paper)   — told.       Type-led hero, no image.
-        2. The render        (ink)     — shown.      Full-bleed image, silent.
-        3. The pieces        (paper)   — named.      Three fragments, stone rail.
-        4. The mirror        (paper)   — recognized. Negation beats.
-        5. How she works     (paper)   — understood. Three verbs.
-        6. Memory            (paper)   — remembered. One line + one thumbnail.
-        7. Your turn         (paper)   — invited.    One sentence, two links.
-
-      The brand-world decisions behind this layout live in
-      docs/brand/website-brand-guidebook-2026-04-21.md §VI.
-    -->
-
+  <body>
     <main>
-
       <!-- ============================================================= -->
-      <!-- VIEWPORT 1 — The word                                           -->
-      <!-- Paper canvas. No image. "Today." at display scale, flush left. -->
-      <!-- The reader is told before they are shown.                      -->
+      <!-- BEAT 1 — Hero                                                    -->
+      <!-- Full-bleed editorial photograph. Masthead, headline, wordmark.  -->
       <!-- ============================================================= -->
 
       <section
         id="hero"
-        class="site-sr-section relative w-full overflow-hidden bg-paper text-ink"
+        class="relative w-full overflow-hidden"
         style="min-height: 100vh; min-height: 100svh"
-        aria-label="Today's verdict"
+        aria-label="Issue 01"
       >
-        <!-- Masthead (top-left). ISSUE №01 is static on deploy. -->
-        <div
-          class="absolute left-6 right-6 top-6 site-sr-item sm:left-10 sm:top-10"
-          style="--site-sr-delay: 0ms"
-        >
-          <p class="eyebrow tracking-wider">ISSUE №01 · TUE · OCT 22</p>
-          <p
-            class="mt-1 font-display text-[22px] tracking-tight"
-            aria-label="Style.ai"
-          >
-            Style<span class="opacity-70">.ai</span>
-          </p>
-        </div>
+        <!-- Hero photograph — salvage candidate 63d9bb1e1a74. -->
+        <!-- TODO: confirm photographed vs AI before launch -->
+        <picture class="absolute inset-0 h-full w-full">
+          <source srcset="/images/63d9bb1e1a74.avif" type="image/avif" />
+          <source srcset="/images/63d9bb1e1a74.webp" type="image/webp" />
+          <img
+            src="/images/63d9bb1e1a74.png"
+            alt="A navy wool coat and cream trouser, held in morning light."
+            class="h-full w-full object-cover"
+            fetchpriority="high"
+            decoding="async"
+          />
+        </picture>
+        <div class="grain-overlay" aria-hidden="true"></div>
+        <div class="ink-scrim" aria-hidden="true"></div>
 
-        <!-- The verdict. "Today." at display scale, "Quiet confidence." below
-             at the hero verdict scale. Vertically centered in the viewport. -->
-        <div
-          class="absolute inset-0 flex flex-col justify-center px-6 sm:px-10"
+        <!-- Masthead (top-left). -->
+        <p
+          data-reveal
+          class="eyebrow absolute left-6 top-6 sm:left-10 sm:top-10"
+          style="color: rgba(245, 241, 234, 0.75); --reveal-delay: 0ms"
         >
-          <div class="site-sr-item" style="--site-sr-delay: 200ms">
+          ISSUE №01 · UKTI · EST. 2026
+        </p>
+
+        <!-- Headline (center-right). -->
+        <div class="relative flex h-screen items-center justify-end px-6 sm:px-10" style="min-height: 100vh; min-height: 100svh">
+          <div class="w-full max-w-[820px] text-right sm:pr-6">
             <h1
-              id="hero-verdict"
-              class="hero-today"
-              aria-live="polite"
+              data-reveal
+              class="hero-headline"
+              style="color: var(--paper); --reveal-delay: 160ms"
             >
-              Today.
+              Ukti decides what you<br />wear.
             </h1>
-            <p class="verdict verdict--hero mt-2">
-              Quiet confidence.
+            <p
+              data-reveal
+              class="support-line mt-6"
+              style="color: rgba(245, 241, 234, 0.88); --reveal-delay: 320ms"
+            >
+              One outfit a day, from what you already own.
             </p>
           </div>
         </div>
 
-        <!-- Bottom-left ambient marginalia. The word "read" belongs to
-             print — it tells the reader, without a tutorial, that this
-             is a publication, not a landing page. -->
-        <div
-          class="absolute bottom-6 left-6 right-6 site-sr-item sm:bottom-10 sm:left-10"
-          style="--site-sr-delay: 500ms"
+        <!-- Wordmark (bottom-right). -->
+        <p
+          data-reveal
+          class="wordmark absolute bottom-6 right-6 text-[20px] sm:bottom-10 sm:right-10 sm:text-[22px]"
+          style="color: rgba(245, 241, 234, 0.92); --reveal-delay: 480ms"
         >
-          <p
-            class="eyebrow"
-            style="color: rgba(168, 155, 138, 0.75)"
+          UKTI
+        </p>
+      </section>
+
+      <!-- ============================================================= -->
+      <!-- BEAT 2 — Mirror (type-only)                                      -->
+      <!-- Paper canvas. Stone rail centered. Three italic observations.   -->
+      <!-- Stagger: 140ms.                                                 -->
+      <!-- ============================================================= -->
+
+      <section
+        id="mirror"
+        class="bg-paper py-24 sm:py-40"
+        aria-label="Mirror"
+      >
+        <div class="mx-auto max-w-[720px] px-6 sm:px-10">
+          <div
+            class="stone-rail pl-8 sm:pl-12"
+            data-stagger-group
+            data-stagger-ms="140"
           >
-            READ THE ISSUE.
-          </p>
+            <p data-reveal class="mirror-line">The navy. Not the grey.</p>
+            <p data-reveal class="mirror-line mt-10 sm:mt-12">
+              Wool today. Colder than it reads.
+            </p>
+            <p data-reveal class="mirror-line mt-10 sm:mt-12">
+              The oxford. The meeting calls for it.
+            </p>
+          </div>
         </div>
       </section>
 
       <!-- ============================================================= -->
-      <!-- VIEWPORT 2 — The render                                         -->
-      <!-- Ink canvas. Full-bleed real app render. No overlay text.       -->
-      <!-- The verdict in V1 prepared the eye; this viewport is silent.   -->
+      <!-- BEAT 3 — One pull (full-bleed)                                   -->
+      <!-- Second editorial photograph. Caption overlaid bottom-right.    -->
       <!-- ============================================================= -->
 
       <section
-        id="the-render"
-        class="site-sr-section relative isolate w-full overflow-hidden bg-ink"
+        id="one-pull"
+        class="relative w-full overflow-hidden"
         style="min-height: 100vh; min-height: 100svh"
         aria-label="The pull"
       >
@@ -191,325 +154,177 @@
           <source srcset="/images/08349e12269a.webp" type="image/webp" />
           <img
             src="/images/08349e12269a.png"
-            alt="Today's pull — a composed editorial outfit in warm morning light"
-            class="h-full w-full object-cover site-sr-item"
-            style="--site-sr-delay: 0ms"
+            alt="A rolled-linen sleeve against a cream trouser, at the forearm."
+            class="h-full w-full object-cover"
             loading="lazy"
             decoding="async"
           />
         </picture>
         <div class="grain-overlay" aria-hidden="true"></div>
-        <!-- No ink-fade. No caption. The image stands alone. -->
+        <div class="ink-scrim" aria-hidden="true"></div>
+
+        <figcaption
+          data-reveal
+          class="pull-caption absolute bottom-8 right-6 sm:bottom-12 sm:right-10"
+        >
+          The linen, rolled once.
+        </figcaption>
       </section>
 
       <!-- ============================================================= -->
-      <!-- VIEWPORT 3 — The pieces                                         -->
-      <!-- Paper canvas. Stone rail. Three fragments on one line, sized   -->
-      <!-- just below the mirror's negation scale — the outfit named.     -->
+      <!-- BEAT 4 — How it works (type-only)                                -->
+      <!-- Paper canvas. Three clauses stacked centered. Stagger 200ms.   -->
       <!-- ============================================================= -->
 
       <section
-        id="the-pieces"
-        class="site-sr-section bg-paper py-28 sm:py-40"
-        aria-label="The pieces"
+        id="how-it-works"
+        class="bg-paper py-28 sm:py-40"
+        aria-label="How it works"
       >
-        <div class="mx-auto max-w-editorial px-6 sm:px-10">
-          <div class="stone-rail pl-6 sm:pl-10 max-w-prose">
-            <p
-              class="eyebrow mb-8 site-sr-item sm:mb-12"
-              style="--site-sr-delay: 0ms"
-            >
-              THE PULL · ISSUE №01
-            </p>
-
-            <p
-              class="site-sr-item font-display text-ink"
-              style="--site-sr-delay: 120ms; font-size: clamp(26px, 6.5vw, 40px); line-height: 1.25; letter-spacing: -0.005em"
-            >
-              Camel knit. Black denim. Brown loafers.
-            </p>
-
-            <p
-              class="whisper site-sr-item mt-10 sm:mt-14"
-              style="--site-sr-delay: 320ms"
-            >
-              Worn tomorrow. Before the light changes.
-            </p>
-          </div>
+        <div
+          class="mx-auto max-w-[900px] px-6 text-center"
+          data-stagger-group
+          data-stagger-ms="200"
+        >
+          <p data-reveal class="clause">Ukti reads the day.</p>
+          <p data-reveal class="clause mt-10 sm:mt-14">Ukti pulls one outfit.</p>
+          <p data-reveal class="clause mt-10 sm:mt-14">You come back tomorrow.</p>
         </div>
       </section>
 
       <!-- ============================================================= -->
-      <!-- VIEWPORT 4 — The mirror                                         -->
-      <!-- Paper canvas. Stone rail left. No image. The emptiness is      -->
-      <!-- the point — the reader recognizes what she is not wearing      -->
-      <!-- before being shown what she is.                                -->
+      <!-- BEAT 5 — A week, held (4-cell grid, type-only fallback)          -->
+      <!-- TODO: swap in editorial stock images once Founder approves budget -->
       <!-- ============================================================= -->
 
       <section
-        id="mirror"
-        class="site-sr-section bg-paper py-24 sm:py-32"
-        aria-label="The mirror, again"
+        id="a-week"
+        class="bg-paper py-24 sm:py-32"
+        aria-label="A week, held"
       >
-        <div class="relative mx-auto max-w-editorial px-6">
-          <div class="stone-rail pl-6 sm:pl-10">
-            <p
-              class="eyebrow mb-10 site-sr-item sm:mb-14"
-              style="--site-sr-delay: 0ms"
-            >
-              47 MINUTES BEFORE YOU LEAVE.
-            </p>
-
-            <div class="space-y-6 sm:space-y-8">
-              <p
-                class="site-sr-item font-display italic leading-[1.08] tracking-tight text-ink"
-                style="--site-sr-delay: 120ms; font-size: clamp(28px, 7.5vw, 44px)"
-              >
-                Not the trench.
-              </p>
-              <p
-                class="site-sr-item font-display italic leading-[1.08] tracking-tight text-ink"
-                style="--site-sr-delay: 260ms; font-size: clamp(28px, 7.5vw, 44px)"
-              >
-                Not the dress.
-              </p>
-              <p
-                class="site-sr-item font-display italic leading-[1.08] tracking-tight text-ink"
-                style="--site-sr-delay: 400ms; font-size: clamp(28px, 7.5vw, 44px)"
-              >
-                Not the one you wore on Thursday.
-              </p>
-            </div>
-
-            <p
-              class="eyebrow mt-14 site-sr-item sm:mt-20"
-              style="--site-sr-delay: 600ms; color: rgba(168, 155, 138, 0.8)"
-            >
-              THE MIRROR, AGAIN.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <!-- ============================================================= -->
-      <!-- VIEWPORT 5 — How she works                                      -->
-      <!-- Paper canvas. Three italic verbs, each with a whisper.         -->
-      <!-- No icons, no numbered steps, no feature grid.                  -->
-      <!-- ============================================================= -->
-
-      <section
-        id="how-she-works"
-        class="site-sr-section bg-paper py-28 sm:py-40"
-        aria-label="How she works"
-      >
-        <div class="mx-auto max-w-editorial px-6">
+        <div class="mx-auto max-w-[1100px] px-6 sm:px-10">
           <p
-            class="eyebrow site-sr-item mb-16 text-center sm:mb-24"
-            style="--site-sr-delay: 0ms"
+            data-reveal
+            class="eyebrow eyebrow--grid text-center"
+            style="margin-bottom: 3rem"
           >
-            HOW SHE WORKS.
+            A WEEK, HELD.
           </p>
 
-          <div class="mx-auto max-w-prose space-y-14 sm:space-y-20">
-            <!-- BEAT 1 — reads you -->
-            <div class="site-sr-item" style="--site-sr-delay: 120ms">
-              <p
-                class="font-display italic leading-[1.08] tracking-tight text-ink"
-                style="font-size: clamp(30px, 8vw, 48px)"
-              >
-                She reads you.
-              </p>
-              <p class="whisper mt-3">
-                One photo. Your light, your undertone,<br class="hidden sm:block" />
-                the way you stand.
-              </p>
-            </div>
-
-            <!-- BEAT 2 — pulls one -->
-            <div class="site-sr-item" style="--site-sr-delay: 300ms">
-              <p
-                class="font-display italic leading-[1.08] tracking-tight text-ink"
-                style="font-size: clamp(30px, 8vw, 48px)"
-              >
-                She pulls one.
-              </p>
-              <p class="whisper mt-3">
-                One look. Not a feed. Not a lookbook.
-              </p>
-            </div>
-
-            <!-- BEAT 3 — returns tomorrow -->
-            <div class="site-sr-item" style="--site-sr-delay: 480ms">
-              <p
-                class="font-display italic leading-[1.08] tracking-tight text-ink"
-                style="font-size: clamp(30px, 8vw, 48px)"
-              >
-                You come back tomorrow.
-              </p>
-              <p class="whisper mt-3">
-                Her read sharpens every day.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ============================================================= -->
-      <!-- VIEWPORT 6 — Memory                                             -->
-      <!-- Paper canvas. Stone rail. One Fraunces italic line, one small  -->
-      <!-- paper-framed thumbnail. Replaces the old 4-up lookbook —       -->
-      <!-- memory is not inventory.                                       -->
-      <!-- ============================================================= -->
-
-      <section
-        id="memory"
-        class="site-sr-section bg-paper py-28 sm:py-40"
-        aria-label="Memory"
-      >
-        <div class="mx-auto max-w-editorial px-6 sm:px-10">
-          <div class="stone-rail pl-6 sm:pl-10 max-w-prose">
-            <p
-              class="eyebrow mb-10 site-sr-item"
-              style="--site-sr-delay: 0ms"
-            >
-              LAST WEEK.
-            </p>
-
-            <div class="site-sr-item" style="--site-sr-delay: 120ms">
-              <p
-                class="font-display italic text-ink"
-                style="font-size: clamp(26px, 6.5vw, 40px); line-height: 1.15; letter-spacing: -0.01em"
-              >
-                Last Tuesday, you wore brown.
-              </p>
-            </div>
-
-            <!-- Small thumbnail — a single past look, paper-framed. -->
-            <figure
-              class="site-sr-item mt-10 max-w-[220px] sm:mt-14 sm:max-w-[260px]"
-              style="--site-sr-delay: 280ms"
-            >
-              <picture class="block">
-                <source srcset="/images/a72cfc383f12.avif" type="image/avif" />
-                <source srcset="/images/a72cfc383f12.webp" type="image/webp" />
-                <img
-                  src="/images/a72cfc383f12.png"
-                  alt="A look from last week — an ivory shirt, faded denim, raffia mule"
-                  class="aspect-[2/3] w-full object-cover"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </picture>
+          <div
+            class="grid grid-cols-2 gap-6 sm:grid-cols-4 sm:gap-8"
+            data-stagger-group
+            data-stagger-ms="80"
+          >
+            <figure data-reveal class="flex aspect-square items-end bg-bone p-5">
+              <figcaption class="eyebrow eyebrow--grid">TUE · Quiet confidence.</figcaption>
             </figure>
-
-            <p
-              class="whisper site-sr-item mt-8"
-              style="--site-sr-delay: 440ms"
-            >
-              She remembers.
-            </p>
+            <figure data-reveal class="flex aspect-square items-end bg-bone p-5">
+              <figcaption class="eyebrow eyebrow--grid">WED · Soft authority.</figcaption>
+            </figure>
+            <figure data-reveal class="flex aspect-square items-end bg-bone p-5">
+              <figcaption class="eyebrow eyebrow--grid">THU · The grey, again.</figcaption>
+            </figure>
+            <figure data-reveal class="flex aspect-square items-end bg-bone p-5">
+              <figcaption class="eyebrow eyebrow--grid">FRI · Less is the call.</figcaption>
+            </figure>
           </div>
         </div>
       </section>
 
       <!-- ============================================================= -->
-      <!-- VIEWPORT 7 — Your turn                                          -->
-      <!-- Paper canvas. One ask, one sentence. Two store links — still   -->
-      <!-- ink-fill pills for tap-target reality, but quieter than the    -->
-      <!-- old handwritten-card composition. The close line reads like   -->
-      <!-- the trailing imprint of a magazine, not a CTA.                 -->
+      <!-- BEAT 6 — Your turn                                               -->
+      <!-- Paper canvas. Header + support + App Store + Google Play pills. -->
       <!-- ============================================================= -->
 
       <section
         id="your-turn"
-        class="site-sr-section bg-paper py-32 sm:py-40"
+        class="bg-paper py-32 sm:py-40"
         aria-label="Your turn"
       >
-        <div class="mx-auto max-w-editorial px-6 text-center">
-          <h2
-            class="verdict verdict--hero site-sr-item"
-            style="--site-sr-delay: 0ms"
-          >
-            Your turn.
-          </h2>
-          <p
-            class="whisper site-sr-item mt-6"
-            style="--site-sr-delay: 160ms"
-          >
-            Continue tomorrow's issue.
+        <div class="mx-auto max-w-[720px] px-6 text-center">
+          <h2 data-reveal class="section-header">Your turn.</h2>
+          <p data-reveal class="support-line mt-6" style="--reveal-delay: 120ms">
+            The app waits in the store.
           </p>
 
           <div
-            class="site-sr-item mt-12 flex flex-col items-center justify-center gap-4 sm:mt-14 sm:flex-row sm:gap-5"
-            style="--site-sr-delay: 320ms"
+            class="mt-12 flex flex-col items-center justify-center gap-4 sm:mt-14 sm:flex-row sm:gap-6"
+            data-stagger-group
+            data-stagger-ms="120"
           >
+            <!-- TODO: replace with final URLs before launch -->
+            <!-- TODO: design-lead swaps these text-fallback pills for official Apple + Google badge SVGs -->
             <a
-              href="https://apps.apple.com/"
-              class="cta-pill cta-pill--ink"
-              data-store-link="ios"
+              data-reveal
+              href="https://apps.apple.com/app/ukti/id000000000"
+              class="store-pill"
               rel="noopener"
-              aria-label="Download Style.ai on the App Store"
+              aria-label="Download on the App Store"
             >
-              App Store →
+              <svg
+                role="img"
+                aria-label="Download on the App Store"
+                width="135"
+                height="40"
+                viewBox="0 0 135 40"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <rect x="0.5" y="0.5" width="134" height="39" rx="6" fill="#0D0B0A" stroke="#0D0B0A" />
+                <g fill="#F5F1EA">
+                  <path d="M27.5 13.1c-0.3 0.4-0.9 0.8-1.5 0.7-0.1-0.6 0.2-1.3 0.5-1.7 0.4-0.5 1-0.8 1.5-0.8 0.1 0.6-0.2 1.3-0.5 1.8zm0.5 0.9c-0.9 0-1.6 0.5-2 0.5-0.4 0-1-0.5-1.7-0.5-0.9 0-1.7 0.5-2.1 1.3-0.9 1.6-0.2 3.9 0.7 5.2 0.4 0.6 0.9 1.3 1.6 1.3 0.6 0 0.9-0.4 1.7-0.4 0.8 0 1 0.4 1.7 0.4 0.7 0 1.2-0.6 1.6-1.2 0.5-0.7 0.7-1.4 0.7-1.4-0.0-0.0-1.4-0.6-1.4-2.1 0-1.3 1.1-1.9 1.1-1.9-0.6-0.9-1.6-1.0-1.9-1.0z" />
+                  <text x="38" y="17" font-family="-apple-system,SF Pro Display,Helvetica,Arial,sans-serif" font-size="8" font-weight="400">Download on the</text>
+                  <text x="38" y="29" font-family="-apple-system,SF Pro Display,Helvetica,Arial,sans-serif" font-size="15" font-weight="600">App Store</text>
+                </g>
+              </svg>
             </a>
+
             <a
-              href="https://play.google.com/store/"
-              class="cta-pill cta-pill--ink"
-              data-store-link="android"
+              data-reveal
+              href="https://play.google.com/store/apps/details?id=io.ukti.app"
+              class="store-pill"
               rel="noopener"
-              aria-label="Download Style.ai on Google Play"
+              aria-label="Get it on Google Play"
             >
-              Google Play →
+              <svg
+                role="img"
+                aria-label="Get it on Google Play"
+                width="135"
+                height="40"
+                viewBox="0 0 135 40"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <rect x="0.5" y="0.5" width="134" height="39" rx="6" fill="#0D0B0A" stroke="#0D0B0A" />
+                <g>
+                  <path d="M21 12.5l9 7.5-9 7.5-0.7-0.5V13z" fill="#F5F1EA" opacity="0.9"/>
+                  <path d="M21 12.5l9 7.5-2.1 1.8-6.9-5.8z" fill="#FFC107"/>
+                  <path d="M21 27.5l6.9-5.7 2.1 1.7-9 4.5z" fill="#F44336"/>
+                  <path d="M20.3 13l6.6 6.3-6.6 6.2V13z" fill="#4CAF50"/>
+                </g>
+                <g fill="#F5F1EA">
+                  <text x="38" y="17" font-family="Roboto,-apple-system,Helvetica,Arial,sans-serif" font-size="8" font-weight="400">GET IT ON</text>
+                  <text x="38" y="29" font-family="Roboto,-apple-system,Helvetica,Arial,sans-serif" font-size="15" font-weight="600">Google Play</text>
+                </g>
+              </svg>
             </a>
           </div>
-
-          <p
-            class="eyebrow site-sr-item mt-16"
-            style="--site-sr-delay: 520ms; color: rgba(168, 155, 138, 0.85)"
-          >
-            ONE OUTFIT · EVERY MORNING · NO ADS
-          </p>
         </div>
       </section>
-
     </main>
 
-    <!-- Footer — ink canvas. Five mono-caps links maximum. -->
-    <footer class="bg-ink py-10">
-      <div
-        class="mx-auto flex max-w-editorial flex-col items-center justify-between gap-4 px-6 sm:flex-row"
-      >
-        <p class="eyebrow eyebrow--paper">STYLE.AI · 2026</p>
+    <!-- Footer — minimal, per spec §6. -->
+    <footer class="bg-paper py-10">
+      <div class="mx-auto flex max-w-[1100px] flex-col items-center justify-between gap-4 px-6 sm:flex-row">
+        <p class="footer-link">© UKTI 2026</p>
         <nav aria-label="Footer">
-          <ul
-            class="eyebrow eyebrow--paper flex items-center gap-6"
-            style="color: rgba(245, 241, 234, 0.5)"
-          >
-            <li>
-              <a href="/guides/" class="transition-opacity hover:opacity-100">GUIDES</a>
-            </li>
-            <li>
-              <a href="/privacy" class="transition-opacity hover:opacity-100">PRIVACY</a>
-            </li>
-            <li>
-              <a href="/terms" class="transition-opacity hover:opacity-100">TERMS</a>
-            </li>
+          <ul class="flex items-center gap-6">
+            <li><a class="footer-link" href="/privacy">PRIVACY</a></li>
+            <li><a class="footer-link" href="/terms">TERMS</a></li>
+            <li><a class="footer-link" href="/press">PRESS</a></li>
           </ul>
         </nav>
       </div>
     </footer>
-
-    <!-- Persistent App Store pill — appears once the user scrolls past the
-         mirror section (see main.js). Standard Apple clear-space preserved. -->
-    <a
-      href="#your-turn"
-      class="sticky-cta cta-pill cta-pill--ink"
-      data-sticky-cta
-      data-cta-kind="scroll"
-      aria-label="Pull your first look"
-    >
-      Pull your first look →
-    </a>
 
     <script type="module" src="/src/main.js"></script>
   </body>
