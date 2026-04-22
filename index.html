@@ -393,21 +393,22 @@
         class="bg-paper py-28 sm:py-40"
         aria-label="How it works"
       >
-        <div
-          class="mx-auto max-w-[900px] px-6 text-center lg:max-w-[1200px] lg:px-16 lg:text-left"
+        <!-- Ordered list: clauses are numbered semantically so screen readers
+             announce "list, 3 items, item 1…" naturally. At mobile the numerals
+             are suppressed by .clauses CSS (list-style: none); at desktop a
+             counter() + ::before renders the hanging italic lowercase Roman
+             numeral in a 4.5rem gutter column. Single-family Fraunces, no
+             taste break between numeral and clause. -->
+        <ol
+          class="clauses mx-auto max-w-[900px] px-6 text-center lg:max-w-[1200px] lg:px-16 lg:text-left"
+          role="list"
           data-stagger-group
           data-stagger-ms="200"
         >
-          <p data-reveal class="clause">
-            <span class="clause-number" aria-hidden="true">i</span>Ukti reads the day.
-          </p>
-          <p data-reveal class="clause mt-10 sm:mt-14">
-            <span class="clause-number" aria-hidden="true">ii</span>Ukti pulls one outfit.
-          </p>
-          <p data-reveal class="clause mt-10 sm:mt-14">
-            <span class="clause-number" aria-hidden="true">iii</span>You come back tomorrow.
-          </p>
-        </div>
+          <li data-reveal class="clause">Ukti reads the day.</li>
+          <li data-reveal class="clause mt-10 sm:mt-14">Ukti pulls one outfit.</li>
+          <li data-reveal class="clause mt-10 sm:mt-14">You come back tomorrow.</li>
+        </ol>
       </section>
 
       <!-- ============================================================= -->
