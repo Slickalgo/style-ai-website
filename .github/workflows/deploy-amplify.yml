@@ -64,7 +64,12 @@ jobs:
           cache: "npm"
 
       - name: Install dependencies
-        run: npm ci
+        # Using `npm install` not `npm ci` because sharp's native bindings have
+        # platform-scoped optional deps (@emnapi/core, @emnapi/wasi-threads on
+        # linux-x64) that a lockfile generated on macOS doesn't capture. This
+        # is the install strategy the sharp maintainers recommend for CI.
+        # See https://sharp.pixelplumbing.com/install#cross-platform
+        run: npm install --no-audit --no-fund
 
       - name: Build static site
         run: npm run build
