@@ -12,9 +12,25 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, "..");
 const outDir = path.join(root, "public", "images");
 
-const IDS = [
-  "08349e12269a",
-  "63d9bb1e1a74",
+/**
+ * Each entry corresponds to an editorial image slot in the site. If the
+ * semantic PNG is present, we do nothing. If missing, a bone-colored
+ * placeholder with the caption text is generated so the dev server never
+ * 404s. All primaries are 3:4 portrait except the week grid which is 1:1.
+ *
+ * Alts are reserve variants that are referenced by the build pipeline but
+ * not wired into any HTML by default. They still need placeholders to
+ * avoid dangling optimize-images runs when the alt PNG has been deleted.
+ */
+const SLOTS = [
+  { id: "hero", width: 1200, height: 1600, label: "UKTI · HERO" },
+  { id: "hero-alt", width: 1200, height: 1600, label: "UKTI · HERO (alt)" },
+  { id: "one-pull", width: 1200, height: 1600, label: "UKTI · ONE PULL" },
+  { id: "one-pull-alt", width: 1200, height: 1600, label: "UKTI · ONE PULL (alt)" },
+  { id: "week-tue", width: 1200, height: 1200, label: "TUE · Quiet confidence." },
+  { id: "week-wed", width: 1200, height: 1200, label: "WED · Soft authority." },
+  { id: "week-thu", width: 1200, height: 1200, label: "THU · The grey, again." },
+  { id: "week-fri", width: 1200, height: 1200, label: "FRI · Less is the call." },
 ];
 
 async function makePlaceholder(width, height, label) {
@@ -29,10 +45,10 @@ async function makePlaceholder(width, height, label) {
 
 async function main() {
   fs.mkdirSync(outDir, { recursive: true });
-  for (const id of IDS) {
-    const dest = path.join(outDir, `${id}.png`);
+  for (const slot of SLOTS) {
+    const dest = path.join(outDir, `${slot.id}.png`);
     if (fs.existsSync(dest)) continue;
-    const buf = await makePlaceholder(786, 1704, `UKTI · ${id.slice(0, 6)}`);
+    const buf = await makePlaceholder(slot.width, slot.height, slot.label);
     fs.writeFileSync(dest, buf);
     console.warn(`[ensure-image-placeholders] wrote ${path.relative(root, dest)}`);
   }

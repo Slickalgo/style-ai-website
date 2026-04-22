@@ -18,7 +18,6 @@
     <meta property="og:url" content="https://ukti.io/" />
     <meta property="og:title" content="Ukti" />
     <meta property="og:description" content="One outfit a day. Issued, not suggested." />
-    <!-- TODO: design-lead supplies rebuilt /og-cover.jpg (1200x630, UKTI wordmark on paper). -->
     <meta property="og:image" content="https://ukti.io/og-cover.jpg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
@@ -151,10 +150,10 @@
         aria-label="The pull"
       >
         <picture class="absolute inset-0 h-full w-full">
-          <source srcset="/images/08349e12269a.avif" type="image/avif" />
-          <source srcset="/images/08349e12269a.webp" type="image/webp" />
+          <source srcset="/images/one-pull.avif" type="image/avif" />
+          <source srcset="/images/one-pull.webp" type="image/webp" />
           <img
-            src="/images/08349e12269a.png"
+            src="/images/one-pull.png"
             alt="A rolled-linen sleeve against a cream trouser, at the forearm."
             class="h-full w-full object-cover"
             loading="lazy"
@@ -194,10 +193,13 @@
       </section>
 
       <!-- ============================================================= -->
-      <!-- BEAT 5 — A week, held (type-only grid at V1 launch).            -->
-      <!-- No editorial-stock budget; to swap images, generate 4 via the    -->
-      <!-- Ukti app itself (same pipeline as the hero) or hand-author open   -->
-      <!-- sourced editorial imagery. Type-only ships as-is until then.     -->
+      <!-- BEAT 5 — A week, held (full 4-cell lookbook grid).              -->
+      <!-- All 4 images AI-generated from the Ukti app's own pipeline,     -->
+      <!-- produced against prompts documented at                           -->
+      <!--   /ukti-os/teams/creative/drafts/                                -->
+      <!--     2026-04-22-marketing-website-ai-image-prompts.md             -->
+      <!-- Each cell has a dark ink scrim along the bottom edge so the     -->
+      <!-- mono caption holds readable over any frame.                      -->
       <!-- ============================================================= -->
 
       <section
@@ -219,17 +221,72 @@
             data-stagger-group
             data-stagger-ms="80"
           >
-            <figure data-reveal class="flex aspect-square items-end bg-bone p-5">
-              <figcaption class="eyebrow eyebrow--grid">TUE · Quiet confidence.</figcaption>
+            <!-- TUE — editorial image in place -->
+            <figure data-reveal class="relative flex aspect-square items-end overflow-hidden bg-bone p-5">
+              <picture class="absolute inset-0 h-full w-full">
+                <source srcset="/images/week-tue.avif" type="image/avif" />
+                <source srcset="/images/week-tue.webp" type="image/webp" />
+                <img
+                  src="/images/week-tue.png"
+                  alt="A charcoal wool crewneck knit over a white shirt, hands in pockets, window light."
+                  class="h-full w-full object-cover"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </picture>
+              <div class="ink-scrim ink-scrim--grid" aria-hidden="true"></div>
+              <figcaption class="eyebrow eyebrow--grid eyebrow--on-image relative z-10">TUE · Quiet confidence.</figcaption>
             </figure>
-            <figure data-reveal class="flex aspect-square items-end bg-bone p-5">
-              <figcaption class="eyebrow eyebrow--grid">WED · Soft authority.</figcaption>
+
+            <!-- WED — editorial image in place -->
+            <figure data-reveal class="relative flex aspect-square items-end overflow-hidden bg-bone p-5">
+              <picture class="absolute inset-0 h-full w-full">
+                <source srcset="/images/week-wed.avif" type="image/avif" />
+                <source srcset="/images/week-wed.webp" type="image/webp" />
+                <img
+                  src="/images/week-wed.png"
+                  alt="Profile view, ink-navy blazer over a white oxford, head turned down, espresso wood panel behind."
+                  class="h-full w-full object-cover"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </picture>
+              <div class="ink-scrim ink-scrim--grid" aria-hidden="true"></div>
+              <figcaption class="eyebrow eyebrow--grid eyebrow--on-image relative z-10">WED · Soft authority.</figcaption>
             </figure>
-            <figure data-reveal class="flex aspect-square items-end bg-bone p-5">
-              <figcaption class="eyebrow eyebrow--grid">THU · The grey, again.</figcaption>
+
+            <!-- THU — editorial image in place -->
+            <figure data-reveal class="relative flex aspect-square items-end overflow-hidden bg-bone p-5">
+              <picture class="absolute inset-0 h-full w-full">
+                <source srcset="/images/week-thu.avif" type="image/avif" />
+                <source srcset="/images/week-thu.webp" type="image/webp" />
+                <img
+                  src="/images/week-thu.png"
+                  alt="Mid-calf walking fragment, grey wool trouser and brown leather lace-ups, late-afternoon light."
+                  class="h-full w-full object-cover"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </picture>
+              <div class="ink-scrim ink-scrim--grid" aria-hidden="true"></div>
+              <figcaption class="eyebrow eyebrow--grid eyebrow--on-image relative z-10">THU · The grey, again.</figcaption>
             </figure>
-            <figure data-reveal class="flex aspect-square items-end bg-bone p-5">
-              <figcaption class="eyebrow eyebrow--grid">FRI · Less is the call.</figcaption>
+
+            <!-- FRI — editorial image in place -->
+            <figure data-reveal class="relative flex aspect-square items-end overflow-hidden bg-bone p-5">
+              <picture class="absolute inset-0 h-full w-full">
+                <source srcset="/images/week-fri.avif" type="image/avif" />
+                <source srcset="/images/week-fri.webp" type="image/webp" />
+                <img
+                  src="/images/week-fri.png"
+                  alt="Chest-up close-crop, white shirt collar under a pale grey merino knit, cool daylight."
+                  class="h-full w-full object-cover"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </picture>
+              <div class="ink-scrim ink-scrim--grid" aria-hidden="true"></div>
+              <figcaption class="eyebrow eyebrow--grid eyebrow--on-image relative z-10">FRI · Less is the call.</figcaption>
             </figure>
           </div>
         </div>

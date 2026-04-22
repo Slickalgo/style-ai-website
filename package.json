@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "node scripts/ensure-image-placeholders.mjs && vite",
     "dev:lan": "node ./scripts/print-lan-url.mjs && node scripts/ensure-image-placeholders.mjs && vite",
-    "build:assets": "node scripts/ensure-image-placeholders.mjs && node scripts/optimize-images.mjs",
+    "build:assets": "node scripts/ensure-image-placeholders.mjs && node scripts/optimize-images.mjs && node scripts/build-og-cover.mjs",
     "prebuild": "npm run build:assets",
     "build": "vite build",
     "preview": "vite preview"

@@ -115,6 +115,13 @@
     letter-spacing: 0.1em;
   }
 
+  /* When a week-grid caption sits on top of an editorial image, swap to
+     paper-on-ink so it reads cleanly against the dark scrim. Pair with
+     .ink-scrim--grid below. */
+  .eyebrow--on-image {
+    color: var(--paper);
+  }
+
   /* HERO HEADLINE — clamp only here, per spec §8. */
   .hero-headline {
     font-family: "Fraunces", ui-serif, Georgia, serif;
@@ -366,6 +373,18 @@
       rgba(13, 11, 10, 0) 100%
     );
     pointer-events: none;
+  }
+
+  /* Week-grid variant — smaller cell, so the scrim is shorter + tighter
+     so the subject of the frame isn't obscured. Bottom ~38% only. */
+  .ink-scrim--grid {
+    height: 38%;
+    background: linear-gradient(
+      to top,
+      rgba(13, 11, 10, 0.62) 0%,
+      rgba(13, 11, 10, 0.24) 55%,
+      rgba(13, 11, 10, 0) 100%
+    );
   }
 }
 
