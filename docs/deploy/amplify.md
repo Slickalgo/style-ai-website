@@ -13,7 +13,7 @@ a new app, and debugging failed deploys.
 | Amplify region | `ap-south-1` (Mumbai) |
 | Amplify app id | `d1y2gv5w126dto` |
 | Amplify app name | `ukti-marketing` (renamed from `style-designer-marketing` on 2026-04-22 via `aws amplify update-app`) |
-| Default Amplify domain | `d1y2gv5w126dto.amplifyapp.com` |
+| Default Amplify domain | `https://main.d1y2gv5w126dto.amplifyapp.com` (per-branch URL — the bare appId domain is not routed; see "Why the branch prefix" below) |
 | Target production domain | `ukti.io` (DNS flip planned week of May 11–17, 2026) |
 | Deploying branch | `main` |
 | GitHub repo | `git@github.com:Slickalgo/style-ai-website.git` |
@@ -129,6 +129,16 @@ SEO pages; those were purged when we cut over.)
    can be redeployed from the console (Redeploy button). Prefer this over
    reverting commits when the issue is infra, not content.
 
+## Why the branch prefix
+
+Amplify serves each branch at its own subdomain:
+`https://<branch>.<appId>.amplifyapp.com`. The bare `<appId>.amplifyapp.com`
+returns 404 unless you promote a branch to `productionBranch` (only done
+when attaching a custom domain — a separate concern). When we wire `ukti.io`
+in launch week, that custom-domain record will point at the `main` branch
+explicitly, so `https://ukti.io` will serve the site end-users see, and the
+branch-prefixed URL above stays as the canonical staging URL.
+
 ## First-time setup checklist
 
 - [ ] Create `ukti-ci-deployer` IAM user with the policy above
@@ -136,7 +146,7 @@ SEO pages; those were purged when we cut over.)
 - [ ] Add the five GitHub Secrets listed above
 - [ ] Push to `main` OR trigger the workflow manually via
       **Actions → Deploy to AWS Amplify → Run workflow**
-- [ ] Watch the job succeed; confirm `https://d1y2gv5w126dto.amplifyapp.com`
+- [ ] Watch the job succeed; confirm `https://main.d1y2gv5w126dto.amplifyapp.com`
       shows the new build
 - [ ] (Later) add custom domain `ukti.io` in the Amplify console, verify
       DNS records at the registrar, wait for cert validation
@@ -153,4 +163,4 @@ aws amplify update-app \
 ```
 
 Changes the console label only; app-id stays the same, default domain
-stays `d1y2gv5w126dto.amplifyapp.com`.
+stays `main.d1y2gv5w126dto.amplifyapp.com`.
