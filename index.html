@@ -34,15 +34,29 @@
     <meta name="twitter:description" content="One outfit a day. Issued, not suggested." />
     <meta name="twitter:image" content="https://ukti.io/og-cover.jpg" />
 
-    <!-- Preload the hero photograph as LCP candidate. Responsive: mobile gets -sm (720w), desktop gets the 1440w.
-         href= is the fallback for engines that ignore imagesrcset; it's the desktop variant, same as the primary. -->
+    <!-- Preload the hero photograph as LCP candidate. The site serves TWO different
+         hero crops: a 3:4 portrait at mobile (hero.png) and a 3:2 landscape at
+         desktop (hero-wide.png, per Creative + Marketing for ad-site continuity).
+         Each viewport preloads its own crop via `media=`; only one fires per load. -->
+    <!-- Mobile (portrait): -->
     <link
       rel="preload"
       as="image"
       type="image/avif"
-      href="/images/hero.avif"
-      imagesrcset="/images/hero-sm.avif 720w, /images/hero.avif 1440w"
+      href="/images/hero-md.avif"
+      imagesrcset="/images/hero-sm.avif 720w, /images/hero-md.avif 1440w, /images/hero.avif 1920w"
       imagesizes="100vw"
+      media="(max-width: 1023px)"
+    />
+    <!-- Desktop (landscape 3:2): -->
+    <link
+      rel="preload"
+      as="image"
+      type="image/avif"
+      href="/images/hero-wide-md.avif"
+      imagesrcset="/images/hero-wide-sm.avif 720w, /images/hero-wide-md.avif 1440w, /images/hero-wide.avif 1920w"
+      imagesizes="100vw"
+      media="(min-width: 1024px)"
     />
 
     <!-- Runtime config (Pixel ID, short URL, store URLs).
@@ -202,14 +216,28 @@
         <!-- Register intentional: the product shows its own output on the marketing surface. -->
         <!-- Register watch: Apartamento / Céline editorial feel. Monitor at launch for off-register drift. -->
         <picture class="absolute inset-0 h-full w-full">
+          <!-- Desktop (≥1024px): wide 3:2 crop with figure at right-third + window-shadow left. -->
+          <source
+            media="(min-width: 1024px)"
+            type="image/avif"
+            srcset="/images/hero-wide-sm.avif 720w, /images/hero-wide-md.avif 1440w, /images/hero-wide.avif 1920w"
+            sizes="100vw"
+          />
+          <source
+            media="(min-width: 1024px)"
+            type="image/webp"
+            srcset="/images/hero-wide-sm.webp 720w, /images/hero-wide-md.webp 1440w, /images/hero-wide.webp 1920w"
+            sizes="100vw"
+          />
+          <!-- Mobile (<1024px): 3:4 portrait. -->
           <source
             type="image/avif"
-            srcset="/images/hero-sm.avif 720w, /images/hero.avif 1440w"
+            srcset="/images/hero-sm.avif 720w, /images/hero-md.avif 1440w, /images/hero.avif 1920w"
             sizes="100vw"
           />
           <source
             type="image/webp"
-            srcset="/images/hero-sm.webp 720w, /images/hero.webp 1440w"
+            srcset="/images/hero-sm.webp 720w, /images/hero-md.webp 1440w, /images/hero.webp 1920w"
             sizes="100vw"
           />
           <img
@@ -234,9 +262,29 @@
           ISSUE №01 · UKTI · EST. 2026
         </p>
 
-        <!-- Headline (center-right). -->
-        <div class="relative flex h-screen items-center justify-end px-6 sm:px-10" style="min-height: 100vh; min-height: 100svh">
-          <div class="w-full max-w-[820px] text-right sm:pr-6">
+        <!-- Desktop-only top-right cluster — dateline paired with the left masthead,
+             persistent install text-link anchoring to Beat 6. Hidden at mobile via CSS. -->
+        <div
+          data-reveal
+          class="absolute right-6 top-6 sm:right-10 sm:top-10 text-right"
+          style="--reveal-delay: 80ms"
+        >
+          <p class="eyebrow dateline" style="color: rgba(245, 241, 234, 0.92)">
+            APR · MMXXVI
+          </p>
+          <a href="#your-turn" class="install-link" style="margin-top: 0.75rem">
+            → INSTALL
+          </a>
+        </div>
+
+        <!-- Headline — mobile: right-aligned, vertically centered.
+             Desktop: bottom-left anchored so it sits in the empty left-half of the
+             3:2 wide crop (figure is at right-third). -->
+        <div
+          class="relative flex h-screen items-center justify-end px-6 sm:px-10 lg:items-end lg:justify-start lg:px-16 lg:pb-20 xl:px-24 xl:pb-24"
+          style="min-height: 100vh; min-height: 100svh"
+        >
+          <div class="w-full max-w-[820px] text-right sm:pr-6 lg:max-w-[900px] lg:pr-0 lg:text-left">
             <h1
               data-reveal
               class="hero-headline"
@@ -306,12 +354,12 @@
         <picture class="absolute inset-0 h-full w-full">
           <source
             type="image/avif"
-            srcset="/images/one-pull-sm.avif 720w, /images/one-pull.avif 1440w"
+            srcset="/images/one-pull-sm.avif 720w, /images/one-pull-md.avif 1440w, /images/one-pull.avif 1920w"
             sizes="100vw"
           />
           <source
             type="image/webp"
-            srcset="/images/one-pull-sm.webp 720w, /images/one-pull.webp 1440w"
+            srcset="/images/one-pull-sm.webp 720w, /images/one-pull-md.webp 1440w, /images/one-pull.webp 1920w"
             sizes="100vw"
           />
           <img
@@ -346,13 +394,19 @@
         aria-label="How it works"
       >
         <div
-          class="mx-auto max-w-[900px] px-6 text-center"
+          class="mx-auto max-w-[900px] px-6 text-center lg:max-w-[1200px] lg:px-16 lg:text-left"
           data-stagger-group
           data-stagger-ms="200"
         >
-          <p data-reveal class="clause">Ukti reads the day.</p>
-          <p data-reveal class="clause mt-10 sm:mt-14">Ukti pulls one outfit.</p>
-          <p data-reveal class="clause mt-10 sm:mt-14">You come back tomorrow.</p>
+          <p data-reveal class="clause">
+            <span class="clause-number" aria-hidden="true">i</span>Ukti reads the day.
+          </p>
+          <p data-reveal class="clause mt-10 sm:mt-14">
+            <span class="clause-number" aria-hidden="true">ii</span>Ukti pulls one outfit.
+          </p>
+          <p data-reveal class="clause mt-10 sm:mt-14">
+            <span class="clause-number" aria-hidden="true">iii</span>You come back tomorrow.
+          </p>
         </div>
       </section>
 
@@ -371,7 +425,7 @@
         class="bg-paper py-24 sm:py-32"
         aria-label="A week, held"
       >
-        <div class="mx-auto max-w-[1100px] px-6 sm:px-10">
+        <div class="mx-auto max-w-[1100px] px-6 sm:px-10 lg:max-w-[1600px] lg:px-16">
           <p
             data-reveal
             class="eyebrow eyebrow--grid text-center"
@@ -390,12 +444,12 @@
               <picture class="absolute inset-0 h-full w-full">
                 <source
                   type="image/avif"
-                  srcset="/images/week-tue-sm.avif 720w, /images/week-tue.avif 1440w"
+                  srcset="/images/week-tue-sm.avif 720w, /images/week-tue-md.avif 1440w, /images/week-tue.avif 1920w"
                   sizes="(min-width: 640px) 25vw, 50vw"
                 />
                 <source
                   type="image/webp"
-                  srcset="/images/week-tue-sm.webp 720w, /images/week-tue.webp 1440w"
+                  srcset="/images/week-tue-sm.webp 720w, /images/week-tue-md.webp 1440w, /images/week-tue.webp 1920w"
                   sizes="(min-width: 640px) 25vw, 50vw"
                 />
                 <img
@@ -417,12 +471,12 @@
               <picture class="absolute inset-0 h-full w-full">
                 <source
                   type="image/avif"
-                  srcset="/images/week-wed-sm.avif 720w, /images/week-wed.avif 1440w"
+                  srcset="/images/week-wed-sm.avif 720w, /images/week-wed-md.avif 1440w, /images/week-wed.avif 1920w"
                   sizes="(min-width: 640px) 25vw, 50vw"
                 />
                 <source
                   type="image/webp"
-                  srcset="/images/week-wed-sm.webp 720w, /images/week-wed.webp 1440w"
+                  srcset="/images/week-wed-sm.webp 720w, /images/week-wed-md.webp 1440w, /images/week-wed.webp 1920w"
                   sizes="(min-width: 640px) 25vw, 50vw"
                 />
                 <img
@@ -444,12 +498,12 @@
               <picture class="absolute inset-0 h-full w-full">
                 <source
                   type="image/avif"
-                  srcset="/images/week-thu-sm.avif 720w, /images/week-thu.avif 1440w"
+                  srcset="/images/week-thu-sm.avif 720w, /images/week-thu-md.avif 1440w, /images/week-thu.avif 1920w"
                   sizes="(min-width: 640px) 25vw, 50vw"
                 />
                 <source
                   type="image/webp"
-                  srcset="/images/week-thu-sm.webp 720w, /images/week-thu.webp 1440w"
+                  srcset="/images/week-thu-sm.webp 720w, /images/week-thu-md.webp 1440w, /images/week-thu.webp 1920w"
                   sizes="(min-width: 640px) 25vw, 50vw"
                 />
                 <img
@@ -471,12 +525,12 @@
               <picture class="absolute inset-0 h-full w-full">
                 <source
                   type="image/avif"
-                  srcset="/images/week-fri-sm.avif 720w, /images/week-fri.avif 1440w"
+                  srcset="/images/week-fri-sm.avif 720w, /images/week-fri-md.avif 1440w, /images/week-fri.avif 1920w"
                   sizes="(min-width: 640px) 25vw, 50vw"
                 />
                 <source
                   type="image/webp"
-                  srcset="/images/week-fri-sm.webp 720w, /images/week-fri.webp 1440w"
+                  srcset="/images/week-fri-sm.webp 720w, /images/week-fri-md.webp 1440w, /images/week-fri.webp 1920w"
                   sizes="(min-width: 640px) 25vw, 50vw"
                 />
                 <img
@@ -539,6 +593,21 @@
             >
               <img src="/badges/google-play.svg" alt="" width="162" height="48" />
             </a>
+          </div>
+
+          <!-- QR install handoff (desktop only — mobile users don't need a QR to
+               their own device). Encodes https://ukti.io/get which routes to the
+               correct store. Editorial treatment: paper-ground modules, ink caps
+               for the "open with your camera" line, mono short URL below. -->
+          <div data-reveal class="qr-block mt-20" style="--reveal-delay: 240ms">
+            <img
+              src="/images/qr.svg"
+              alt="QR code to install Ukti on your phone"
+              width="160"
+              height="160"
+            />
+            <p class="qr-caption">Open with your camera.</p>
+            <p class="qr-short-url">ukti.io/get</p>
           </div>
         </div>
       </section>

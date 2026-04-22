@@ -468,3 +468,168 @@
     transition-delay: 0ms;
   }
 }
+
+/* ─────────────────────────────────────────────────────────────── */
+/* Image cropping — per Creative review: preserve the arched window  */
+/* light above the shoes on hero; put the cuff on the upper-third    */
+/* line on one-pull so the detail isn't centered.                    */
+/* ─────────────────────────────────────────────────────────────── */
+
+#hero picture img {
+  object-position: center 30%;
+}
+#one-pull picture img {
+  object-position: 50% 40%;
+}
+
+/* ─────────────────────────────────────────────────────────────── */
+/* Desktop-only elements — hidden at mobile defaults, revealed at    */
+/* ≥1024px. Dateline pairs with the left masthead; install link is   */
+/* Marketing's persistent-escape-hatch; qr-block is the desktop →    */
+/* mobile install handoff.                                           */
+/* ─────────────────────────────────────────────────────────────── */
+
+.dateline,
+.install-link,
+.qr-block {
+  display: none;
+}
+
+/* ─────────────────────────────────────────────────────────────── */
+/* Desktop enhancement layer — applies at ≥1024px per 7-agent review. */
+/* Doctrine: enhance the single HTML, don't split into a second      */
+/* desktop variant. Mobile-first rules above remain source of truth. */
+/* ─────────────────────────────────────────────────────────────── */
+
+@media (min-width: 1024px) {
+  /* Hero — headline breaks free of the 6rem cap and earns masthead scale. */
+  .hero-headline {
+    font-size: clamp(5rem, 9vw, 10rem);
+  }
+
+  /* Hero — cap height so 2560 screens don't show a giant slab of coat. */
+  #hero {
+    min-height: min(100vh, 900px) !important;
+  }
+
+  /* Hero — crop preference for the wide 3:2 render (figure at right-third,
+     window-shadow at left). Overrides the portrait crop above. */
+  #hero picture img {
+    object-position: center 50%;
+  }
+
+  /* Section beats earn desktop type scale. */
+  .section-header,
+  .clause {
+    font-size: var(--t-100);
+    line-height: 1;
+  }
+  .support-line {
+    font-size: 1.625rem; /* 26px */
+  }
+
+  /* Wordmark at desktop scale — 22 → 28. */
+  .wordmark {
+    font-size: 1.75rem;
+  }
+
+  /* Masthead dateline + install link — desktop top-right cluster.
+     Displayed inside the hero, paired against ISSUE №01 at top-left. */
+  .dateline {
+    display: block;
+  }
+
+  .install-link {
+    display: inline-block;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    text-transform: uppercase;
+    font-size: var(--t-10);
+    letter-spacing: 0.12em;
+    color: var(--paper);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+  }
+  .install-link:hover {
+    text-decoration-thickness: 2px;
+  }
+  .install-link:focus-visible {
+    outline: 2px solid var(--paper);
+    outline-offset: 4px;
+  }
+
+  /* Roman-numeral adornment on the three clauses at ≥lg:. Mobile keeps
+     the clean centered three-word presentation unchanged. */
+  .clause-number {
+    display: inline-block;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    text-transform: uppercase;
+    font-size: var(--t-10);
+    letter-spacing: 0.12em;
+    color: var(--stone);
+    margin-right: 1.5rem;
+    vertical-align: 0.7em;
+  }
+
+  /* Close beat — QR block lands. Desktop only; mobile users don't need
+     a QR to their own device. */
+  .qr-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .qr-block img {
+    width: 160px;
+    height: 160px;
+    background: var(--paper);
+  }
+  .qr-block .qr-caption {
+    font-family: "Fraunces", ui-serif, Georgia, serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 1.125rem;
+    color: var(--stone);
+  }
+  .qr-block .qr-short-url {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    text-transform: uppercase;
+    font-size: var(--t-10);
+    letter-spacing: 0.12em;
+    color: var(--stone);
+  }
+
+  /* Beat rhythm at desktop — the py-24 / py-32 rhythm that works on mobile
+     reads tight on a 1440+ canvas. Bump to editorial-print spacing. */
+  #mirror {
+    padding-top: 10rem !important;
+    padding-bottom: 10rem !important;
+  }
+  #how-it-works {
+    padding-top: 11rem !important;
+    padding-bottom: 11rem !important;
+  }
+  #your-turn {
+    padding-top: 10rem !important;
+    padding-bottom: 10rem !important;
+  }
+
+  /* Week grid widens + takes a 4/5 portrait aspect on desktop, so the
+     cells stop reading as postage stamps on a 1920 canvas. */
+  #a-week figure {
+    aspect-ratio: 4 / 5 !important;
+  }
+}
+
+/* Ultra-wide — 1920+ gets extra vertical rhythm, matching the wider canvas. */
+@media (min-width: 1920px) {
+  #mirror,
+  #how-it-works,
+  #your-turn {
+    padding-top: 14rem !important;
+    padding-bottom: 14rem !important;
+  }
+  .install-link {
+    font-size: var(--t-20);
+  }
+}

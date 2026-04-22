@@ -26,8 +26,9 @@ const root = path.resolve(__dirname, "..");
 const imgDir = path.join(root, "public", "images");
 
 const VARIANTS = [
-  { suffix: "", width: 1440 },
-  { suffix: "-sm", width: 720 },
+  { suffix: "", width: 1920 },   // desktop retina + large-viewport primary
+  { suffix: "-md", width: 1440 }, // laptop / standard desktop
+  { suffix: "-sm", width: 720 },  // mobile
 ];
 
 async function main() {
@@ -56,7 +57,7 @@ async function main() {
         .webp({ quality: 82 })
         .toFile(path.join(imgDir, `${stem}${suffix}.webp`));
     }
-    console.log(`[optimize-images] ${stem} → 1440, 720 (avif + webp)`);
+    console.log(`[optimize-images] ${stem} → 1920, 1440, 720 (avif + webp)`);
   }
 }
 
