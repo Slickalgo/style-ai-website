@@ -9,6 +9,9 @@ import "./style.css";
 import "lenis/dist/lenis.css";
 import Lenis from "lenis";
 import { injectSpeedInsights } from "@vercel/speed-insights";
+// Attribution: Meta Pixel loader (no-op until UKTI_CONFIG.metaPixelId is set)
+// + UTM preservation on store links. See docs/launch/pre-production-blockers.md §1.
+import "./tracking.js";
 
 const MD = 768;
 

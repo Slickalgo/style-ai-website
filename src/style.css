@@ -295,6 +295,40 @@
     color: var(--ink);
   }
 
+  /* Keyboard-visible focus on eyebrow + wordmark when they're anchors.
+     On sub-pages (privacy/terms/press/how-it-works) the UKTI wordmark is
+     an <a> home-link and "← BACK" uses .eyebrow as an <a>. Without this
+     they fall back to UA default ring on a paper canvas — WCAG 2.4.7 fail. */
+  a.eyebrow:focus-visible,
+  a.wordmark:focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 4px;
+  }
+
+  /* Skip-to-content link — WCAG 2.4.1 (Bypass Blocks). Hidden until focused.
+     When keyboard users tab on first arrival, this is their first stop. */
+  .skip-link {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    z-index: 999;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    text-transform: uppercase;
+    font-size: var(--t-10);
+    letter-spacing: 0.12em;
+    text-decoration: none;
+  }
+  .skip-link:focus,
+  .skip-link:focus-visible {
+    left: 1rem;
+    top: 1rem;
+    padding: 0.625rem 1rem;
+    background: var(--ink);
+    color: var(--paper);
+    outline: 2px solid var(--paper);
+    outline-offset: 2px;
+  }
+
   /* Body prose — for /privacy + /terms. */
   .legal-prose {
     color: var(--ink);

@@ -7,6 +7,12 @@
     <link rel="apple-touch-icon" href="/logo-mark.svg" />
     <meta name="theme-color" content="#F5F1EA" />
     <title>Ukti — Issue №01</title>
+
+    <!-- Smart App Banner — only mobile Safari reads this. Shows a discreet
+         "OPEN IN APP / INSTALL" banner above the site when the user is on
+         iOS Safari. Placeholder app-id is swapped for real ID post-store-approval.
+         See docs/launch/pre-production-blockers.md §2. -->
+    <meta name="apple-itunes-app" content="app-id=000000000" />
     <meta
       name="description"
       content="Ukti decides what you wear. One outfit a day, from what you already own."
@@ -38,6 +44,11 @@
       imagesrcset="/images/hero-sm.avif 720w, /images/hero.avif 1440w"
       imagesizes="100vw"
     />
+
+    <!-- Runtime config (Pixel ID, short URL, store URLs).
+         Synchronous script, loads before the deferred module so window.UKTI_CONFIG
+         is available when tracking.js runs. Empty pixelId = no Pixel, no events. -->
+    <script src="/config.js"></script>
 
     <!-- ─────────────────────────────────────────────────────────────── -->
     <!-- Critical CSS — above-the-fold only. Tokens, base body, Beat 1    -->
@@ -174,7 +185,8 @@
   </head>
 
   <body>
-    <main>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <main id="main">
       <!-- ============================================================= -->
       <!-- BEAT 1 — Hero                                                    -->
       <!-- Full-bleed editorial photograph. Masthead, headline, wordmark.  -->
