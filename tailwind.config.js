@@ -14,11 +14,10 @@ export default {
   darkMode: "class",
   content: [
     "./index.html",
-    "./terms.html",
+    "./how-it-works.html",
+    "./press.html",
     "./privacy.html",
-    "./how-she-works.html",
-    "./the-looks.html",
-    "./guides/**/*.html",
+    "./terms.html",
     "./src/**/*.{js,ts}",
   ],
   theme: {

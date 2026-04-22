@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://styledesigner.co.in/sitemap.xml
+Sitemap: https://ukti.io/sitemap.xml
