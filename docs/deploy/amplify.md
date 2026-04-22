@@ -12,7 +12,7 @@ a new app, and debugging failed deploys.
 | IAM user running deploys | `bapu` (local) / dedicated CI user (recommended — see below) |
 | Amplify region | `ap-south-1` (Mumbai) |
 | Amplify app id | `d1y2gv5w126dto` |
-| Amplify app name | `style-designer-marketing` (pre-rebrand; fine to rename to `ukti-marketing` via `aws amplify update-app`) |
+| Amplify app name | `ukti-marketing` (renamed from `style-designer-marketing` on 2026-04-22 via `aws amplify update-app`) |
 | Default Amplify domain | `d1y2gv5w126dto.amplifyapp.com` |
 | Target production domain | `ukti.io` (DNS flip planned week of May 11–17, 2026) |
 | Deploying branch | `main` |
@@ -142,6 +142,9 @@ SEO pages; those were purged when we cut over.)
       DNS records at the registrar, wait for cert validation
 
 ## Rename the Amplify app (cosmetic)
+
+Already renamed to `ukti-marketing` on 2026-04-22. If you ever need to rename
+again (e.g. splitting into `ukti-marketing-prod` + `ukti-marketing-preview`):
 
 ```bash
 aws amplify update-app \
