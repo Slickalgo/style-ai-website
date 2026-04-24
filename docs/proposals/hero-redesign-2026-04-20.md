@@ -59,7 +59,7 @@ WebGL fragment shader only if the CSS filter fails the "dipping in water" read i
 
 **Budget:** *negative.* Removes the preloaded AVIF hero image (~18KB), removes `.grain-overlay` SVG (~2KB), removes `.ink-fade-*` CSS (~0.4KB). Estimated LCP on 4G: **1.1s** — well under the 1.8s brief cap. JS unchanged. This is the only concept that *improves* perf.
 
-**Risk:** fashion is visual. A zero-image hero is a conviction bet that *the word* — Fraunces italic at 240px — is more arresting than a full-bleed photo of a composed outfit. For a user who doesn't know Style.ai yet, no image means no anchor for what "quiet confidence" looks like on a body. The one-pull (`index.html:248–302`) still shows a real render on scroll, so the visual anchor arrives — but it's ~1.5 screens late. Brief §Concrete provocations #7.
+**Risk:** fashion is visual. A zero-image hero is a conviction bet that *the word* — Fraunces italic at 240px — is more arresting than a full-bleed photo of a composed outfit. For a user who doesn't know UKTI yet, no image means no anchor for what "quiet confidence" looks like on a body. The one-pull (`index.html:248–302`) still shows a real render on scroll, so the visual anchor arrives — but it's ~1.5 screens late. Brief §Concrete provocations #7.
 
 **Conversion hypothesis:** faster LCP + rarer format = longer first-viewport dwell time. Target: CPA drops ≥25% on a 4G-throttled cohort; LCP hits 1.1s on Lighthouse mobile; `scroll_50` stays flat or lifts.
 

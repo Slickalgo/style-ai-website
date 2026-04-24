@@ -16,7 +16,7 @@ The hero's `<h1 id="hero-verdict">` lands at `clamp(40px, 10vw, 72px)` with `lin
 
 ### 2. Mirror triple negation as counterpoint — `index.html:197–240`
 
-After the hero's full-bleed ink canvas, the mirror is paper, spacious, and the first moment of *texture*. Three negations (`Not the trench. Not the dress. Not the one you wore on Thursday.`) at `clamp(28px, 7.5vw, 44px)` Fraunces italic, each its own `.site-sr-item` with 120ms stagger. The stone rail (2px pseudo-element, `src/style.css:154–165`) signals a margin mark without visual weight. Teaches what Style.ai is *not* before showing what it is — a structurally smart pause in the funnel.
+After the hero's full-bleed ink canvas, the mirror is paper, spacious, and the first moment of *texture*. Three negations (`Not the trench. Not the dress. Not the one you wore on Thursday.`) at `clamp(28px, 7.5vw, 44px)` Fraunces italic, each its own `.site-sr-item` with 120ms stagger. The stone rail (2px pseudo-element, `src/style.css:154–165`) signals a margin mark without visual weight. Teaches what UKTI is *not* before showing what it is — a structurally smart pause in the funnel.
 
 ### 3. One-pull as proof, not repeat — `index.html:248–302`
 

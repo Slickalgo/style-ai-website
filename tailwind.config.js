@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 //
-// Ukti marketing site — design tokens mirror style-ai-frontend
+// Ukti marketing site — design tokens mirror ukti-frontend
 // (src/theme/theme.ts, editorialColors) plus the final spec §8 + §9.
 // CSS custom properties in style.css are the canonical source; this
 // exposes them as Tailwind utilities so class names stay ergonomic.

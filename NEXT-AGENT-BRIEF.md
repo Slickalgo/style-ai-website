@@ -1,6 +1,6 @@
 # Brief to the next designer
 
-**From:** the CEO, Style.ai
+**From:** the CEO, UKTI
 **To:** the agent who will own the website redesign
 **Date:** 2026-04-20
 **Re:** getting us from "good editorial baseline" to a top 1% website in the world
@@ -19,7 +19,7 @@ You have all the time in the world to design, plan, and code this. I would rathe
 
 ## Who we are
 
-**Style.ai** is a personal stylist. Not an AI tool. The product is simple: a user opens the app, the stylist reads their light + undertone + posture from one photo, and hands them one outfit for the day. They come back tomorrow. The app's name in the user's head is "her" — not the app.
+**UKTI** is a personal stylist. Not an AI tool. The product is simple: a user opens the app, the stylist reads their light + undertone + posture from one photo, and hands them one outfit for the day. They come back tomorrow. The app's name in the user's head is "her" — not the app.
 
 Our moat is **emotion + taste**, not features. If our marketing site feels like a product tour, we've lost. The site is the stylist's first whisper — the moment a stranger scrolling Instagram on a train thinks "oh."
 
@@ -29,7 +29,7 @@ Our moat is **emotion + taste**, not features. If our marketing site feels like 
 
 ## What the site does today
 
-We just shipped an editorial rebuild. It's at `styledesigner.co.in`. Repo: `style-ai-website/` (Vite 8 + vanilla HTML/JS + Tailwind 3.4 + self-hosted Fraunces + IBM Plex Mono + Lenis desktop-only + Sharp AVIF/WebP pipeline, Vercel deploy, security-headered).
+We just shipped an editorial rebuild. It's at `styledesigner.co.in`. Repo: `ukti-website/` (Vite 8 + vanilla HTML/JS + Tailwind 3.4 + self-hosted Fraunces + IBM Plex Mono + Lenis desktop-only + Sharp AVIF/WebP pipeline, Vercel deploy, security-headered).
 
 **Homepage:** single scroll, six movements, no nav bar.
 1. Hero — full-bleed real render + `ISSUE №01 · TUE · OCT 22` masthead + Fraunces italic verdict stamp
@@ -45,7 +45,7 @@ Lighthouse mobile: **88 perf. LCP 2.2s. CLS 0.015. TBT 100ms.** Meta Pixel + GA4
 
 **This is baseline. It is not where we're going.** What we have today clears a low bar. Top 1% is not 88 on Lighthouse — it's 100 on Lighthouse, and a scroll that makes the user lean into the phone instead of leaning away.
 
-Read `docs/website-to-app-ux-brief-2026-04-20.md` in the `style-ai-frontend/` repo for the visual-system specifics the website locked in. The tokens and voice are not up for renegotiation. Everything else is.
+Read `docs/website-to-app-ux-brief-2026-04-20.md` in the `ukti-frontend/` repo for the visual-system specifics the website locked in. The tokens and voice are not up for renegotiation. Everything else is.
 
 ---
 
@@ -193,7 +193,7 @@ Backend: untouched. The website is static. Any server-side work (e.g., Meta CAPI
 - A PR that ships a major redesign before I've seen the motion. I won't approve it blind.
 - A library-of-the-month dependency. "I added GSAP-ScrollTrigger" is not a reason; "I added GSAP-ScrollTrigger because the Mirror section needs a pinned handoff to A Week that can't be timed with Intersection Observers alone, and Motion One can't do pins" is a reason.
 - Showreel-as-marketing. If an effect doesn't serve conversion, it doesn't ship. Period.
-- "Following a trend." I don't care about bento grids. I don't care about noise textures. I don't care about 3D type. I care about whether the site makes the user feel like Style.ai has already read them.
+- "Following a trend." I don't care about bento grids. I don't care about noise textures. I don't care about 3D type. I care about whether the site makes the user feel like UKTI has already read them.
 - Copy that wasn't spoken out loud first. The voice is the product.
 
 ---
@@ -204,7 +204,7 @@ Backend: untouched. The website is static. Any server-side work (e.g., Meta CAPI
 
 2. **Watch the app render one outfit.** You need to feel what it's like. I'll get you a TestFlight link. Don't touch the site until you've had the app's experience — the mirror, the pulling shimmer, the verdict stamp, the pieces line landing under a real photograph of you. Your job is to make the site an extension of that feeling, and you can't extend a feeling you haven't had.
 
-3. **Write one paragraph of prose** — the opening of a magazine article about a user of Style.ai. Two hundred words, your voice. Send it to me. If you can write in the register this brand lives in, we continue. If you can't, we have a gap to close before you design a pixel. This is not a gate; it's calibration.
+3. **Write one paragraph of prose** — the opening of a magazine article about a user of UKTI. Two hundred words, your voice. Send it to me. If you can write in the register this brand lives in, we continue. If you can't, we have a gap to close before you design a pixel. This is not a gate; it's calibration.
 
 After those three, bring me the proposal doc for the hero redesign. We'll take it from there.
 
@@ -256,17 +256,17 @@ Good luck.
 
 ## Resources the next agent should have access to
 
-- Current website repo: `/Users/bapu/Desktop/designer/style-ai-repos/style-ai-website`
-- Current app repo: `/Users/bapu/Desktop/designer/style-ai-repos/style-ai-frontend`
-- Current backend repo: `/Users/bapu/Desktop/designer/style-ai-repos/style-ai-backend`
+- Current website repo: `/Users/bapu/Desktop/designer/style-ai-repos/ukti-website`
+- Current app repo: `/Users/bapu/Desktop/designer/style-ai-repos/ukti-frontend`
+- Current backend repo: `/Users/bapu/Desktop/designer/style-ai-repos/ukti-backend`
 - Website live: `https://styledesigner.co.in/`
-- Companion brief (app ↔ website): `style-ai-frontend/docs/website-to-app-ux-brief-2026-04-20.md`
+- Companion brief (app ↔ website): `ukti-frontend/docs/website-to-app-ux-brief-2026-04-20.md`
 - Design philosophy (locked): `memory/feedback_design_principles.md` (in user's Claude memory folder)
 - V1 manifesto (scope): `memory/project_v1_manifesto.md`
-- Voice + visual tokens (authoritative source for the app): `style-ai-frontend/src/theme/theme.ts` (editorialColors + editorialType)
-- Editorial class helpers (authoritative for the site): `style-ai-website/src/style.css` (`.verdict`, `.eyebrow`, `.whisper`, `.pieces`, `.stone-rail`, `.hand-card`, `.grain-overlay`, `.guide-prose`)
-- Real app renders live in `style-ai-website/public/images/` (10 hashes, AVIF/WebP/PNG each)
-- Editorial rebuild commits: `977b530` → `719394b` on `style-ai-website` main
+- Voice + visual tokens (authoritative source for the app): `ukti-frontend/src/theme/theme.ts` (editorialColors + editorialType)
+- Editorial class helpers (authoritative for the site): `ukti-website/src/style.css` (`.verdict`, `.eyebrow`, `.whisper`, `.pieces`, `.stone-rail`, `.hand-card`, `.grain-overlay`, `.guide-prose`)
+- Real app renders live in `ukti-website/public/images/` (10 hashes, AVIF/WebP/PNG each)
+- Editorial rebuild commits: `977b530` → `719394b` on `ukti-website` main
 - Performance budget + Lighthouse baseline: captured in commit `8857701`
 
 If a file isn't checked in and you need it (logo source, font license, brand guidelines PDF), ask me directly. Don't guess.

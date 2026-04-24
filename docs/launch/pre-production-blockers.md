@@ -136,7 +136,7 @@ Not a strict launch blocker, but the founder agreed to address before launch wee
 
 ## 🟡 7. Legal content — /privacy + /terms
 
-**Status:** stub content inherited from pre-rebrand Style.ai era. Voice has been refreshed but substance needs a legal-writer pass.
+**Status:** stub content inherited from pre-rebrand UKTI era. Voice has been refreshed but substance needs a legal-writer pass.
 
 **What needs to happen:**
 - [ ] Legal writer extends `privacy.html` with current Ukti data-handling specifics (what the app collects, how it's stored, retention, deletion flow, cross-border transfer for Azure-hosted services)

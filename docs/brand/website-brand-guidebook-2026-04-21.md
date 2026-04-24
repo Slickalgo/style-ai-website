@@ -1,4 +1,4 @@
-# Style.ai — Website Brand Guidebook
+# UKTI — Website Brand Guidebook
 
 **Date:** 2026-04-21
 **Scope:** `styledesigner.co.in` — the home page, the ad landers (`/how-she-works`, `/the-looks`), the 16 SEO guide pages, and any future A/B/C variant proposed on top of them.
@@ -37,7 +37,7 @@ The commonest failure mode in this project is a brand instinct overriding produc
 
 ### The thesis, one sentence
 
-**Style.ai is a quiet authority. She has already decided. She is telling you the answer.**
+**UKTI is a quiet authority. She has already decided. She is telling you the answer.**
 
 The user is not browsing. Not comparing. Not optimizing. The user is being read, then told. The site is the first whisper of that voice — the moment a stranger on a train stops scrolling because the page in front of them does not sound like every other page.
 
@@ -477,7 +477,7 @@ The home page is structured as a single magazine issue: six movements, no naviga
 
 Five mono-caps links and the brand mark. That's it. No newsletter signup. No social icons. No "follow us on Instagram." The site is not a hub; it is a single issue.
 
-Currently: `PRIVACY · TERMS · HOW SHE WORKS · THE LOOKS · [Style.ai mark]`. If any link is added, one must be removed — the list of five is a constraint.
+Currently: `PRIVACY · TERMS · HOW SHE WORKS · THE LOOKS · [UKTI mark]`. If any link is added, one must be removed — the list of five is a constraint.
 
 ---
 
@@ -583,8 +583,8 @@ Organized by category. This list is authoritative. If a proposal includes anythi
 - "Truly," "incredibly," "deeply," "beautifully," "stunningly"
 - "Never [negative] again!"
 - "Join thousands of happy users"
-- Any sentence starting with "With Style.ai, you can..."
-- Any sentence starting with "Style.ai helps you..."
+- Any sentence starting with "With UKTI, you can..."
+- Any sentence starting with "UKTI helps you..."
 
 ### Visual elements
 - Gradient CTAs

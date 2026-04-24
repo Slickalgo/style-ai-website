@@ -16,7 +16,7 @@ a new app, and debugging failed deploys.
 | Default Amplify domain | `https://main.d1y2gv5w126dto.amplifyapp.com` (per-branch URL — the bare appId domain is not routed; see "Why the branch prefix" below) |
 | Target production domain | `ukti.io` (DNS flip planned week of May 11–17, 2026) |
 | Deploying branch | `main` |
-| GitHub repo | `git@github.com:Slickalgo/style-ai-website.git` |
+| GitHub repo | `git@github.com:Slickalgo/ukti-website.git` |
 
 ## Flow
 

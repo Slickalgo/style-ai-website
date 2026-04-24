@@ -69,12 +69,12 @@ Ads Manager cannot split a single standard event (`InitiateCheckout`) by a custo
 
 **Path (Meta Events Manager, as of 2026-04):**
 
-1. Business.facebook.com → **Events Manager** → select the Style.ai Pixel
+1. Business.facebook.com → **Events Manager** → select the UKTI Pixel
 2. Left rail → **Custom Conversions** → **Create Custom Conversion**
 3. Fill the form (first variant):
    - **Name:** `InitiateCheckout_VariantA`
    - **Description:** `Install-intent click from hero variant A`
-   - **Data source:** the Style.ai Pixel
+   - **Data source:** the UKTI Pixel
    - **Conversion event:** `InitiateCheckout` (the standard event already fired at [src/main.js:270](../../src/main.js))
    - **Rule:** `Event Parameters` → parameter name `variant` → condition `equals` → value `a` (lowercase, exact)
    - **Category:** `Add to cart` (closest fit for a store-tap — category is for Meta's optimization hints, pick once and keep consistent across all three)
@@ -122,7 +122,7 @@ Saved explorations are shareable via URL. Paste the URL into this doc's log sect
 
 Before flipping traffic to the test branch in production, run through each variant on a Vercel preview deploy.
 
-**From the CLI in `style-ai-website/`:**
+**From the CLI in `ukti-website/`:**
 
 ```
 npm install
@@ -130,7 +130,7 @@ npm run build
 vercel --prod=false
 ```
 
-Vercel returns a preview URL like `https://style-ai-website-<hash>.vercel.app`.
+Vercel returns a preview URL like `https://ukti-website-<hash>.vercel.app`.
 
 **For each of `a`, `b`, `c`:**
 
