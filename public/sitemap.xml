@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Pre-launch: this sitemap is disabled in practice via robots.txt (Disallow: /)
+  and the noindex/nofollow meta on every HTML page. It is kept in the repo so
+  launch day is a single flip — remove robots.txt Disallow, drop the noindex
+  metas, and the crawler lands here with the canonical URL list already built.
+  Do not add internal or unpublished URLs while the block is in place.
+-->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://ukti.io/</loc>
