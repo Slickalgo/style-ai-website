@@ -11,14 +11,17 @@
     <title>Ukti — Privacy</title>
     <meta
       name="description"
-      content="Ukti collects no information on this site."
+      content="Your photos, wardrobe, and skincare data — what Ukti collects and how it's used."
     />
     <link rel="canonical" href="https://ukti.io/privacy" />
 
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://ukti.io/privacy" />
     <meta property="og:title" content="Ukti — Privacy" />
-    <meta property="og:description" content="Ukti collects no information on this site." />
+    <meta
+      property="og:description"
+      content="Your photos, wardrobe, and skincare data — what Ukti collects and how it's used."
+    />
     <meta property="og:image" content="https://ukti.io/og-cover.jpg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
@@ -26,7 +29,10 @@
     <meta property="og:site_name" content="Ukti" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Ukti — Privacy" />
-    <meta name="twitter:description" content="Ukti collects no information on this site." />
+    <meta
+      name="twitter:description"
+      content="Your photos, wardrobe, and skincare data — what Ukti collects and how it's used."
+    />
     <meta name="twitter:image" content="https://ukti.io/og-cover.jpg" />
 
     <script src="/config.js"></script>
@@ -41,284 +47,328 @@
       </div>
     </header>
 
+    <!--
+      Content below is the v1 pre-lawyer Privacy Policy sourced from
+      ukti-os/teams/legal/drafts/2026-04-24-privacy-policy-v1.md
+      (legal-reviewer v0 + brand-lead voice pass).
+
+      Placeholders the Founder must fill are rendered as visible <mark> spans
+      so they cannot ship by accident. Lawyer-verify items are inline HTML
+      comments (not user-visible).
+
+      NOT A LEGALLY-BINDING DOCUMENT UNTIL RATIFIED BY HUMAN LAWYER.
+    -->
+
     <main id="main" class="legal-prose mx-auto px-6 py-16 sm:py-24" role="main">
       <p style="font-family: 'IBM Plex Mono',ui-monospace,monospace; font-size: var(--t-10); letter-spacing: 0.12em; text-transform: uppercase; color: var(--stone); margin-bottom: 1.5rem">
-        EFFECTIVE DATE: 22 APRIL 2026 · PRIVACY CONTACT:
+        EFFECTIVE DATE: 24 APRIL 2026 · PRIVACY CONTACT:
         <a href="mailto:privacy@ukti.io">privacy@ukti.io</a>
       </p>
 
       <h1>Privacy Policy</h1>
 
       <p>
-        Ukti collects no information on this site. <strong>ukti.io</strong> is a static editorial
-        surface — it stores no email, no account, no cookie beyond what is strictly necessary for
-        the page to render. When you tap the App Store or Google Play link, you leave ukti.io and
-        the destination store's own privacy terms govern from that point.
+        <strong>Pre-lawyer draft.</strong> This policy is under human-lawyer review. It describes
+        the intended handling of data in UKTI as of the effective date above. It is not a
+        legally-binding document until ratified.
       </p>
 
-      <p>
-        This policy describes how the Indian legal entity that operates the Ukti brand
-        (<strong>Ukti</strong>) handles personal data across its services, including the
-        forthcoming Ukti app. You may request Ukti's legal name and registered office by email to
-        <a href="mailto:privacy@ukti.io">privacy@ukti.io</a>. By using the services, you agree to
-        this policy. If you do not agree, do not use the services.
-      </p>
-
-      <p>
-        <strong>Important:</strong> This policy is not legal advice. If you need guidance for your
-        situation, consult a qualified professional.
-      </p>
+      <nav aria-label="Contents" class="legal-toc">
+        <p class="legal-toc-label">Contents</p>
+        <ol>
+          <li><a href="#s1">1. Who we are</a></li>
+          <li><a href="#s2">2. What this policy covers</a></li>
+          <li><a href="#s3">3. What we collect</a></li>
+          <li><a href="#s4">4. How we use what we collect</a></li>
+          <li><a href="#s5">5. How long we keep it</a></li>
+          <li><a href="#s6">6. Your rights</a></li>
+          <li><a href="#s7">7. Third-party processors</a></li>
+          <li><a href="#s8">8. Security</a></li>
+          <li><a href="#s9">9. Children</a></li>
+          <li><a href="#s10">10. Changes to this policy</a></li>
+          <li><a href="#s11">11. Contact and complaints</a></li>
+        </ol>
+      </nav>
 
       <hr />
 
-      <h2>1. Information Ukti collects</h2>
+      <h2 id="s1">1. Who we are</h2>
       <p>
-        On <strong>ukti.io</strong>, Ukti collects nothing beyond the operational telemetry
-        described in Section 8. The categories below apply when you create an account in the Ukti
-        app.
+        UKTI is an editorial styling application. One outfit verdict per day, drawn from garments
+        you already own.
+      </p>
+      <!-- [FOUNDER: fill in legal entity name, registered office address, and company number once incorporated.] -->
+      <p>
+        <mark>[FOUNDER: legal entity name, registered office address, company number.]</mark>
+      </p>
+      <!-- [FOUNDER: confirm jurisdiction of incorporation — determines GDPR Art. 4(7) controller status + lead supervisory authority.] -->
+      <p>
+        <mark>[FOUNDER: jurisdiction of incorporation.]</mark>
+      </p>
+      <p>
+        For any privacy question or data-subject-rights request:
+        <mark>[FOUNDER: privacy@ukti.io once domain is live.]</mark>
+      </p>
+      <!-- [LAWYER: confirm whether a GDPR Art. 27 EU representative is required given EU-user count at launch, and whether a UK GDPR Art. 27 UK representative is required. DPDP Act 2023 also contemplates a DPO for "Significant Data Fiduciaries".] -->
+
+      <h2 id="s2">2. What this policy covers</h2>
+      <p>
+        This policy covers the UKTI mobile application (iOS + Android) and the UKTI website at
+        <strong>ukti.io</strong>. It applies to everyone who uses the app or the site, with
+        region-specific provisions called out where they diverge.
       </p>
 
-      <h3>Account and contact data</h3>
+      <h2 id="s3">3. What we collect</h2>
+      <p>
+        We collect only what the product needs to deliver one outfit verdict a day.
+      </p>
+
+      <h3>3.1 Account data</h3>
       <ul>
-        <li>
-          <strong>Registration and login.</strong> Ukti collects your email address, authentication
-          tokens, and credentials managed through an identity provider (including password hashes
-          that are never stored in plain text). If you use social or single sign-on in the future,
-          Ukti collects the identifiers the provider shares.
-        </li>
-        <li>
-          <strong>Profile and preferences.</strong> Ukti collects the name, date of birth,
-          measurements, style preferences, and other fields you enter during onboarding or
-          settings.
-        </li>
+        <li>Email address (for sign-in, account recovery, transactional email).</li>
+        <li>Display name you choose (optional).</li>
+        <li>Authentication tokens issued by our auth provider (Supabase).</li>
+        <li>Subscription status (Apple / Google IAP receipts; we do not see your card number).</li>
       </ul>
 
-      <h3>Photos, wardrobe, and user content</h3>
+      <h3>3.2 Photos you upload</h3>
       <ul>
-        <li>
-          <strong>Images you capture or upload.</strong> Ukti stores photos of you, your clothing,
-          tags, and related media you submit through the camera or gallery flows, including derived
-          thumbnails and metadata (for example, MIME type and file size).
-        </li>
-        <li>
-          <strong>Wardrobe and catalog data.</strong> Ukti stores item labels, categories, colors,
-          ratings, and feedback you submit.
-        </li>
-      </ul>
-
-      <h3>Usage, device, and diagnostic data</h3>
-      <ul>
-        <li>
-          <strong>Product telemetry.</strong> Ukti logs events such as sign-in, feature usage, API
-          requests, error codes, and performance timings. On mobile, Ukti collects operating system
-          version, app version, device model, locale, and crash reports.
-        </li>
-        <li>
-          <strong>Support communications.</strong> When you contact Ukti, the message, attachments,
-          and notes required to respond are retained.
-        </li>
-      </ul>
-
-      <h3>Technical data</h3>
-      <ul>
-        <li>
-          <strong>Server logs.</strong> Ukti's systems record IP addresses, request paths, user
-          agents, timestamps, and security signals needed to operate and protect the services.
-        </li>
-        <li>
-          <strong>Cookies and local storage.</strong> Ukti uses cookies, device storage, and
-          similar technologies only as described in Section 8.
-        </li>
-      </ul>
-
-      <h2>2. How Ukti uses information</h2>
-      <ul>
-        <li>
-          <strong>Provide the services.</strong> Authenticate you, store your wardrobe, run styling
-          features, and deliver notifications you enable.
-        </li>
-        <li>
-          <strong>Operate styling features.</strong> Send prompts, images, and contextual data to
-          model providers to generate Ukti's daily call for you.
-        </li>
-        <li>
-          <strong>Improve and secure the services.</strong> Debug issues, monitor reliability,
-          prevent abuse, and develop new features. Ukti does not use your photos or chat content to
-          train third-party foundation models except where a separate feature clearly states
-          otherwise in writing and you opt in.
-        </li>
-        <li>
-          <strong>Communicate with you.</strong> Send transactional messages (verification,
-          password reset, security alerts) and, where permitted, product updates according to your
-          preferences.
-        </li>
-        <li>
-          <strong>Comply with law.</strong> Meet legal, regulatory, and tax obligations and respond
-          to lawful requests.
-        </li>
-      </ul>
-
-      <h2>3. Legal bases (EEA, UK, and Switzerland)</h2>
-      <p>Where GDPR or equivalent law applies, Ukti relies on:</p>
-      <ul>
-        <li><strong>Contract</strong> — processing necessary to provide the services you request.</li>
-        <li>
-          <strong>Legitimate interests</strong> — securing the services, understanding aggregate
-          usage, and internal reporting.
-        </li>
-        <li>
-          <strong>Consent</strong> — optional cookies and any processing presented as
-          consent-based.
-        </li>
-        <li><strong>Legal obligation</strong> — retention and disclosure where the law requires it.</li>
-      </ul>
-
-      <h2>4. How Ukti shares information</h2>
-      <p>Ukti discloses information to the following categories of recipients:</p>
-      <ul>
-        <li>
-          <strong>Cloud and authentication providers.</strong> Ukti uses infrastructure providers
-          for authentication, databases, file storage, and hosting in the regions configured for
-          production.
-        </li>
-        <li>
-          <strong>AI model providers.</strong> Ukti sends prompts, images, and related context to
-          model providers to generate styling outputs. Those providers process data under their
-          terms and Ukti's instructions as processors where applicable.
-        </li>
-        <li>
-          <strong>Operational telemetry.</strong> On <strong>ukti.io</strong>, Ukti loads
-          first-party Vercel Speed Insights to measure page performance (LCP, CLS, TTFB). No
-          behavioral analytics, no tracking pixels, no third-party advertising scripts run on this
-          site.
-        </li>
-        <li>
-          <strong>Payment processors.</strong> If paid features are offered in future, payment
-          details are collected by the processor; Ukti receives limited billing metadata.
-        </li>
-        <li>
-          <strong>Professional advisers and corporate transactions.</strong> Lawyers, auditors,
-          insurers, and successors in a merger or acquisition, subject to confidentiality and legal
-          requirements.
-        </li>
-        <li>
-          <strong>Authorities.</strong> When Ukti believes in good faith that disclosure is
-          required by law or necessary to protect rights, safety, or security.
-        </li>
+        <li>Wardrobe photos (garments you already own, to build the closet the verdict draws from).</li>
+        <li>A selfie (used for skin analysis and tone / undertone reading).</li>
+        <li>A body photo (used for proportion and fit reading).</li>
       </ul>
       <p>
-        Ukti does <strong>not</strong> sell your personal information as defined under U.S. state
-        privacy laws, and Ukti does <strong>not</strong> share personal information for
-        cross-context behavioral advertising.
+        We store photos in Supabase storage buckets, encrypted at rest. We serve them to the app
+        through short-lived signed URLs only. We do not embed permanent public image URLs anywhere.
       </p>
 
-      <h2>5. Data retention</h2>
+      <h3>3.3 Wardrobe metadata</h3>
+      <p>
+        We derive this from your wardrobe photos by computer-vision analysis: item name, category,
+        color, brand (if visible), season, and occasion tags. You can edit or delete any of this.
+      </p>
+
+      <h3>3.4 Skin-analysis outputs</h3>
+      <p>
+        We derive these from your selfie: skin type, tone, undertone, simple concern flags (for
+        example dryness, dehydration), and a short editorial summary. These are stored alongside
+        the photo and are yours to delete.
+      </p>
+      <p>
+        <strong>This is styling, not medicine.</strong> The skin analysis is editorial guidance
+        about color, tone, and ritual — it is not a medical diagnosis, not medical advice, and not
+        a replacement for a qualified dermatologist or physician. If you have a medical concern
+        about your skin or health, see a qualified professional.
+      </p>
+      <!-- [FOUNDER / LAWYER: confirm whether acne score, concern severity, medical-flag categories constitute "health data" under GDPR Art. 9 or "sensitive personal data" under DPDP Act §2(36). If yes, tighten §6 explicit-consent language + CCPA §1798.121 opt-out. Single highest-risk ambiguity in this draft. -->
+
+      <h3>3.5 Usage telemetry</h3>
+      <p>
+        We record only the eight product KPIs listed in our internal metric firewall. No engagement
+        metrics. No session-length optimization. No interest profiling.
+      </p>
+      <!-- [FOUNDER: confirm the eight-KPI list matches operational reality, and whether to enumerate it publicly. Enumerating is on-brand; withholding is legally safer.] -->
+
+      <h3>3.6 Device metadata</h3>
       <ul>
-        <li>
-          <strong>Account and profile data</strong> are kept while your account is active and for
-          up to <strong>seven years</strong> after closure where tax, fraud, or legal hold
-          requirements apply.
-        </li>
-        <li>
-          <strong>Photos, wardrobe items, and styling content</strong> are retained until you
-          delete them or delete your account, after which they are removed from active systems;
-          backup copies typically expire within <strong>thirty-five days</strong>.
-        </li>
-        <li>
-          <strong>Logs and telemetry</strong> are retained for up to <strong>twelve months</strong>,
-          except longer retention for security investigations or legal obligations.
-        </li>
+        <li>Device model, OS version, app version (for crash reports and compatibility).</li>
+        <li>Locale and timezone (to set the notification hour and currency for incidental local display).</li>
+        <li>Push-notification token, if you opt in to the daily whisper.</li>
       </ul>
 
-      <h2>6. Your rights</h2>
+      <h3>3.7 What we do NOT collect</h3>
+      <ul>
+        <li>We do not collect your contacts.</li>
+        <li>We do not collect your location beyond locale + timezone.</li>
+        <li>We do not track you across other apps or websites.</li>
+        <li>We do not use advertising identifiers (IDFA / AAID).</li>
+        <li>We do not collect audio, microphone, or accelerometer data.</li>
+      </ul>
+
+      <h2 id="s4">4. How we use what we collect</h2>
+
+      <h3>4.1 To deliver the product</h3>
+      <ul>
+        <li>Generate one daily outfit verdict from garments you already own.</li>
+        <li>Analyze your skin and surface a weekly ritual protocol.</li>
+        <li>Send the daily notification at the time you set.</li>
+      </ul>
+
+      <h3>4.2 To keep the product working</h3>
+      <ul>
+        <li>Authenticate your session.</li>
+        <li>Troubleshoot crashes and bugs (aggregate logs only).</li>
+        <li>Honor your subscription entitlements.</li>
+      </ul>
+
+      <h3>4.3 What we do NOT do with your data</h3>
+      <ul>
+        <li><strong>We do not sell your data.</strong> Not to advertisers. Not to retailers. Not to data brokers. Not to anyone.</li>
+        <li><strong>We do not share your data with advertisers or retailers.</strong> UKTI has no commerce layer. No affiliate links. No co-branded partnerships that would involve user-data sharing.</li>
+        <li><strong>We do not profile you for advertising.</strong> There is no ad network integration in UKTI.</li>
+        <li><strong>We do not train third-party AI models on your photos or content.</strong> User photos and wardrobe data are excluded from OpenAI / Azure OpenAI / Anthropic model training under our vendor terms (see §7).</li>
+        <li><strong>We do not use your data to build a "taste profile" you can download, share, or be evaluated against.</strong> Personalization is not a slider.</li>
+      </ul>
+      <!-- [FOUNDER: confirm the five statements above match operational reality exactly. A factually-wrong Article VI claim here is CCPA / FTC / ASA risk and a constitutional breach.] -->
+
+      <h3>4.4 Legal bases (GDPR Art. 6 / UK GDPR Art. 6)</h3>
+      <ul>
+        <li><strong>Contract</strong> (Art. 6(1)(b)) — delivering the product you signed up for.</li>
+        <li><strong>Legitimate interests</strong> (Art. 6(1)(f)) — debugging, security, fraud prevention. We have assessed this balancing test; the record is available on request.</li>
+        <li><strong>Consent</strong> (Art. 6(1)(a)) — push notifications; optional skin analysis if it qualifies as special-category data (see §3.4).</li>
+        <li><strong>Legal obligation</strong> (Art. 6(1)(c)) — tax records, regulator responses.</li>
+      </ul>
+      <!-- [LAWYER: verify legal-basis map. In particular, whether skin-analysis processing runs on Art. 9(2)(a) consent or another Art. 9 derogation. LIA text for §4.4 legitimate-interests not attached; draft before public launch.] -->
+
+      <h2 id="s5">5. How long we keep it</h2>
+      <ul>
+        <li><strong>Account data</strong> — life of account + 30 days after deletion request.</li>
+        <li><strong>Photos (wardrobe, selfie, body)</strong> — until you delete the item, or 30 days after account deletion.</li>
+        <li><strong>Wardrobe metadata</strong> — same as photos.</li>
+        <li><strong>Skin-analysis outputs</strong> — until you delete the report, or 30 days after account deletion.</li>
+        <li><strong>Usage telemetry (the eight KPIs)</strong> — 24 months, aggregated-only after 90 days.</li>
+        <li><strong>Subscription / billing records</strong> — 7 years (tax obligation).</li>
+        <li><strong>Server logs (crash, security)</strong> — 90 days.</li>
+      </ul>
+      <!-- [FOUNDER: confirm the 30-day post-deletion grace window matches backend reality. If cron runs quarterly and policy promises 30 days, factual mismatch.] -->
+      <!-- [LAWYER: verify 7-year billing retention against India (DPDP + Income-Tax Act), UK (HMRC 6y), EU (7-10y member-state), US (IRS 3-7y), SG (IRAS 5y), AE (VAT 5y). Pick longest-applicable per region or run region-specific retention.] -->
+
+      <h2 id="s6">6. Your rights</h2>
       <p>
-        Depending on your location, you may have the right to access, correct, delete, restrict, or
-        object to certain processing, to withdraw consent, to data portability, and to lodge a
-        complaint with a supervisory authority. To exercise rights, email
-        <a href="mailto:privacy@ukti.io">privacy@ukti.io</a>. Ukti verifies requests by confirming
-        control of your account email where appropriate.
-      </p>
-      <p>
-        If you are in <strong>India</strong>, you may also contact the grievance channel at the
-        same email with "Grievance" in the subject line for matters under the Digital Personal Data
-        Protection Act, 2023, including access, correction, erasure, consent withdrawal, and
-        nomination rights where applicable.
+        You have the following rights. You exercise them by emailing
+        <mark>[FOUNDER: privacy contact]</mark> or from inside the app at Profile → Privacy →
+        Data Controls (<mark>[FOUNDER: confirm path before launch]</mark>).
       </p>
 
-      <h2>7. Account and data deletion</h2>
+      <h3>6.1 Under GDPR + UK GDPR (EU + UK users)</h3>
+      <ul>
+        <li>Access (Art. 15) — request a copy of your data.</li>
+        <li>Rectification (Art. 16) — correct inaccurate data.</li>
+        <li>Erasure (Art. 17) — delete your account and data.</li>
+        <li>Restriction (Art. 18).</li>
+        <li>Portability (Art. 20) — export your wardrobe + skin history in a machine-readable format.</li>
+        <li>Object to processing (Art. 21).</li>
+        <li>Withdraw consent at any time (Art. 7(3)).</li>
+        <li>Lodge a complaint with a supervisory authority — your local DPA, or <mark>[LAWYER: lead supervisory authority once entity jurisdiction is set]</mark>.</li>
+      </ul>
+
+      <h3>6.2 Under CCPA / CPRA (California residents)</h3>
+      <ul>
+        <li>Right to know what personal information we collect (Cal. Civ. Code §1798.110).</li>
+        <li>Right to delete (§1798.105).</li>
+        <li>Right to correct (§1798.106).</li>
+        <li>Right to limit use of sensitive personal information (§1798.121) — <!-- [LAWYER: required if skin outputs = SPI; see §3.4] --> applicable depending on §3.4 classification.</li>
+        <li>Right to opt-out of sale or sharing — <strong>we do not sell or share your personal information as those terms are defined in the CCPA/CPRA</strong> (see §4.3).</li>
+        <li>Right to non-discrimination for exercising any of the above.</li>
+      </ul>
+      <p>We do not use personal information for cross-context behavioral advertising.</p>
+      <!-- [LAWYER: verify "we do not sell or share" CCPA posture against §1798.140 definitions. Any third-party SDK receiving user-level data for its own purposes can trigger "sharing" even without money. §7 processor list is the fact-check.] -->
+
+      <h3>6.3 Under DPDP Act 2023 (India)</h3>
+      <ul>
+        <li>Right to access (§11).</li>
+        <li>Right to correction and erasure (§12).</li>
+        <li>Right to grievance redressal (§13) — <mark>[FOUNDER: designate a grievance officer; §13(1) requires a publicly reachable one]</mark>.</li>
+        <li>Right to nominate (§14) — designate someone to exercise your rights if you die or become incapacitated.</li>
+      </ul>
+      <!-- [LAWYER: confirm Data Fiduciary vs Significant Data Fiduciary status at launch scale.] -->
+
+      <h3>6.4 UK and other regions</h3>
       <p>
-        You can delete individual photos or wardrobe entries inside the app where those controls
-        exist. To delete your entire account, use the in-app account or security settings if
-        available, or email <a href="mailto:privacy@ukti.io">privacy@ukti.io</a> from your
-        registered address with "Account Deletion" in the subject line. Ukti acknowledges deletion
-        requests within <strong>three business days</strong> and completes deletion of data not
-        subject to a legal retention exception within <strong>thirty days</strong>.
+        Rights under the UK GDPR + DPA 2018 mirror the EU section. Users in Singapore (PDPA 2012)
+        and the UAE (PDPL 2021) may exercise equivalent rights; contact us and we will process
+        them in good faith within 30 days.
+      </p>
+      <!-- [LAWYER: SG PDPA + AE PDPL text required if we want to enumerate rights per region. Currently honored via "good-faith" language.] -->
+
+      <h3>6.5 Response timelines</h3>
+      <p>
+        We aim to respond within 30 days. Where the regulation allows an extension (e.g. GDPR
+        Art. 12(3) — up to 2 further months for complex requests), we will tell you and explain
+        why.
       </p>
 
-      <h2>8. Cookies and tracking</h2>
+      <h2 id="s7">7. Third-party processors</h2>
       <p>
-        On <strong>ukti.io</strong>, Ukti uses at most one functional cookie: the Vercel Speed
-        Insights identifier (strictly-necessary, 15-minute TTL, GDPR Article 5(3) Recital 66
-        exempt). No marketing cookies, no behavioral tracking, no session recorders. You can
-        control cookies through your browser settings; blocking strictly necessary cookies may
-        break parts of the Ukti app, which uses them for sign-in.
+        We share data only with the processors we need to run the product. A Data Processing
+        Addendum binds each processor below; it restricts their use to our instructions.
+      </p>
+      <ul>
+        <li><strong>Supabase</strong> (Supabase Inc.) — database, auth, storage. Receives: account data, photos, wardrobe metadata, skin outputs, usage telemetry.</li>
+        <li><strong>OpenAI / Azure OpenAI</strong> — vision + language models for wardrobe auto-tagging, skin analysis, verdict generation. Receives: photos (selfie, body, wardrobe), wardrobe metadata — <strong>excluded from model training per our DPA</strong>.</li>
+        <li><strong>Anthropic</strong> (if used) — language model for reasoning paths. <mark>[FOUNDER: confirm whether Anthropic is a processor at launch — if not, remove]</mark>.</li>
+        <li><strong>Apple / Google</strong> — in-app purchase + subscription verification. Receives: subscription receipts, app-store identifiers.</li>
+        <li><strong>Expo</strong> (Expo Inc.) — push-notification token infrastructure. Receives: push token, device identifier. <mark>[FOUNDER: confirm Expo push is used or planned]</mark>.</li>
+        <li><strong><mark>[FOUNDER: transactional-email provider — Resend / Postmark / SES — pick one]</mark></strong> — account emails (verification, password reset, receipts). Receives: email address, display name.</li>
+        <li><strong>Cloudflare</strong> (if used) — CDN, DDoS protection. Receives: IP address, basic request metadata. <mark>[FOUNDER: confirm used]</mark>.</li>
+      </ul>
+      <!-- [LAWYER: processor list is the single most audit-critical list here. Verify (a) signed DPA per processor, (b) "excluded from model training" supported by executed DPA not public terms, (c) sub-processor notification clauses, (d) cross-border transfer mechanisms documented.] -->
+
+      <h3>7.1 Cross-border transfers</h3>
+      <p>
+        We process your data in the United States (Supabase, OpenAI, Anthropic, Apple, Google,
+        Expo — <mark>[FOUNDER: verify each]</mark>), the European Union, the United Kingdom, and
+        other jurisdictions where our processors operate.
+      </p>
+      <ul>
+        <li><strong>EU users</strong> — we rely on the European Commission's Standard Contractual Clauses (2021/914) for transfers to the US and other third countries without adequacy decisions, plus any necessary supplementary measures.</li>
+        <li><strong>UK users</strong> — we use the UK International Data Transfer Addendum (IDTA) or the UK Addendum to the EU SCCs.</li>
+        <li><strong>India users</strong> — we transfer under DPDP Act §16, subject to any restrictions the Central Government notifies.</li>
+      </ul>
+      <!-- [LAWYER: verify SCC + IDTA + Supplementary Measures for each US-located processor. Post-Schrems-II TIA should exist in writing before public launch.] -->
+
+      <h2 id="s8">8. Security</h2>
+      <p>
+        We use industry-standard security measures: encryption in transit (TLS 1.2+), encryption
+        at rest (provider-managed), row-level security on the database, short-lived signed URLs
+        for image access, and principle-of-least-privilege access controls.
+      </p>
+      <p>
+        No system is perfect. If we learn of a breach affecting your personal data, we will
+        notify you and the relevant regulator within the timelines each regulation requires
+        (GDPR: 72 hours to the regulator; CCPA: without unreasonable delay; DPDP: as soon as
+        possible per §8(6)).
+      </p>
+      <!-- [LAWYER / security-auditor: the factual accuracy of the encryption / RLS / signed-URL claims is security-auditor's responsibility to audit against the codebase. This Policy must not promise anything the code does not do.] -->
+
+      <h2 id="s9">9. Children</h2>
+      <p>
+        UKTI is <strong>not</strong> intended for anyone under the age of 13 (or 16 where GDPR
+        Art. 8 requires — we apply the 16-year floor for EU users by default).
+      </p>
+      <p>
+        <mark>[FOUNDER: pick one — 13+ with GDPR-16 override · 16+ globally · 18+ globally.]</mark>
+      </p>
+      <!-- [LAWYER: verify the chosen threshold is compatible with COPPA (16 CFR Part 312), GDPR Art. 8, UK AADC (ICO), DPDP §9 (verifiable parental consent for children's data).] -->
+      <p>
+        If we learn we have collected personal data from a user below the age threshold, we
+        delete it.
       </p>
 
-      <h2>9. Security</h2>
+      <h2 id="s10">10. Changes to this policy</h2>
       <p>
-        Ukti uses encryption in transit (TLS), encryption at rest where supported by providers,
-        access controls, and monitoring designed to protect personal data. No system is perfectly
-        secure; use a strong password and protect your device.
+        We will post any change to this policy at <strong>ukti.io/privacy</strong> and, for
+        material changes, notify you in the app or by email at least 30 days before the change
+        takes effect. You can always see when the policy was last updated from the date at the
+        top of this page.
       </p>
 
-      <h2>10. International transfers</h2>
+      <h2 id="s11">11. Contact and complaints</h2>
       <p>
-        Ukti operates from <strong>India</strong> and uses service providers in India, the United
-        States, the European Union, and other regions. When Ukti transfers personal data from the
-        EEA, UK, or Switzerland, it uses appropriate safeguards such as Standard Contractual
-        Clauses or equivalent mechanisms where required.
+        <strong>Privacy questions, data-subject requests, complaints:</strong><br />
+        <mark>[FOUNDER: privacy@ukti.io once domain is live]</mark>
       </p>
-
-      <h2>11. Children</h2>
       <p>
-        The services are not directed at children under <strong>13</strong>, and Ukti does not
-        knowingly collect personal information from children under 13. The Ukti terms require users
-        to be at least <strong>18</strong> in any event. If you believe a child has provided
-        personal data, contact <a href="mailto:privacy@ukti.io">privacy@ukti.io</a> and it will be
-        deleted promptly.
+        <strong>Grievance Officer (India, DPDP Act §13):</strong><br />
+        <mark>[FOUNDER: name + email once designated]</mark>
       </p>
-
-      <h2>12. Automated processing</h2>
-      <p>
-        The Ukti app's daily call is generated automatically and may be inaccurate or unsuitable
-        for a given context. You should not rely on automated outputs alone for decisions with
-        legal, medical, financial, or safety implications. Ukti does not use your content to train
-        third-party foundation models except where a feature explicitly states otherwise and you
-        opt in.
-      </p>
-
-      <h2>13. United States (California and other states)</h2>
-      <p>
-        California residents may request the rights described in Section 6 and may ask once per
-        calendar year about certain disclosures for direct marketing purposes. Ukti does not
-        discriminate for exercising privacy rights. Authorized agents may submit requests where
-        state law allows.
-      </p>
-
-      <h2>14. Changes to this Policy</h2>
-      <p>
-        Ukti updates this Policy when its practices change. The new version is posted on this page
-        and the effective date is updated. For material changes, Ukti provides notice by email or
-        in-app message where the law requires.
-      </p>
-
-      <h2>15. Contact</h2>
-      <p>
-        Questions about this Policy:
-        <a href="mailto:privacy@ukti.io">privacy@ukti.io</a><br />
-        Security issues:
-        <a href="mailto:privacy@ukti.io">privacy@ukti.io</a> (subject: "Security")
-      </p>
+      <p><strong>Supervisory Authority contacts:</strong></p>
+      <ul>
+        <li>EU — your local Data Protection Authority.</li>
+        <li>UK — the Information Commissioner's Office (<a href="https://ico.org.uk">ico.org.uk</a>).</li>
+        <li>California — the California Privacy Protection Agency (<a href="https://cppa.ca.gov">cppa.ca.gov</a>).</li>
+        <li>India — the Data Protection Board of India (once established).</li>
+      </ul>
 
       <p
         style="margin-top: 3rem; font-family: 'IBM Plex Mono',ui-monospace,monospace; font-size: var(--t-10); letter-spacing: 0.12em; text-transform: uppercase; color: var(--stone)"
