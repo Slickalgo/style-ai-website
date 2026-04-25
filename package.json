@@ -3,11 +3,9 @@
   "version": "1.0.0",
   "description": "Ukti marketing site — editorial static surface.",
   "scripts": {
-    "dev": "node scripts/ensure-image-placeholders.mjs && vite",
-    "dev:lan": "node ./scripts/print-lan-url.mjs && node scripts/ensure-image-placeholders.mjs && vite",
-    "build:assets": "node scripts/ensure-image-placeholders.mjs && node scripts/optimize-images.mjs && node scripts/build-og-cover.mjs && node scripts/build-qr.mjs",
-    "prebuild": "npm run build:assets",
-    "build": "vite build",
+    "prebuild": "node scripts/ensure-image-placeholders.mjs && node scripts/optimize-images.mjs && node scripts/build-og-cover.mjs && node scripts/build-qr.mjs",
+    "build": "npm run prebuild && vite build",
+    "dev": "vite",
     "preview": "vite preview"
   },
   "keywords": [],
