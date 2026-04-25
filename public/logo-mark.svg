@@ -1,43 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
-  <defs>
-    <linearGradient id="f-bg" x1="0%" y1="100%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#161310" />
-      <stop offset="100%" stop-color="#0c0a08" />
-    </linearGradient>
-    <linearGradient id="f-s" x1="0%" y1="100%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#9a7b5c" />
-      <stop offset="38%" stop-color="#e8c49a" />
-      <stop offset="100%" stop-color="#d4a574" />
-    </linearGradient>
-  </defs>
-  <rect width="32" height="32" rx="8" fill="url(#f-bg)" />
-  <rect
-    x="0.5"
-    y="0.5"
-    width="31"
-    height="31"
-    rx="7.5"
-    fill="none"
-    stroke="rgba(212, 165, 116, 0.28)"
-    stroke-width="1"
-  />
-  <g transform="translate(5.5,5.5) scale(0.4375)">
-    <path
-      d="M 31.5 12 C 14.5 12 11.25 19.75 24 24 C 36.75 28.25 33.5 36 16.5 36"
-      fill="none"
-      stroke="rgba(212, 165, 116, 0.2)"
-      stroke-width="5.2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      style="filter: blur(1.2px)"
-    />
-    <path
-      d="M 31.5 12 C 14.5 12 11.25 19.75 24 24 C 36.75 28.25 33.5 36 16.5 36"
-      fill="none"
-      stroke="url(#f-s)"
-      stroke-width="3.35"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
+<?xml version="1.0" encoding="UTF-8"?>
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-label="UKTI">
+  <rect width="1024" height="1024" fill="#F5F1EA"></rect>
+  <g transform="translate(272 272) scale(2)">
+    <g fill="#0D0B0A">
+      <path d="M 50 42 L 50 148 C 50 186, 78 210, 120 210 C 162 210, 190 186, 190 148 L 190 42 L 176 42 L 176 148 C 176 178, 154 196, 120 196 C 86 196, 64 178, 64 148 L 64 42 Z"></path>
+      <path d="M 38 42 L 78 42 L 78 48 L 64 48 L 50 48 L 38 48 Z"></path>
+      <path d="M 162 42 L 202 42 L 202 48 L 190 48 L 176 48 L 162 48 Z"></path>
+    </g>
   </g>
 </svg>
