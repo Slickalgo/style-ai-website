@@ -4,16 +4,18 @@
 
 /* ─────────────────────────────────────────────────────────────── */
 /* Design tokens — paper/ink color + editorial type scale.          */
-/* Values mirror ukti-frontend theme.ts editorialColors and the  */
-/* final spec §8.2 + §9.                                             */
+/* Locked to brand-system + voice-system editorial register.         */
 /* ─────────────────────────────────────────────────────────────── */
 
 :root {
-  --paper: #F5F1EA;
-  --bone: #E8E1D4;
-  --ink: #0D0B0A;
-  --espresso: #1A1512;
-  --stone: #5F5854;
+  --paper:      #F5F1EA;
+  --bone:       #E8E1D4;
+  --ink:        #0D0B0A;
+  --espresso:   #1A1512;
+  --stone:      #A89B8A;   /* margin mark */
+  --stone-deep: #5F5854;   /* mono-caps body, eyebrow text */
+  --ember:      #A7412A;   /* ::selection + rare emphasis only */
+  --clay:       #C6B5A3;
 
   /* Editorial type scale (rem on 16px root). */
   --t-10: 0.688rem;   /* 11px mono labels */
@@ -69,30 +71,70 @@
 /* ─────────────────────────────────────────────────────────────── */
 
 @layer base {
+  *, *::before, *::after { box-sizing: border-box; }
+
   html {
     overflow-x: hidden;
+    -webkit-text-size-adjust: 100%;
   }
 
   body {
-    @apply bg-paper text-ink;
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
     font-family: "Fraunces", ui-serif, Georgia, serif;
     font-weight: 400;
+    line-height: 1.5;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
   ::selection {
-    background: rgba(13, 11, 10, 0.15);
+    background: rgba(167, 65, 42, 0.25);
     color: inherit;
   }
 
   a {
     color: inherit;
+    text-decoration: none;
+  }
+
+  img, picture {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+
+  h1, h2, h3, p, ul, ol, figure, figcaption {
+    margin: 0;
+    padding: 0;
+  }
+
+  ul, ol {
+    list-style: none;
   }
 
   main {
     display: block;
   }
+}
+
+/* ─────────────────────────────────────────────────────────────── */
+/* Layout primitives                                                 */
+/* ─────────────────────────────────────────────────────────────── */
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+.container--prose {
+  max-width: 640px;
+}
+.container--editorial {
+  max-width: 1100px;
 }
 
 /* ─────────────────────────────────────────────────────────────── */
@@ -105,125 +147,172 @@
     font-family: "IBM Plex Mono", ui-monospace, monospace;
     text-transform: uppercase;
     font-size: var(--t-10);
-    letter-spacing: 0.12em;
-    color: var(--stone);
+    letter-spacing: 0.18em;
+    color: var(--stone-deep);
     font-weight: 400;
+  }
+
+  .eyebrow--on-ink {
+    color: rgba(245, 241, 234, 0.92);
   }
 
   .eyebrow--grid {
     font-size: var(--t-20);
-    letter-spacing: 0.1em;
+    letter-spacing: 0.12em;
   }
 
   /* When a week-grid caption sits on top of an editorial image, swap to
-     paper-on-ink so it reads cleanly against the dark scrim. Pair with
-     .ink-scrim--grid below. */
+     paper-on-ink so it reads cleanly against the dark scrim. */
   .eyebrow--on-image {
     color: var(--paper);
   }
 
-  /* HERO HEADLINE — clamp only here, per spec §8. */
-  .hero-headline {
+  /* VERDICT — Hero italic statement. Crossfade managed in main.js. */
+  .verdict {
     font-family: "Fraunces", ui-serif, Georgia, serif;
+    font-style: italic;
     font-weight: 400;
-    font-style: normal;
-    color: var(--ink);
-    letter-spacing: -0.02em;
-    line-height: 0.95;
-    margin: 0;
-    hyphens: none;
-    font-size: clamp(2.5rem, 10vw, 6rem);
-  }
-
-  @media (max-width: 374px) {
-    .hero-headline {
-      font-size: 2.5rem;
-      line-height: 1;
-    }
-  }
-
-  /* SECTION HEADER — Fraunces 56 / 40. */
-  .section-header {
-    font-family: "Fraunces", ui-serif, Georgia, serif;
-    font-weight: 500;
-    font-size: var(--t-80);
-    line-height: 1;
+    font-size: clamp(40px, 10vw, 72px);
+    line-height: 1.02;
     letter-spacing: -0.015em;
     margin: 0;
-    color: var(--ink);
+    hyphens: none;
   }
 
-  @media (max-width: 640px) {
-    .section-header {
-      font-size: var(--t-70);
+  /* VERDICT STACK — three lines stacked, only one visible at a time.
+     All items are absolutely positioned and bottom-anchored so the
+     LOWER baseline never shifts. A 1-line verdict and a 2-line verdict
+     both end on the same horizontal — the gap to the pieces line below
+     stays constant. Container height locked via min-height. */
+  .verdict-stack {
+    position: relative;
+  }
+  .verdict-stack .verdict {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0;
+    transition: opacity 700ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .verdict-stack .verdict[data-active="1"] {
+    opacity: 1;
+  }
+  .verdict-stack .verdict:not([data-active="1"]) {
+    pointer-events: none;
+  }
+
+  /* Word-stagger entry — first paint only.
+     Each word of the initially-active verdict fades + lifts in turn. After
+     this animation completes, subsequent rotations cross-fade as whole
+     blocks (the .word spans only exist on verdict #0). */
+  .verdict-stack .verdict .word {
+    display: inline-block;
+    opacity: 0;
+    transform: translate3d(0, 0.35em, 0);
+    transition:
+      opacity 700ms cubic-bezier(0.22, 1, 0.36, 1),
+      transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+    transition-delay: calc(var(--word-i, 0) * 90ms);
+  }
+  .verdict-stack--booted .verdict .word {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .verdict-stack .verdict .word {
+      opacity: 1;
+      transform: none;
+      transition: opacity 200ms ease;
+      transition-delay: 0ms;
     }
   }
 
-  /* SUPPORT LINE — Fraunces 22/20. */
-  .support-line {
-    font-family: "Fraunces", ui-serif, Georgia, serif;
-    font-weight: 400;
-    font-size: var(--t-50);
-    line-height: 1.5;
-    color: var(--ink);
+  /* PIECES — outfit lineup beneath the verdict. Stacked like the verdict
+     so they crossfade in lockstep — no mid-flight textContent swap.
+     Bottom-anchored: a 1-line and a 2-line variant share the same lower
+     baseline so the CTA below stays put. */
+  .pieces-stack {
+    position: relative;
     margin: 0;
   }
-
-  @media (max-width: 640px) {
-    .support-line {
-      font-size: 1.25rem;
-    }
+  .pieces {
+    font-family: "Fraunces", ui-serif, Georgia, serif;
+    font-weight: 400;
+    font-size: clamp(14px, 3.8vw, 16px);
+    line-height: 1.55;
+    letter-spacing: 0.005em;
+  }
+  .pieces-stack .pieces {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0;
+    transition: opacity 700ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .pieces-stack .pieces[data-active="1"] {
+    opacity: 1;
+  }
+  .pieces-stack .pieces:not([data-active="1"]) {
+    pointer-events: none;
   }
 
-  /* MIRROR ITALIC — Fraunces italic 30 / 26. */
+  /* WHISPER — italic body, slightly muted. */
+  .whisper {
+    font-family: "Fraunces", ui-serif, Georgia, serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(14px, 3.8vw, 16px);
+    line-height: 1.55;
+    color: rgba(13, 11, 10, 0.78);
+  }
+  .whisper--on-ink {
+    color: rgba(245, 241, 234, 0.82);
+  }
+
+  /* MIRROR LINE — italic statement on paper. */
   .mirror-line {
     font-family: "Fraunces", ui-serif, Georgia, serif;
     font-style: italic;
     font-weight: 400;
-    font-size: var(--t-60);
-    line-height: 1.15;
-    color: var(--ink);
+    font-size: clamp(28px, 7.5vw, 44px);
+    line-height: 1.08;
+    letter-spacing: -0.01em;
     margin: 0;
   }
 
-  @media (max-width: 640px) {
-    .mirror-line {
-      font-size: 1.625rem;
-    }
+  /* CLAUSE — How-she-works italic line. */
+  .clause {
+    font-family: "Fraunces", ui-serif, Georgia, serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(28px, 7.5vw, 44px);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    margin: 0;
   }
 
-  /* ONE-PULL CAPTION — Fraunces italic 40/32. */
+  /* PULL CAPTION — italic caption on photograph. */
   .pull-caption {
     font-family: "Fraunces", ui-serif, Georgia, serif;
     font-style: italic;
     font-weight: 400;
-    font-size: var(--t-70);
-    line-height: 1.1;
+    font-size: clamp(22px, 5.5vw, 36px);
+    line-height: 1.15;
     color: var(--paper);
     margin: 0;
   }
 
-  @media (max-width: 640px) {
-    .pull-caption {
-      font-size: 2rem;
-    }
-  }
-
-  /* HOW-IT-WORKS CLAUSE — Fraunces 56/40 weight 500. */
-  .clause {
+  /* SECTION HEADER — Beat 6 italic statement. */
+  .section-header {
     font-family: "Fraunces", ui-serif, Georgia, serif;
-    font-weight: 500;
-    font-size: var(--t-80);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(40px, 10vw, 72px);
     line-height: 1;
     letter-spacing: -0.015em;
-    color: var(--ink);
     margin: 0;
-  }
-
-  @media (max-width: 640px) {
-    .clause {
-      font-size: var(--t-70);
-    }
   }
 
   /* WORDMARK — UKTI caps, Fraunces 500. */
@@ -233,29 +322,98 @@
     text-transform: uppercase;
     letter-spacing: 0.05em;
     color: var(--ink);
+    margin: 0;
   }
 
-  /* STONE RAIL — thin hairline for Mirror section. */
+  /* PROMISE — mono caps, the small sentence above the badges. */
+  .promise {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    text-transform: uppercase;
+    font-size: var(--t-10);
+    letter-spacing: 0.22em;
+    color: var(--stone-deep);
+    margin-top: 0.5rem;
+  }
+
+  /* STONE RAIL — per-section progress indicator.
+     Two layers: ambient hairline + ink fill that grows as the section
+     enters and crosses the viewport. main.js sets --rail-progress. */
   .stone-rail {
     position: relative;
+    padding-left: 1.75rem;
   }
   .stone-rail::before {
     content: "";
     position: absolute;
     left: 0;
-    top: 0;
-    bottom: 0;
-    width: 1px;
-    background-color: rgba(62, 56, 51, 0.4);
+    top: 0.4em;
+    bottom: 0.4em;
+    width: 2px;
+    background: rgba(168, 155, 138, 0.55);
+  }
+  .stone-rail::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.4em;
+    width: 2px;
+    height: calc(var(--rail-progress, 0) * (100% - 0.8em));
+    background: var(--ink);
+    transition: height 220ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* GRAIN OVERLAY — full-bleed subtle film grain. */
+  .grain-overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.08;
+    mix-blend-mode: multiply;
+    background-image: url("/noise.svg");
+    background-size: 240px 240px;
+  }
+
+  /* INK FADE — bottom + top scrims for hero/photograph legibility. */
+  .ink-fade-bottom {
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 55%;
+    background: linear-gradient(
+      to top,
+      rgba(13, 11, 10, 0.55) 0%,
+      rgba(13, 11, 10, 0.2) 40%,
+      rgba(13, 11, 10, 0) 100%
+    );
+    pointer-events: none;
+  }
+  .ink-fade-top {
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 220px;
+    background: linear-gradient(
+      to bottom,
+      rgba(13, 11, 10, 0.45) 0%,
+      rgba(13, 11, 10, 0) 100%
+    );
+    pointer-events: none;
+  }
+
+  /* Legacy single-layer ink scrim retained for sub-pages. */
+  .ink-scrim {
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 55%;
+    background: linear-gradient(
+      to top,
+      rgba(13, 11, 10, 0.55) 0%,
+      rgba(13, 11, 10, 0.2) 40%,
+      rgba(13, 11, 10, 0) 100%
+    );
+    pointer-events: none;
   }
 
   /* STORE PILL — official badge anchors, paper canvas.
-     Height is 48px per Apple + Google brand guidelines (min touch target,
-     stronger presence at beat 6). Widths differ by brand:
-       Apple (119.66 × 40 native)      → 144 × 48 displayed
-       Google Play (238.96 × 70.87)    → 162 × 48 displayed
-     Heights MUST match across the two platforms; widths MUST NOT be
-     normalized (would violate both brands' aspect-ratio rules). */
+     Height is 48px per Apple + Google brand guidelines. */
   .store-pill {
     display: inline-flex;
     align-items: center;
@@ -282,8 +440,8 @@
     font-family: "IBM Plex Mono", ui-monospace, monospace;
     text-transform: uppercase;
     font-size: var(--t-10);
-    letter-spacing: 0.12em;
-    color: var(--stone);
+    letter-spacing: 0.18em;
+    color: var(--stone-deep);
     text-decoration: none;
   }
   .footer-link:hover {
@@ -295,18 +453,14 @@
     color: var(--ink);
   }
 
-  /* Keyboard-visible focus on eyebrow + wordmark when they're anchors.
-     On sub-pages (privacy/terms/press/how-it-works) the UKTI wordmark is
-     an <a> home-link and "← BACK" uses .eyebrow as an <a>. Without this
-     they fall back to UA default ring on a paper canvas — WCAG 2.4.7 fail. */
+  /* Keyboard-visible focus on eyebrow + wordmark when they're anchors. */
   a.eyebrow:focus-visible,
   a.wordmark:focus-visible {
     outline: 2px solid var(--ink);
     outline-offset: 4px;
   }
 
-  /* Skip-to-content link — WCAG 2.4.1 (Bypass Blocks). Hidden until focused.
-     When keyboard users tab on first arrival, this is their first stop. */
+  /* Skip-to-content link — WCAG 2.4.1 (Bypass Blocks). */
   .skip-link {
     position: absolute;
     left: -9999px;
@@ -315,7 +469,7 @@
     font-family: "IBM Plex Mono", ui-monospace, monospace;
     text-transform: uppercase;
     font-size: var(--t-10);
-    letter-spacing: 0.12em;
+    letter-spacing: 0.18em;
     text-decoration: none;
   }
   .skip-link:focus,
@@ -360,7 +514,7 @@
     font-weight: 500;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: var(--stone);
+    color: var(--stone-deep);
     margin: 2rem 0 0.75rem;
   }
   .legal-prose p,
@@ -395,53 +549,510 @@
     margin: 2.5rem 0;
   }
 
-  /* Grain overlay for full-bleed compositions. */
-  .grain-overlay {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    opacity: 0.08;
-    mix-blend-mode: multiply;
-    background-image: url("/noise.svg");
-    background-size: 240px 240px;
+  /* Support line + hero headline retained for sub-pages
+     (how-it-works.html, press.html). */
+  .hero-headline {
+    font-family: "Fraunces", ui-serif, Georgia, serif;
+    font-weight: 400;
+    color: var(--ink);
+    letter-spacing: -0.02em;
+    line-height: 0.95;
+    margin: 0;
+    hyphens: none;
+    font-size: clamp(2.5rem, 10vw, 6rem);
   }
-
-  /* Ink scrim for hero legibility on photograph. */
-  .ink-scrim {
-    position: absolute;
-    inset: auto 0 0 0;
-    height: 55%;
-    background: linear-gradient(
-      to top,
-      rgba(13, 11, 10, 0.55) 0%,
-      rgba(13, 11, 10, 0.2) 40%,
-      rgba(13, 11, 10, 0) 100%
-    );
-    pointer-events: none;
+  .support-line {
+    font-family: "Fraunces", ui-serif, Georgia, serif;
+    font-weight: 400;
+    font-size: var(--t-50);
+    line-height: 1.5;
+    color: var(--ink);
+    margin: 0;
   }
+  @media (max-width: 640px) {
+    .support-line {
+      font-size: 1.25rem;
+    }
+  }
+}
 
-  /* Week-grid variant — smaller cell, so the scrim is shorter + tighter
-     so the subject of the frame isn't obscured. Bottom ~38% only. */
-  .ink-scrim--grid {
-    height: 38%;
-    background: linear-gradient(
-      to top,
-      rgba(13, 11, 10, 0.62) 0%,
-      rgba(13, 11, 10, 0.24) 55%,
-      rgba(13, 11, 10, 0) 100%
-    );
+/* ─────────────────────────────────────────────────────────────── */
+/* BEAT 1 — Hero                                                     */
+/* ─────────────────────────────────────────────────────────────── */
+
+#hero {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100svh;
+  overflow: hidden;
+  background: var(--ink);
+  color: var(--paper);
+}
+
+#hero .hero-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+#hero .hero-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+}
+
+#hero .hero-content {
+  position: relative;
+  z-index: 2;
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem 1.5rem 2rem;
+}
+
+#hero .masthead {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+#hero .install-link {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  text-transform: uppercase;
+  font-size: var(--t-10);
+  letter-spacing: 0.18em;
+  color: rgba(245, 241, 234, 0.92);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  display: none;
+}
+
+#hero .hero-stack {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.125rem;
+  max-width: 560px;
+}
+
+#hero .verdict-stack {
+  color: var(--paper);
+  /* Set font-size context on the stack so em-based min-height computes
+     against the verdict's scale, not the h1's inherited 16px. The
+     2-line variant ("Today. / Quiet confidence.") drives the lower bound. */
+  font-size: clamp(40px, 10vw, 72px);
+  line-height: 1.02;
+  min-height: 2.2em;
+}
+
+#hero .pieces-stack {
+  font-size: clamp(14px, 3.8vw, 16px);
+  line-height: 1.55;
+  /* Reserve 2 lines so the longest pieces line ("Navy wool coat. Cream
+     trouser. Brown leather lace-ups.") doesn't push layout when it wraps
+     on narrow viewports while shorter variants stay 1-line. */
+  min-height: 3.2em;
+}
+
+#hero .pieces {
+  color: rgba(245, 241, 234, 0.82);
+  min-height: 1.55em;
+  transition: opacity 380ms ease;
+}
+
+#hero .wordmark {
+  position: absolute;
+  right: 1.5rem;
+  bottom: 1.5rem;
+  font-size: 20px;
+  color: rgba(245, 241, 234, 0.92);
+  letter-spacing: 0.08em;
+  z-index: 3;
+}
+
+#hero .cta-pill {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.5em;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  text-transform: uppercase;
+  font-size: var(--t-10);
+  letter-spacing: 0.18em;
+  color: var(--paper);
+  padding: 0.875rem 0;
+  border-bottom: 1px solid rgba(245, 241, 234, 0.5);
+  align-self: flex-start;
+  transition: border-color 180ms ease;
+}
+
+#hero .cta-pill:hover {
+  border-bottom-color: var(--paper);
+}
+
+#hero .cta-pill .arrow {
+  transition: transform 180ms ease;
+}
+
+#hero .cta-pill:hover .arrow {
+  transform: translateX(4px);
+}
+
+/* Concept-B breath — always on by default; collapses under reduced motion.
+   1.5% scale + 0.008 grain delta on a 6s loop. */
+#hero[data-breathing="1"] .hero-bg img {
+  animation: ukti-breath 6000ms ease-in-out infinite;
+  transform-origin: center center;
+  will-change: transform;
+}
+#hero[data-breathing="1"] .grain-overlay {
+  animation: ukti-grain 6000ms ease-in-out infinite;
+}
+@keyframes ukti-breath {
+  0%, 100% { transform: scale(1.000); }
+  50%      { transform: scale(1.015); }
+}
+@keyframes ukti-grain {
+  0%, 100% { opacity: 0.080; }
+  50%      { opacity: 0.088; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #hero .hero-bg img,
+  #hero .grain-overlay {
+    animation: none !important;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────── */
+/* BEAT 2 — Mirror                                                   */
+/* ─────────────────────────────────────────────────────────────── */
+
+#mirror {
+  background: var(--paper);
+  padding: 6rem 0 7rem;
+}
+
+#mirror .mirror-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 2.25rem;
+}
+
+/* ─────────────────────────────────────────────────────────────── */
+/* BEAT 3 — One pull                                                 */
+/* ─────────────────────────────────────────────────────────────── */
+
+#one-pull {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100svh;
+  overflow: hidden;
+  background: var(--espresso);
+}
+
+#one-pull .pull-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+#one-pull .pull-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 40%;
+}
+
+#one-pull .pull-content {
+  position: relative;
+  z-index: 2;
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 1.5rem 1.5rem 2rem;
+}
+
+#one-pull .pull-eyebrow {
+  position: absolute;
+  top: 1.5rem;
+  left: 1.5rem;
+  z-index: 2;
+}
+
+#one-pull .pull-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  max-width: 560px;
+}
+
+/* ─────────────────────────────────────────────────────────────── */
+/* BEAT 4 — How she works                                            */
+/* ─────────────────────────────────────────────────────────────── */
+
+#how {
+  background: var(--paper);
+  padding: 7rem 0 8rem;
+}
+
+#how .clauses {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+/* ─────────────────────────────────────────────────────────────── */
+/* BEAT 5 — A week, held                                             */
+/* Mobile-first vertical-offset stagger; desktop ≥1024 → 4-up grid.  */
+/* ─────────────────────────────────────────────────────────────── */
+
+#week {
+  background: var(--paper);
+  padding: 5rem 0 7rem;
+}
+
+#week .week-eyebrow {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+#week .week-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+#week figure {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: var(--bone);
+  width: 88%;
+  margin: 0;
+}
+
+#week figure:nth-child(odd) {
+  align-self: flex-start;
+}
+
+#week figure:nth-child(even) {
+  align-self: flex-end;
+}
+
+#week figure picture {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+#week figure img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+#week figure .scrim {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 38%;
+  background: linear-gradient(
+    to top,
+    rgba(13, 11, 10, 0.62) 0%,
+    rgba(13, 11, 10, 0.24) 55%,
+    rgba(13, 11, 10, 0) 100%
+  );
+  pointer-events: none;
+}
+
+#week figcaption {
+  position: absolute;
+  left: 1.25rem;
+  bottom: 1.25rem;
+  z-index: 2;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  text-transform: uppercase;
+  font-size: var(--t-20);
+  letter-spacing: 0.12em;
+  color: var(--paper);
+}
+
+/* ─────────────────────────────────────────────────────────────── */
+/* BEAT 6 — Your turn                                                */
+/* ─────────────────────────────────────────────────────────────── */
+
+#your-turn {
+  background: var(--paper);
+  padding: 8rem 0 5rem;
+  text-align: center;
+}
+
+#your-turn .ask-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+#your-turn .badges {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.875rem;
+  margin-top: 2.5rem;
+}
+
+#your-turn .qr-block {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 2.5rem;
+}
+
+#your-turn .qr-block .qr-frame {
+  width: 160px;
+  height: 160px;
+  background: var(--paper);
+  position: relative;
+}
+#your-turn .qr-block .qr-frame::before,
+#your-turn .qr-block .qr-frame::after {
+  content: "";
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-color: var(--ink);
+  border-style: solid;
+  border-width: 0;
+}
+#your-turn .qr-block .qr-frame::before {
+  top: -6px;
+  left: -6px;
+  border-top-width: 1px;
+  border-left-width: 1px;
+}
+#your-turn .qr-block .qr-frame::after {
+  bottom: -6px;
+  right: -6px;
+  border-bottom-width: 1px;
+  border-right-width: 1px;
+}
+#your-turn .qr-block .qr-frame img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+#your-turn .qr-block .qr-caption {
+  font-family: "Fraunces", ui-serif, Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.125rem;
+  color: var(--stone-deep);
+  margin-top: 0.5rem;
+}
+#your-turn .qr-block .qr-short-url {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  text-transform: uppercase;
+  font-size: var(--t-10);
+  letter-spacing: 0.18em;
+  color: var(--stone);
+}
+
+/* ─────────────────────────────────────────────────────────────── */
+/* Footer                                                            */
+/* ─────────────────────────────────────────────────────────────── */
+
+footer {
+  background: var(--paper);
+  padding: 2.5rem 0 3rem;
+  border-top: 1px solid rgba(168, 155, 138, 0.35);
+}
+footer .footer-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+footer .footer-links {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+/* Middle-dot separator between legal links — matches the eyebrow
+   "ISSUE №01 · UKTI · EST. 2026" rhythm across the site. */
+footer .footer-links li + li {
+  position: relative;
+}
+footer .footer-links li + li::before {
+  content: "·";
+  position: absolute;
+  left: -0.875rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--stone);
+  pointer-events: none;
+}
+
+@media (min-width: 1024px) {
+  footer .footer-row {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+footer .footer-brand {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  text-transform: uppercase;
+  font-size: var(--t-10);
+  letter-spacing: 0.18em;
+  color: var(--stone-deep);
+}
+
+/* Colophon sub-row — quiet mono caps, two-line agate.
+   Magazine-masthead register: a footnote, not a feature.
+   Sized + dimmed so the brand mark above it stays the optical anchor. */
+footer .footer-colophon {
+  margin: 2.5rem 0 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  text-transform: uppercase;
+  font-size: var(--t-10);
+  letter-spacing: 0.18em;
+  line-height: 1.6;
+  color: var(--stone);
+}
+
+@media (min-width: 1024px) {
+  footer .footer-colophon {
+    margin-top: 2rem;
   }
 }
 
 /* ─────────────────────────────────────────────────────────────── */
 /* Scroll-reveal motion — IntersectionObserver hooks in main.js.     */
-/* Per spec §10: 600ms ease-out opacity + 12px translateY.           */
-/* Mirror: 140ms stagger. How-it-works: 200ms stagger.                */
 /* ─────────────────────────────────────────────────────────────── */
 
 [data-reveal] {
   opacity: 0;
-  transform: translate3d(0, 12px, 0);
+  transform: translate3d(0, 1.5rem, 0);
   transition:
     opacity 600ms cubic-bezier(0.22, 1, 0.36, 1),
     transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
@@ -464,172 +1075,120 @@
   [data-reveal][data-revealed="1"] {
     opacity: 1;
     transform: none;
-    transition: none;
+    transition: opacity 200ms ease;
     transition-delay: 0ms;
   }
 }
 
 /* ─────────────────────────────────────────────────────────────── */
-/* Image cropping — per Creative review: preserve the arched window  */
-/* light above the shoes on hero; put the cuff on the upper-third    */
-/* line on one-pull so the detail isn't centered.                    */
-/* ─────────────────────────────────────────────────────────────── */
-
-#hero picture img {
-  object-position: center 30%;
-}
-#one-pull picture img {
-  object-position: 50% 40%;
-}
-
-/* ─────────────────────────────────────────────────────────────── */
-/* Desktop-only elements — hidden at mobile defaults, revealed at    */
-/* ≥1024px. Dateline pairs with the left masthead; install link is   */
-/* Marketing's persistent-escape-hatch; qr-block is the desktop →    */
-/* mobile install handoff.                                           */
-/* ─────────────────────────────────────────────────────────────── */
-
-.dateline,
-.install-link,
-.qr-block {
-  display: none;
-}
-
-/* ─────────────────────────────────────────────────────────────── */
-/* Desktop enhancement layer — applies at ≥1024px per 7-agent review. */
-/* Doctrine: enhance the single HTML, don't split into a second      */
-/* desktop variant. Mobile-first rules above remain source of truth. */
+/* DESKTOP ≥ 1024px — enhance, don't redesign                        */
 /* ─────────────────────────────────────────────────────────────── */
 
 @media (min-width: 1024px) {
-  /* Hero — headline breaks free of the 6rem cap and earns masthead scale. */
-  .hero-headline {
-    font-size: clamp(5rem, 9vw, 10rem);
+  .container {
+    padding-left: 4rem;
+    padding-right: 4rem;
   }
 
-  /* Hero — cap height so 2560 screens don't show a giant slab of coat. */
+  /* Hero: cap at 920px so 2560-tall screens don't slab. */
   #hero {
-    min-height: min(100vh, 900px) !important;
+    min-height: min(100vh, 920px);
   }
-
-  /* Hero — crop preference for the wide 3:2 render (figure at right-third,
-     window-shadow at left). Overrides the portrait crop above. */
-  #hero picture img {
+  #hero .hero-bg img {
     object-position: center 50%;
   }
-
-  /* Section beats earn desktop type scale. */
-  .section-header,
-  .clause {
-    font-size: var(--t-100);
-    line-height: 1;
+  #hero .hero-content {
+    padding: 2.5rem 4rem 3rem;
   }
-  .support-line {
-    font-size: 1.625rem; /* 26px */
+  #hero .hero-stack {
+    max-width: 720px;
+    gap: 1.5rem;
   }
-
-  /* Wordmark at desktop scale — 22 → 28. */
-  .wordmark {
-    font-size: 1.75rem;
+  #hero .verdict-stack {
+    font-size: clamp(56px, 7vw, 96px);
   }
-
-  /* Masthead dateline + install link — desktop top-right cluster.
-     Displayed inside the hero, paired against ISSUE №01 at top-left. */
-  .dateline {
-    display: block;
+  #hero .verdict {
+    font-size: clamp(56px, 7vw, 96px);
   }
-
-  .install-link {
+  #hero .pieces-stack {
+    /* Desktop pieces fits 1 line easily — tighten the reservation. */
+    min-height: 1.6em;
+  }
+  #hero .pieces {
+    font-size: 1.125rem;
+  }
+  #hero .wordmark {
+    right: 4rem;
+    bottom: 2.5rem;
+    font-size: 22px;
+  }
+  #hero .install-link {
     display: inline-block;
-    font-family: "IBM Plex Mono", ui-monospace, monospace;
-    text-transform: uppercase;
-    font-size: var(--t-10);
-    letter-spacing: 0.12em;
-    color: var(--paper);
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 4px;
   }
-  .install-link:hover {
+  #hero .install-link:hover {
     text-decoration-thickness: 2px;
   }
-  .install-link:focus-visible {
+  #hero .install-link:focus-visible {
     outline: 2px solid var(--paper);
     outline-offset: 4px;
   }
 
-  /* How-it-works clauses: semantic <ol class="clauses" role="list"> with
-     <li class="clause"> children. Screen readers announce "list, 3 items,
-     item 1…" via the ol/li structure — we keep the a11y win without a
-     visual numeral. Brand + Marketing were right: three short clauses are
-     a self-reading sequence; numerals are scaffolding the reader's eye
-     never needed. Shipped then removed on founder review — see
-     commit history. */
-  .clauses {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-
-  /* Close beat — QR block lands. Desktop only; mobile users don't need
-     a QR to their own device. */
-  .qr-block {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.75rem;
-  }
-  .qr-block img {
-    width: 160px;
-    height: 160px;
-    background: var(--paper);
-  }
-  .qr-block .qr-caption {
-    font-family: "Fraunces", ui-serif, Georgia, serif;
-    font-style: italic;
-    font-weight: 400;
-    font-size: 1.125rem;
-    color: var(--stone);
-  }
-  .qr-block .qr-short-url {
-    font-family: "IBM Plex Mono", ui-monospace, monospace;
-    text-transform: uppercase;
-    font-size: var(--t-10);
-    letter-spacing: 0.12em;
-    color: var(--stone);
-  }
-
-  /* Beat rhythm at desktop — the py-24 / py-32 rhythm that works on mobile
-     reads tight on a 1440+ canvas. Bump to editorial-print spacing. */
   #mirror {
-    padding-top: 10rem !important;
-    padding-bottom: 10rem !important;
+    padding: 10rem 0;
   }
-  #how-it-works {
-    padding-top: 11rem !important;
-    padding-bottom: 11rem !important;
+  #how {
+    padding: 11rem 0;
   }
   #your-turn {
-    padding-top: 10rem !important;
-    padding-bottom: 10rem !important;
+    padding: 10rem 0 6rem;
+  }
+  #week {
+    padding: 8rem 0 10rem;
   }
 
-  /* Week grid widens + takes a 4/5 portrait aspect on desktop, so the
-     cells stop reading as postage stamps on a 1920 canvas. */
-  #a-week figure {
-    aspect-ratio: 4 / 5 !important;
+  .mirror-line,
+  .clause {
+    font-size: clamp(40px, 5.5vw, 64px);
+  }
+  .pull-caption {
+    font-size: clamp(32px, 4vw, 48px);
+  }
+  .section-header {
+    font-size: clamp(64px, 7vw, 96px);
+  }
+
+  #one-pull .pull-content {
+    padding: 2.5rem 4rem 3rem;
+  }
+  #one-pull .pull-eyebrow {
+    top: 2.5rem;
+    left: 4rem;
+  }
+
+  #week .week-stack {
+    flex-direction: row;
+    max-width: none;
+    gap: 1.5rem;
+    align-items: stretch;
+  }
+  #week figure {
+    width: 100%;
+    align-self: stretch !important;
+  }
+
+  /* Beat 6 — hide tappable badges on desktop, show QR install handoff. */
+  #your-turn .badges {
+    display: none;
+  }
+  #your-turn .qr-block {
+    display: flex;
   }
 }
 
-/* Ultra-wide — 1920+ gets extra vertical rhythm, matching the wider canvas. */
-@media (min-width: 1920px) {
+@media (min-width: 1440px) {
   #mirror,
-  #how-it-works,
-  #your-turn {
-    padding-top: 14rem !important;
-    padding-bottom: 14rem !important;
-  }
-  .install-link {
-    font-size: var(--t-20);
+  #how {
+    padding-top: 13rem;
+    padding-bottom: 13rem;
   }
 }
