@@ -3,8 +3,6 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- PRE-LAUNCH: keep *.amplifyapp.com URL out of Google index. Remove on launch day. -->
-    <meta name="robots" content="noindex, nofollow" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/logo-mark.svg" />
     <meta name="theme-color" content="#F5F1EA" />
@@ -102,8 +100,20 @@
       <h3>Photos, wardrobe, and user content</h3>
       <ul>
         <li>
-          <strong>Images you capture or upload.</strong> Ukti stores photos of you, your clothing,
-          tags, and related media you submit through the camera or gallery flows, along with derived
+          <strong>Face and skin selfies.</strong> Ukti stores selfies you capture or upload for the
+          daily styling report and for the skin tab, along with derived thumbnails and metadata (for
+          example, MIME type and file size). These images, and the analysis Ukti runs on them, are
+          described further in Section 12.
+        </li>
+        <li>
+          <strong>Full-length body photos.</strong> Ukti stores full-length photographs of your
+          body that you choose to capture or upload so the styling report can account for your
+          proportions and fit. This is a distinct, more sensitive category than wardrobe or selfie
+          images; it is optional, and you can delete these photos as described in Section 7.
+        </li>
+        <li>
+          <strong>Clothing and other images.</strong> Ukti stores photos of your clothing, tags, and
+          related media you submit through the camera or gallery flows, along with derived
           thumbnails and metadata (for example, MIME type and file size).
         </li>
         <li>
@@ -199,9 +209,12 @@
           site.
         </li>
         <li>
-          <strong>Payment processors.</strong> Where paid features are offered, payment details are
-          collected by the platform processor (Apple App Store or Google Play in-app purchases);
-          Ukti receives limited billing metadata only.
+          <strong>Payment processors.</strong> Ukti offers paid subscriptions. Your payment details
+          are collected and processed by the platform processor (Apple App Store or Google Play
+          in-app purchases) under that platform's own terms; Ukti does not receive or store your full
+          payment-card details. Ukti receives limited billing and subscription-status metadata
+          (for example, the subscription tier, renewal state, and a transaction identifier) needed
+          to grant and manage access.
         </li>
         <li>
           <strong>Professional advisers and corporate transactions.</strong> Lawyers, auditors,
@@ -327,22 +340,26 @@
         Government.
       </p>
 
-      <h2>11. Children</h2>
+      <h2>11. Minimum age</h2>
       <p>
-        The services are not directed at children under <strong>13</strong>, and Ukti does not
-        knowingly collect personal information from children under 13. The Ukti terms require users
-        to be at least <strong>18</strong> in any event. If you believe a child has provided
-        personal data, contact <a href="mailto:privacy@ukti.io">privacy@ukti.io</a> and it will be
-        deleted promptly.
+        The Ukti services are for adults. You must be at least <strong>18</strong> years old to
+        create an account or use the services, and the services are not directed at anyone under
+        18. Ukti does not knowingly collect personal information from anyone under 18. If you
+        believe someone under 18 has provided personal data, contact
+        <a href="mailto:privacy@ukti.io">privacy@ukti.io</a> and it will be deleted promptly.
       </p>
 
-      <h2>12. Automated processing</h2>
+      <h2>12. Automated processing of your images</h2>
       <p>
-        The Ukti app's daily call is generated automatically and may be inaccurate or unsuitable
-        for a given context. You should not rely on automated outputs alone for decisions with
-        legal, medical, financial, or safety implications. Ukti does not use your photos or
-        content to train third-party foundation models except where a feature explicitly states
-        otherwise and you opt in.
+        Ukti collects and analyzes images of you to operate its features. This includes your face
+        and skin selfies (used for the daily styling report and the skin tab) and your full-length
+        body photos (used to account for proportions and fit). When you submit these images, Ukti
+        and its model providers process them automatically to generate styling outputs and skin
+        observations. The daily call and skin outputs are generated automatically and may be
+        inaccurate or unsuitable for a given context. You should not rely on automated outputs
+        alone for decisions with legal, medical, financial, or safety implications. Ukti does not
+        use your photos or content to train third-party foundation models except where a feature
+        explicitly states otherwise and you opt in.
       </p>
       <p>
         <strong>This is styling, not medicine.</strong> Skin outputs are editorial guidance, not
